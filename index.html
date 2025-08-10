@@ -185,8 +185,8 @@
       tr.innerHTML=`
         <td><input aria-label="Pos" value="${i}" style="width:48px" disabled></td>
         <td><input aria-label="Beschreibung" class="desc" value="${data.desc||''}"></td>
-        <td><input aria-label="Menge" class="qty" type="number" min="0" step="0.01" value="${data.qty||1}"></td>
-        <td><input aria-label="Preis" class="price" type="number" min="0" step="0.01" value="${data.price||0}"></td>
+        <td><input aria-label="Menge" class="qty" type="number" min="0" step="0.01" value="${data.qty ?? 1}"></td>
+        <td><input aria-label="Preis" class="price" type="number" min="0" step="0.01" value="${data.price ?? 0}"></td>
         <td class="t-right subtotal">0,00 €</td>
         <td class="t-right"><button class="btn" title="Entfernen">✕</button></td>`;
       bodyEl.appendChild(tr);
