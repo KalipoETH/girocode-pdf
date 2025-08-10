@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GiroCode & Rechnungs‑PDF Generator</title>
+  <meta name="description" content="Erstelle EPC/GiroCode (SEPA‑QR) und eine DIN‑konforme Rechnungs‑PDF – komplett im Browser, ohne Uploads." />
+  <style>
+    :root{--bg:#0b0c10;--card:#121318;--muted:#8b90a0;--text:#e8eaf0;--accent:#22c55e;--accent2:#16a34a}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    h1{font-size:28px;margin:0 0 10px}
+    p{margin:0;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+    .card{background:var(--card);border:1px solid #1f2431;border-radius:16px;padding:16px}
+    label{display:block;font-size:14px;margin:10px 0 6px;color:#d6d9e4}
+    input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #2a3042;background:#0f1117;color:var(--text)}
+    textarea{resize:vertical}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .row{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{cursor:pointer;padding:12px 16px;border-radius:12px;border:1px solid #233;background:#0f172a;color:#fff;transition:.2s ease}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;font-weight:700}
+    .muted{font-size:12px;color:var(--muted)}
+    .kicker{display:inline-block;padding:4px 8px;border-radius:999px;background:#133018;color:#86efac;font-size:12px;margin-bottom:10px}
+    .qrbox{display:flex;align-items:center;justify-content:center;min-height:220px;border:1px dashed #2a3042;border-radius:12px;background:#0f1117}
+    .footer{margin-top:18px;font-size:12px;color:#9aa1b6}
+    .ok{color:#86efac}.err{color:#fda4af}
+    .logoPreview{height:40px;object-fit:contain;background:#0f1117;border:1px dashed #2a3042;border-radius:10px;padding:6px}
+    @media (max-width:940px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="kicker">100% client‑seitig · keine Uploads</div>
+    <h1>GiroCode & Rechnungs‑PDF Generator</h1>
+    <p>Erstelle in Sekunden einen <strong>EPC/GiroCode</strong> (SEPA‑Überweisung) und eine druckfertige <strong>DIN‑Rechnung</strong> als PDF.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Zahlungsdaten</h3>
+        <label>Empfänger (Name)</label>
+        <input id="name" placeholder="z. B. Max Mustermann e. K." />
+        <div class="two">
+          <div>
+            <label>IBAN</label>
+            <input id="iban" placeholder="DE89 3704 0044 0532 0130 00" />
+          </div>
+          <div>
+            <label>BIC (optional)</label>
+            <input id="bic" placeholder="z. B. COLSDE33" />
+          </div>
+        </div>
+        <div class="two">
+          <div>
+            <label>Betrag (EUR)</label>
+            <input id="amount" type="number" min="0" step="0.01" placeholder="199.00" />
+          </div>
+          <div>
+            <label>Verwendungszweck</label>
+            <input id="purpose" maxlength="140" placeholder="Rechnung 2025‑0001" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button onclick="makeQR()" class="btn primary">GiroCode generieren</button>
+          <button onclick="clearQR()" class="btn">Zurücksetzen</button>
+        </div>
+        <div id="ibanMsg" class="muted" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 8px">Vorschau (QR)</h3>
+        <div class="qrbox"><canvas id="qrCanvas" width="220" height="220"></canvas></div>
+        <div id="qrStatus" class="muted" style="margin-top:8px"></div>
+        <label style="display:flex;gap:8px;align-items:center;margin-top:6px">
+          <input id="useExternalQR" type="checkbox">
+          <span class="muted">Externer QR‑Fallback (api.qrserver.com) – sendet Zahlungsdaten an den Dienst.</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Rechnung (PDF)</h3>
+        <div class="two">
+          <div>
+            <label>Rechnungs‑Nr.</label>
+            <input id="invNo" placeholder="2025‑0001" />
+          </div>
+          <div>
+            <label>Rechnungsdatum</label>
+            <input id="invDate" type="date" />
+          </div>
+        </div>
+        <label>Deine Firmendaten (Absender, Anschrift, Kontakt)</label>
+        <textarea id="seller" rows="4" placeholder="Firma Muster GmbH
+Musterstraße 1
+12345 Musterstadt
+USt‑ID: DE123456789
+hello@firma.de"></textarea>
+        <label>Kundendaten (Empfängeradresse auf Rechnung)</label>
+        <textarea id="buyer" rows="4" placeholder="Kunde AG
+Einkauf
+Kundenstraße 5
+54321 Kundenstadt"></textarea>
+        <label>Logo (PNG/JPG, optional)</label>
+        <input id="logoFile" type="file" accept="image/*" />
+        <img id="logoPreview" class="logoPreview" alt="Logo‑Vorschau" />
+        <label>Leistungsbeschreibung</label>
+        <textarea id="lineItem" rows="3" placeholder="Beratungspaket ‚Basis‘ — 2 Std."></textarea>
+        <div class="two">
+          <div>
+            <label>Netto (EUR)</label>
+            <input id="net" type="number" min="0" step="0.01" placeholder="167.23" />
+          </div>
+          <div>
+            <label>USt‑Satz</label>
+            <input id="vat" type="number" min="0" step="1" value="19" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button onclick="makePDF()" class="btn primary">PDF herunterladen</button>
+        </div>
+        <div class="muted" style="margin-top:8px">Hinweis: QR wird in die Rechnung eingebettet. Beträge werden automatisch berechnet.</div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 8px">FAQ</h3>
+        <p><strong>Datenschutz?</strong> Alles passiert lokal im Browser, es werden keine Daten hochgeladen.</p>
+        <p><strong>BIC nötig?</strong> In vielen Fällen nicht – die Zeile kann leer bleiben.</p>
+        <p><strong>Fehlerhafte IBAN?</strong> Der Prüfschritt warnt dich. Prüfe Leerzeichen & Buchstaben.</p>
+        <p class="muted">Dies ist eine Demo. Für geschäftliche Nutzung bitte die Pflichtangaben deiner Rechnungen prüfen (z. B. §14 UStG / Kleinunternehmer‑Hinweis).</p>
+      </div>
+    </div>
+
+    <div class="footer">© <span id="y"></span> GiroCode Demo · lokal · keine Gewähr. </div>
+  </div>
+
+  <!-- Lib‑Loader: erst lokal (/vendor), dann CDNs -->
+  <script>
+    (function(){
+      function loadScript(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.async=true;s.onload=res;s.onerror=function(){rej(new Error('Failed '+src))};document.head.appendChild(s);});}
+      window.__libsReady=(async function(){
+        var okQR=false, okPDF=false;
+        try{await loadScript('/vendor/qrcode.min.js'); okQR=!!window.QRCode;}catch(e){}
+        if(!okQR){try{await loadScript('https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js'); okQR=!!window.QRCode;}catch(e){}}
+        if(!okQR){try{await loadScript('https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js'); okQR=!!window.QRCode;}catch(e){}}
+        try{await loadScript('https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js'); okPDF=!!window.PDFLib;}catch(e){}
+        if(!okPDF){try{await loadScript('/vendor/pdf-lib.min.js'); okPDF=!!window.PDFLib;}catch(e){}}
+        if(!okQR||!okPDF) console.warn('Lib load status',{okQR,okPDF});
+        return {okQR,okPDF};
+      })();
+    })();
+  </script>
+
+  <script>
+    // ----- Utilities -----
+    document.getElementById('y').textContent=new Date().getFullYear();
+    document.getElementById('invDate').valueAsDate=new Date();
+
+    function sanitizeIBAN(iban){return (iban||'').toUpperCase().replace(/\s+/g,'');}
+    function ibanIsValid(iban){iban=sanitizeIBAN(iban);if(iban.length<15||iban.length>34)return false;const r=iban.slice(4)+iban.slice(0,4);const ex=r.replace(/[A-Z]/g,ch=>(ch.charCodeAt(0)-55).toString());let rem=0;for(const d of ex){rem=(rem*10+(+d))%97;}return rem===1;}
+    function toAmountEUR(v){if(!v&&v!==0)return'';const n=Number(v);if(!isFinite(n)||n<=0)return'';return 'EUR'+n.toFixed(2);}    
+    function buildEPC({name,iban,bic,amount,purpose}){const lines=['BCD','001','1','SCT',(bic||'').trim(),(name||'').trim().slice(0,70),sanitizeIBAN(iban),toAmountEUR(amount),'','',(purpose||'').trim().slice(0,140)];return lines.join('\n');}
+    function showIBANStatus(ok){const el=document.getElementById('ibanMsg');el.innerHTML= ok? 'IBAN‑Check: <span class="ok">gültig</span>':'IBAN‑Check: <span class="err">ungültig</span>'}
+
+    // ----- QR kompatibel zeichnen -----
+    async function drawQRToCanvas(epc){
+      const canvas=document.getElementById('qrCanvas'); const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height);
+      if(window.QRCode && typeof window.QRCode.toCanvas==='function'){await window.QRCode.toCanvas(canvas, epc, {errorCorrectionLevel:'M', margin:2, width:220}); return;}
+      if(window.QRCode && window.QRCode.CorrectLevel){const tmp=document.createElement('div'); tmp.style.position='fixed'; tmp.style.left='-9999px'; document.body.appendChild(tmp); new window.QRCode(tmp,{text:epc,width:220,height:220,correctLevel:window.QRCode.CorrectLevel.M}); await new Promise(r=>setTimeout(r,0)); const el=tmp.querySelector('canvas, img'); if(el){ if(el.tagName==='CANVAS')ctx.drawImage(el,0,0,220,220); else {await new Promise((res,rej)=>{el.onload=res; el.onerror=rej;}); ctx.drawImage(el,0,0,220,220);} } tmp.remove(); return;}
+      if(typeof window.qrcode==='function'){const qr=window.qrcode(0,'M'); qr.addData(epc); qr.make(); const html=qr.createImgTag(4,0); const src=(html.match(/src=\"([^\"]+)\"/)||[])[1]; if(!src)throw new Error('Konnte Bildquelle aus qrcode-generator nicht lesen.'); const img=new Image(); img.src=src; await new Promise((res,rej)=>{img.onload=res; img.onerror=rej;}); ctx.drawImage(img,0,0,220,220); return;}
+      throw new Error('Keine kompatible QR‑Bibliothek gefunden.');
+    }
+
+    function setQRStatus(msg, ok){var el=document.getElementById('qrStatus'); if(!el)return; el.textContent=msg||''; if(ok===true)el.style.color='#86efac'; else if(ok===false)el.style.color='#fda4af'; else el.style.color='';}
+
+    async function makeQR(){
+      const name=document.getElementById('name').value; const iban=document.getElementById('iban').value; const bic=document.getElementById('bic').value; const amount=document.getElementById('amount').value; const purpose=document.getElementById('purpose').value;
+      const ok=ibanIsValid(iban); showIBANStatus(ok); if(!ok){ setQRStatus('IBAN ungültig – bitte prüfen.', false); clearQR(); return; }
+      try{ await (window.__libsReady||Promise.resolve()); try{ const epc=buildEPC({name,iban,bic,amount,purpose}); await drawQRToCanvas(epc); setQRStatus('QR erfolgreich generiert. Jetzt Banking‑App testen.', true); return; }catch(inner){ console.warn('Interne QR‑Zeichnung fehlgeschlagen', inner); }
+        const useExt=document.getElementById('useExternalQR'); if(useExt && useExt.checked){ const epc=buildEPC({name,iban,bic,amount,purpose}); const url='https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(epc); const img=new Image(); img.crossOrigin='anonymous'; img.onload=function(){const c=document.getElementById('qrCanvas'); const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); ctx.drawImage(img,0,0,c.width,c.height); setQRStatus('QR via externer Dienst geladen.', true);}; img.onerror=function(){setQRStatus('Externer QR‑Dienst nicht erreichbar oder blockiert.', false);}; img.src=url; return; }
+        throw new Error('QR‑Bibliothek nicht verfügbar. Aktiviere ggf. den externen QR‑Fallback.');
+      }catch(e){ console.error(e); setQRStatus(e.message||'Unbekannter Fehler bei der QR‑Generierung.', false); }
+    }
+
+    function clearQR(){const c=document.getElementById('qrCanvas');const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);document.getElementById('ibanMsg').textContent='';setQRStatus('',null);}
+
+    // ----- Logo Upload (für PDF) -----
+    const logoInput=document.getElementById('logoFile'); const logoPrev=document.getElementById('logoPreview'); let __logoBytes=null; let __logoType=null;
+    if(logoInput){ logoInput.addEventListener('change', async (e)=>{ const f=e.target.files&&e.target.files[0]; if(!f){__logoBytes=null; __logoType=null; logoPrev.src=''; return;} __logoType=f.type; const r1=new FileReader(); r1.onload=()=>{logoPrev.src=r1.result;}; r1.readAsDataURL(f); const r2=new FileReader(); r2.onload=()=>{__logoBytes=new Uint8Array(r2.result);}; r2.readAsArrayBuffer(f); }); }
+
+    // ----- PDF -----
+    async function makePDF(){
+      try{ await (window.__libsReady||Promise.resolve()); if(typeof PDFLib==='undefined'){ alert('PDF‑Bibliothek konnte nicht geladen werden.'); return; }
+        const invNo=document.getElementById('invNo').value||'0001'; const invDate=document.getElementById('invDate').value||new Date().toISOString().slice(0,10);
+        const seller=(document.getElementById('seller').value||'').trim(); const buyer=(document.getElementById('buyer').value||'').trim();
+        const lineItem=(document.getElementById('lineItem').value||'').trim(); const net=Number(document.getElementById('net').value||0); const vat=Number(document.getElementById('vat').value||0); const vatAmt=+(net*vat/100).toFixed(2); const gross=+(net+vatAmt).toFixed(2);
+        const qrPng=document.getElementById('qrCanvas').toDataURL('image/png');
+
+        const { PDFDocument, StandardFonts, rgb }=PDFLib; const pdfDoc=await PDFDocument.create(); const page=pdfDoc.addPage([595.28,841.89]); const font=await pdfDoc.embedFont(StandardFonts.Helvetica); const bold=await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+        const margin=50; let y=800;
+
+        // Header
+        page.drawText('Rechnung', {x:margin, y, size:22, font:bold});
+        page.drawText(`Nr.: ${invNo}`, {x:margin, y:y-22, size:10, font});
+        page.drawText(`Datum: ${invDate}`, {x:margin+120, y:y-22, size:10, font});
+        // Logo (optional)
+        if(__logoBytes){ try{ let img, w=120, h=40; if(__logoType==='image/png') img=await pdfDoc.embedPng(__logoBytes); else img=await pdfDoc.embedJpg(__logoBytes); const scale=w/img.width; const hh=img.height*scale; page.drawImage(img,{x:595.28-margin-w, y:800-hh/2, width:w, height:hh}); }catch(_){} }
+        // Linie
+        page.drawLine({start:{x:margin,y:770}, end:{x:595.28-margin,y:770}, thickness:1, color:rgb(0.16,0.18,0.25)});
+
+        // Adressen
+        y=740; page.drawText('Absender', {x:margin, y, size:10, font, color:rgb(0.7,0.75,0.85)});
+        seller.split(/\r?\n/).forEach((t,i)=>page.drawText(t,{x:margin,y:y-14-i*12,size:11,font}));
+        const bx=330; const by=y; page.drawText('Empfänger', {x:bx, y:by, size:10, font, color:rgb(0.7,0.75,0.85)});
+        buyer.split(/\r?\n/).forEach((t,i)=>page.drawText(t,{x:bx,y:by-14-i*12,size:11,font}));
+
+        // Leistung
+        y=640; page.drawText('Leistung', {x:margin,y, size:10, font, color:rgb(0.7,0.75,0.85)});
+        page.drawText(lineItem||'—', {x:margin, y:y-16, size:12, font});
+
+        // Beträge Box
+        const boxY=560; page.drawRectangle({x:margin, y:boxY-60, width:220, height:70, borderWidth:1, color:rgb(0.16,0.18,0.25)});
+        page.drawText('Netto', {x:margin+8, y:boxY, size:11, font}); page.drawText(`${net.toFixed(2)} €`, {x:margin+140, y:boxY, size:11, font});
+        page.drawText(`USt (${vat}%)`, {x:margin+8, y:boxY-18, size:11, font}); page.drawText(`${vatAmt.toFixed(2)} €`, {x:margin+140, y:boxY-18, size:11, font});
+        page.drawText('Brutto', {x:margin+8, y:boxY-36, size:12, font:bold}); page.drawText(`${gross.toFixed(2)} €`, {x:margin+140, y:boxY-36, size:12, font:bold});
+
+        // QR rechts
+        const qrImg=await pdfDoc.embedPng(qrPng); const qrSize=160; page.drawImage(qrImg,{x:595.28-margin-qrSize, y:520, width:qrSize, height:qrSize});
+        page.drawText('GiroCode (SEPA‑QR) – scannen & bezahlen', {x:595.28-margin-qrSize-10, y:510, size:9, font, color:rgb(0.7,0.75,0.85)});
+
+        // Fußzeile
+        page.drawText('Erstellt lokal im Browser · keine Datenübertragung', {x:margin, y:60, size:9, font, color:rgb(0.7,0.75,0.85)});
+
+        const bytes=await pdfDoc.save(); const blob=new Blob([bytes],{type:'application/pdf'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`Rechnung_${invNo}.pdf`; a.click(); setTimeout(()=>URL.revokeObjectURL(url), 5000);
+      }catch(e){ console.error(e); alert('PDF‑Fehler: '+(e.message||e)); }
+    }
+  </script>
+</body>
+</html>
