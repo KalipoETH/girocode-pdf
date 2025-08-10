@@ -233,7 +233,6 @@
       const ok=ibanIsValid(iban); if(!ok){ setQRStatus('IBAN ungültig – bitte prüfen.', false); clearQR(); return; }
       try{ await (window.__libsReady||Promise.resolve()); const epc=buildEPC({name,iban,bic,amount,purpose}); await drawQRToCanvas(epc); setQRStatus('QR erfolgreich generiert.', true);} catch(e){ console.error(e); setQRStatus(e.message||'Unbekannter Fehler bei der QR‑Generierung.', false);} }
 
- <script>
 // ===== NEUES PDF-LAYOUT – großzügige Abstände & klare Sektionen =====
 async function downloadPDF(){
   try{
