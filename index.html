@@ -36,6 +36,7 @@
     .qrbox{display:flex;align-items:center;justify-content:center;min-height:220px;border:1px dashed var(--line);border-radius:12px;background:var(--input)}
     .ok{color:#16a34a}.err{color:#ef4444}
     .toggle{padding:10px 12px;border-radius:10px;background:var(--input);border:1px solid var(--line);cursor:pointer}
+    #logoPreview{display:none;max-height:64px;border:1px solid var(--line);border-radius:6px;margin-top:8px}
 
     table.items{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:10px}
     table.items th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:left;padding:0 8px}
@@ -60,7 +61,15 @@
 
     <div class="grid">
       <div class="card">
-        <h3 style="margin:0 0 8px">Zahlungsdaten</h3>
+        <h3 style="margin:0 0 8px">Absender</h3>
+        <label>Absender (Name)</label>
+        <input id="senderName" type="text">
+        <label>Absender (Adresse)</label>
+        <textarea id="senderAddress"></textarea>
+        <label>Logo (optional)</label>
+        <input id="logoInput" type="file" accept="image/*">
+        <img id="logoPreview">
+        <h3 style="margin:20px 0 8px">Zahlungsdaten</h3>
         <label>Empfänger (Name)</label>
         <input id="name" placeholder="z. B. Max Mustermann e. K." />
         <div class="two">
@@ -175,7 +184,8 @@
     }
 
     // ===== Items model & totals =====
-    const bodyEl=document.getElementById('itemsBody'); const vatEl=document.getElementById('vatRate'); const autoAmountEl=document.getElementById('autoAmount');
+      const bodyEl=document.getElementById('itemsBody'); const vatEl=document.getElementById('vatRate'); const autoAmountEl=document.getElementById('autoAmount');
+      const logoInput=document.getElementById('logoInput'); const logoPreview=document.getElementById('logoPreview');
     function fmt(n){return (isFinite(n)?n:0).toFixed(2).replace('.',',')+' €';}
     function parseNum(v){const n=parseFloat(String(v).replace(',','.')); return isFinite(n)?n:0;}
 
@@ -219,9 +229,24 @@
     }
 
     // Seed rows
-    addItem({desc:'Dienstleistung A', qty:1, price:100});
-    addItem({desc:'Dienstleistung B', qty:1, price:50});
-    vatEl.addEventListener('input', computeTotals);
+      addItem({desc:'Dienstleistung A', qty:1, price:100});
+      addItem({desc:'Dienstleistung B', qty:1, price:50});
+      vatEl.addEventListener('input', computeTotals);
+      logoInput.addEventListener('change', async e=>{
+        const file=e.target.files[0];
+        if(file){
+          const reader=new FileReader();
+          reader.onload=ev=>{ logoPreview.src=ev.target.result; logoPreview.style.display='block'; };
+          reader.readAsDataURL(file);
+          window.__logoBytes=await file.arrayBuffer();
+          window.__logoType=file.type;
+        }else{
+          logoPreview.style.display='none';
+          logoPreview.removeAttribute('src');
+          window.__logoBytes=null;
+          window.__logoType=null;
+        }
+      });
 
     function getSafeGross(){
       if(typeof window.__lastGross === 'number' && isFinite(window.__lastGross)) return window.__lastGross;
@@ -255,17 +280,25 @@
       try{ await (window.__libsReady||Promise.resolve()); if(typeof PDFLib==='undefined'){ alert('PDF‑Bibliothek nicht geladen.'); return; }
         const items=getItems(); const vatRate=parseNum(vatEl.value); const sumNet=items.reduce((a,c)=>a+c.qty*c.price,0); const vatAmt=sumNet*vatRate/100; const sumGross=sumNet+vatAmt;
         const name=document.getElementById('name').value||''; const iban=document.getElementById('iban').value||''; const bic=document.getElementById('bic').value||''; const purpose=document.getElementById('purpose').value||'';
+        const senderName=document.getElementById('senderName').value||''; const senderAddress=document.getElementById('senderAddress').value||'';
         const { PDFDocument, StandardFonts, rgb }=PDFLib; const pdf=await PDFDocument.create(); const page=pdf.addPage([595.28,841.89]); const font=await pdf.embedFont(StandardFonts.Helvetica); const bold=await pdf.embedFont(StandardFonts.HelveticaBold);
+        let logoW=0, logoH=0;
         const M=50; let y=800;
         // Header
         page.drawText('Rechnung', {x:M,y, size:22, font:bold});
         page.drawText(`Datum: ${new Date().toISOString().slice(0,10)}`, {x:M+360,y, size:10, font}); y-=26;
+        // Absender
+        page.drawText('Absender', {x:M, y, size:10, font:bold, color:rgb(0.7,0.75,0.85)}); y-=14;
+        if(senderName){ page.drawText(senderName, {x:M, y, size:12, font:bold}); y-=14; }
+        if(senderAddress){ senderAddress.split(/\r?\n/).forEach(line=>{ page.drawText(line, {x:M, y, size:11, font}); y-=14; }); }
         // Zahlungsdaten links
         page.drawText('Zahlungsdaten', {x:M, y, size:10, font:bold, color:rgb(0.7,0.75,0.85)}); y-=14;
         const rows=[["Empfänger",name],["IBAN",iban],["BIC",bic||'-'],["Verwendungszweck",purpose||'-']];
         const labelW=110; rows.forEach(([k,v])=>{ page.drawText(k+':', {x:M, y, size:11, font, color:rgb(0.45,0.5,0.65)}); page.drawText(String(v), {x:M+labelW, y, size:11, font}); y-=14; });
+        // Logo rechts oben
+        if(window.__logoBytes){ try{ const logoImg = window.__logoType==='image/png'?await pdf.embedPng(window.__logoBytes):await pdf.embedJpg(window.__logoBytes); const maxW=130,maxH=60; const scale=Math.min(maxW/logoImg.width, maxH/logoImg.height,1); logoW=logoImg.width*scale; logoH=logoImg.height*scale; page.drawImage(logoImg,{x:595.28-M-logoW,y:800-logoH/2,width:logoW,height:logoH}); }catch(e){ console.error(e); } }
         // QR rechts oben
-        try{ const c=document.getElementById('qrCanvas'); if(c){ const data=c.toDataURL('image/png'); if(data && data.length>100){ const bytes=await fetch(data).then(r=>r.arrayBuffer()); const img=await pdf.embedPng(bytes); const q=120; page.drawImage(img,{x:595.28-M-q,y:800-q/2,width:q,height:q}); } } }catch(_){ }
+        try{ const c=document.getElementById('qrCanvas'); if(c){ const data=c.toDataURL('image/png'); if(data && data.length>100){ const bytes=await fetch(data).then(r=>r.arrayBuffer()); const img=await pdf.embedPng(bytes); const q=120; let qrX=595.28-M-q-(logoW?logoW+10:0); page.drawImage(img,{x:qrX,y:800-q/2,width:q,height:q}); } } }catch(_){ }
         // Linie
         y-=6; page.drawLine({start:{x:M,y}, end:{x:595.28-M,y}, thickness:1, color:rgb(0.16,0.18,0.25)}); y-=18;
 
