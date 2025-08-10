@@ -233,49 +233,136 @@
       const ok=ibanIsValid(iban); if(!ok){ setQRStatus('IBAN ungültig – bitte prüfen.', false); clearQR(); return; }
       try{ await (window.__libsReady||Promise.resolve()); const epc=buildEPC({name,iban,bic,amount,purpose}); await drawQRToCanvas(epc); setQRStatus('QR erfolgreich generiert.', true);} catch(e){ console.error(e); setQRStatus(e.message||'Unbekannter Fehler bei der QR‑Generierung.', false);} }
 
-    // ----- PDF -----
-    async function downloadPDF(){
-      try{ await (window.__libsReady||Promise.resolve()); if(typeof PDFLib==='undefined'){ alert('PDF‑Bibliothek nicht geladen.'); return; }
-        const items=getItems(); const vatRate=parseNum(vatEl.value); const sumNet=items.reduce((a,c)=>a+c.qty*c.price,0); const vatAmt=sumNet*vatRate/100; const sumGross=sumNet+vatAmt;
-        const name=document.getElementById('name').value||''; const iban=document.getElementById('iban').value||''; const bic=document.getElementById('bic').value||''; const purpose=document.getElementById('purpose').value||''; const amountVal=document.getElementById('amount').value||sumGross.toFixed(2);
-        const { PDFDocument, StandardFonts, rgb }=PDFLib; const pdf=await PDFDocument.create(); const page=pdf.addPage([595.28,841.89]); const font=await pdf.embedFont(StandardFonts.Helvetica); const bold=await pdf.embedFont(StandardFonts.HelveticaBold);
-        const M=50; let y=800;
-        page.drawText('Rechnung', {x:M,y, size:22, font:bold});
-        page.drawText(`Datum: ${new Date().toISOString().slice(0,10)}`, {x:M+360,y, size:10, font}); y-=22;
-        page.drawText(`Empfänger: ${name}`, {x:M, y, size:11, font}); y-=14;
-        page.drawText(`IBAN: ${iban}   BIC: ${bic||'-'}`, {x:M, y, size:11, font}); y-=14;
-        page.drawText(`Verwendungszweck: ${purpose||'-'}`, {x:M, y, size:11, font}); y-=10;
-        page.drawLine({start:{x:M,y}, end:{x:595.28-M,y}, thickness:1, color:rgb(0.16,0.18,0.25)}); y-=18;
-        // Items header
-        const cols=[M, M+28, M+360, M+430, M+510];
-        page.drawText('Pos', {x:cols[0], y, size:10, font, color:rgb(0.6,0.65,0.75)});
-        page.drawText('Beschreibung', {x:cols[1], y, size:10, font, color:rgb(0.6,0.65,0.75)});
-        page.drawText('Menge', {x:cols[2], y, size:10, font, color:rgb(0.6,0.65,0.75)});
-        page.drawText('Preis', {x:cols[3], y, size:10, font, color:rgb(0.6,0.65,0.75)});
-        page.drawText('Summe', {x:cols[4], y, size:10, font, color:rgb(0.6,0.65,0.75)});
-        y-=8;
-        page.drawLine({start:{x:M,y}, end:{x:595.28-M,y}, thickness:1, color:rgb(0.16,0.18,0.25)}); y-=12;
-        // Items rows
-        const wrap=(text,w)=>{const words=String(text||'').split(/\s+/); let line='', out=[]; for(const w0 of words){ const t=line?line+' '+w0:w0; if(font.widthOfTextAtSize(t,11) > w){ out.push(line); line=w0; } else line=t; } if(line) out.push(line); return out; };
-        items.forEach((it,idx)=>{
-          const sub=it.qty*it.price; const lines=wrap(it.desc, cols[2]-cols[1]-6); const h=lines.length*12; const rowY=y;
-          page.drawText(String(idx+1), {x:cols[0], y:rowY, size:11, font});
-          lines.forEach((ln,i)=>page.drawText(ln,{x:cols[1], y:rowY - i*12, size:11, font}));
-          page.drawText(String(it.qty), {x:cols[2], y:rowY, size:11, font});
-          page.drawText(it.price.toFixed(2)+' €', {x:cols[3], y:rowY, size:11, font});
-          page.drawText(sub.toFixed(2)+' €', {x:cols[4], y:rowY, size:11, font});
-          y -= Math.max(h, 14) + 6;
-        });
-        y-=6; page.drawLine({start:{x:M,y}, end:{x:595.28-M,y}, thickness:1, color:rgb(0.16,0.18,0.25)}); y-=12;
-        // Totals
-        page.drawText('Summe netto:', {x:cols[3]-70, y, size:11, font}); page.drawText(sumNet.toFixed(2)+' €', {x:cols[4], y, size:11, font}); y-=14;
-        page.drawText(`USt (${vatRate}%) :`, {x:cols[3]-70, y, size:11, font}); page.drawText(vatAmt.toFixed(2)+' €', {x:cols[4], y, size:11, font}); y-=14;
-        page.drawText('Gesamt (brutto):', {x:cols[3]-70, y, size:12, font:bold}); page.drawText(sumGross.toFixed(2)+' €', {x:cols[4], y, size:12, font:bold});
-        // QR in die Seite
-        const qrPng=document.getElementById('qrCanvas').toDataURL('image/png'); const qrImg=await pdf.embedPng(qrPng); const qrSize=140; page.drawImage(qrImg,{x:595.28-M-qrSize, y:740, width:qrSize, height:qrSize});
-        const bytes=await pdf.save(); const blob=new Blob([bytes],{type:'application/pdf'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='rechnung.pdf'; a.click(); setTimeout(()=>URL.revokeObjectURL(url),5000);
-      }catch(e){ console.error(e); alert('PDF‑Fehler: '+(e.message||e)); }
+ <script>
+// ===== NEUES PDF-LAYOUT – großzügige Abstände & klare Sektionen =====
+async function downloadPDF(){
+  try{
+    if(typeof PDFLib==='undefined'){ alert('PDF-Bibliothek nicht geladen.'); return; }
+    const { PDFDocument, StandardFonts, rgb } = PDFLib;
+    const pdfDoc = await PDFDocument.create();
+    const size = { w: 595.28, h: 841.89 }; // A4
+    let page = pdfDoc.addPage([size.w, size.h]);
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const bold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+    const M = 50; // Seitenrand
+    let y = size.h - M;
+
+    const drawLeft = (text, x, y, s=11, f=font, c=rgb(0,0,0)) =>
+      page.drawText(String(text||''), { x, y, size:s, font:f, color:c });
+
+    const drawRight = (text, x, y, s=11, f=font, c=rgb(0,0,0)) => {
+      const t = String(text||''); const w = f.widthOfTextAtSize(t, s);
+      page.drawText(t, { x: x - w, y, size:s, font:f, color:c });
+    };
+
+    const line = (x1, y1, x2, y2, c=rgb(0.85,0.88,0.95)) =>
+      page.drawLine({ start:{x:x1,y:y1}, end:{x:x2,y:y2}, thickness:1, color:c });
+
+    const wrap = (text, width, s=11, f=font) => {
+      const words = String(text||'').split(/\s+/); let out=[], cur='';
+      for (const w of words){
+        const test = cur ? cur+' '+w : w;
+        if (f.widthOfTextAtSize(test, s) > width){ if(cur) out.push(cur); cur = w; }
+        else cur = test;
+      }
+      if(cur) out.push(cur);
+      return out;
+    };
+
+    const addPageIfNeeded = (need=60) => {
+      if (y - need < M + 60) {
+        page = pdfDoc.addPage([size.w, size.h]);
+        y = size.h - M;
+        // Tabellenkopf neu zeichnen
+        drawLeft('Beschreibung', M, y, 10, bold, rgb(0.35,0.4,0.55));
+        drawRight('Betrag (€)', size.w - M, y, 10, bold, rgb(0.35,0.4,0.55));
+        y -= 10; line(M, y, size.w - M, y); y -= 12;
+      }
+    };
+
+    // Header
+    drawLeft('Rechnung', M, y, 24, bold);
+    drawRight(new Date().toISOString().slice(0,10), size.w - M, y, 10, font, rgb(0.35,0.4,0.55));
+
+    // QR oben rechts (falls vorhanden)
+    try{
+      const canvas = document.getElementById('qrCanvas');
+      if(canvas){
+        const dataUrl = canvas.toDataURL('image/png');
+        if(dataUrl && dataUrl.length > 100){
+          const bytes = await fetch(dataUrl).then(r=>r.arrayBuffer());
+          const img = await pdfDoc.embedPng(bytes);
+          const q = 120;
+          page.drawImage(img, { x: size.w - M - q, y: size.h - M - q, width: q, height: q });
+        }
+      }
+    }catch(_){} // QR optional
+    y -= 28;
+
+    // Zahlungsdaten
+    drawLeft('Zahlungsdaten', M, y, 11, bold, rgb(0.35,0.4,0.55)); y -= 14;
+    const kv = [
+      ['Empfänger', document.getElementById('name').value || '—'],
+      ['IBAN', document.getElementById('iban').value || '—'],
+      ['BIC', document.getElementById('bic').value || '—'],
+      ['Verwendungszweck', document.getElementById('purpose').value || '—'],
+    ];
+    const labelW = 110;
+    for (const [k,v] of kv){
+      drawLeft(k+':', M, y, 11, font, rgb(0.45,0.5,0.65));
+      drawLeft(v, M + labelW, y, 11, font);
+      y -= 14;
     }
-  </script>
+
+    y -= 6; line(M, y, size.w - M, y); y -= 18;
+
+    // Positionen – Kopf
+    const col = { pos: M, desc: M + 24, amt: size.w - M };
+    drawLeft('Pos', col.pos, y, 10, bold, rgb(0.35,0.4,0.55));
+    drawLeft('Beschreibung', col.desc, y, 10, bold, rgb(0.35,0.4,0.55));
+    drawRight('Betrag (€)', col.amt, y, 10, bold, rgb(0.35,0.4,0.55));
+    y -= 10; line(M, y, size.w - M, y); y -= 12;
+
+    // Positionen – Zeilen
+    const rows = document.querySelectorAll('#positions tbody tr');
+    let idx = 1; let sum = 0;
+    rows.forEach(tr=>{
+      const desc = tr.querySelector('.desc')?.value || '';
+      const amt = parseFloat(tr.querySelector('.amt')?.value) || 0;
+      sum += amt;
+      const lines = wrap(desc, col.amt - col.desc - 40);
+      const rowH = Math.max(lines.length * 12, 14);
+      addPageIfNeeded(rowH + 12);
+      drawLeft(String(idx), col.pos, y, 11, font);
+      lines.forEach((ln,i)=> drawLeft(ln, col.desc, y - i*12, 11, font));
+      drawRight(amt.toFixed(2), col.amt, y, 11, font);
+      y -= rowH + 8; idx++;
+    });
+
+    y -= 6; line(M, y, size.w - M, y); y -= 12;
+
+    // Summe – Box rechts
+    const boxW = 220, boxH = 56;
+    addPageIfNeeded(boxH + 20);
+    page.drawRectangle({ x: size.w - M - boxW, y: y - boxH + 4, width: boxW, height: boxH, borderWidth: 1, color: rgb(0.85,0.88,0.95) });
+    drawLeft('Gesamt (brutto):', size.w - M - boxW + 12, y + 20, 11, bold);
+    drawRight((document.getElementById('sum').textContent||'0.00') + ' €', size.w - M - 12, y + 20, 14, bold);
+    y -= boxH + 10;
+
+    // Footer
+    drawLeft('Hinweis: Diese Rechnung wurde lokal im Browser generiert.', M, M, 9, font, rgb(0.45,0.5,0.65));
+
+    // Download
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'rechnung.pdf';
+    link.click();
+    setTimeout(()=>URL.revokeObjectURL(link.href), 5000);
+  }catch(e){ console.error(e); alert('PDF-Fehler: '+(e.message||e)); }
+}
+</script>
 </body>
 </html>
