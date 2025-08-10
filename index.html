@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GiroCode + Rechnungs‑PDF — Pro</title>
+  <meta name="description" content="EPC/GiroCode (SEPA‑QR) und druckfertige PDF‑Rechnung — Positionen, Summen, Dark/Light, alles lokal im Browser." />
+  <style>
+    :root{
+      --bg:#0b0c10; --card:#121318; --text:#e8eaf0; --muted:#98a1b3; --line:#1f2431; --input:#0f1117;
+      --accent:#22c55e; --accent2:#16a34a; --btn:#0f172a; --shadow:0 10px 24px rgba(0,0,0,.25);
+    }
+    :root[data-theme="light"]{
+      --bg:#f7f8fb; --card:#ffffff; --text:#0f1221; --muted:#435067; --line:#e6e9f2; --input:#f2f4f9;
+      --accent:#0ea5e9; --accent2:#22c55e; --btn:#eef2ff; --shadow:0 8px 18px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    h1{font-size:28px;margin:0 0 8px}
+    p{margin:0;color:var(--muted)}
+    .toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}
+    .kicker{display:inline-flex;gap:8px;align-items:center;padding:4px 10px;border-radius:999px;background:#133018;color:#86efac;font-size:12px}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:18px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+    label{display:block;font-size:13px;margin:10px 0 6px;color:var(--muted)}
+    input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--input);color:var(--text)}
+    textarea{resize:vertical}
+    .row{display:flex;gap:8px;flex-wrap:wrap}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .btn{cursor:pointer;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:var(--btn);color:var(--text);transition:.18s ease}
+    .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;font-weight:700;color:#fff}
+    .muted{font-size:12px;color:var(--muted)}
+    .qrbox{display:flex;align-items:center;justify-content:center;min-height:220px;border:1px dashed var(--line);border-radius:12px;background:var(--input)}
+    .ok{color:#16a34a}.err{color:#ef4444}
+    .toggle{padding:10px 12px;border-radius:10px;background:var(--input);border:1px solid var(--line);cursor:pointer}
+
+    table.items{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:10px}
+    table.items th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:left;padding:0 8px}
+    table.items td{background:var(--input);border:1px solid var(--line);padding:6px;border-radius:10px}
+    table.items input{background:transparent;border:none;padding:8px;width:100%;color:var(--text)}
+    .t-right{text-align:right}
+    .sum{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+    .sum div{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--input)}
+    .sum .num{font-variant-numeric:tabular-nums;text-align:right}
+    .footer{margin-top:20px;font-size:12px;color:var(--muted)}
+    @media (max-width:960px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <div class="kicker">Lokal · keine Uploads</div>
+      <button id="themeBtn" class="toggle" title="Theme umschalten">🌙 Dark</button>
+    </div>
+    <h1>GiroCode & Rechnungs‑PDF</h1>
+    <p>Erzeuge einen <strong>EPC/GiroCode</strong> und eine <strong>PDF‑Rechnung</strong> mit Positionen.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Zahlungsdaten</h3>
+        <label>Empfänger (Name)</label>
+        <input id="name" placeholder="z. B. Max Mustermann e. K." />
+        <div class="two">
+          <div>
+            <label>IBAN</label>
+            <input id="iban" placeholder="DE89 3704 0044 0532 0130 00" />
+          </div>
+          <div>
+            <label>BIC (optional)</label>
+            <input id="bic" placeholder="z. B. COLSDE33" />
+          </div>
+        </div>
+        <div class="two">
+          <div>
+            <label>Verwendungszweck</label>
+            <input id="purpose" maxlength="140" placeholder="Rechnung 2025‑0001" />
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:16px">
+            <input id="autoAmount" type="checkbox" checked>
+            <span class="muted">Betrag automatisch aus Positionen übernehmen</span>
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn primary" onclick="makeQR()">GiroCode generieren</button>
+          <button class="btn" onclick="clearQR()">Zurücksetzen</button>
+        </div>
+        <div id="qrStatus" class="muted" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 8px">Vorschau (QR)</h3>
+        <div class="qrbox"><canvas id="qrCanvas" width="220" height="220"></canvas></div>
+        <div class="muted" style="margin-top:8px">Tipp: Banking‑App öffnen & Code testen.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h3 style="margin:0">Positionen</h3>
+        <button class="btn" onclick="addItem()">+ Position</button>
+      </div>
+
+      <table class="items">
+        <thead>
+          <tr>
+            <th style="width:44px">Pos</th>
+            <th>Beschreibung</th>
+            <th style="width:90px">Menge</th>
+            <th style="width:120px">Preis (€)</th>
+            <th style="width:120px" class="t-right">Zwischensumme</th>
+            <th style="width:60px"></th>
+          </tr>
+        </thead>
+        <tbody id="itemsBody"></tbody>
+      </table>
+
+      <div class="two" style="margin-top:8px">
+        <div>
+          <label>Steuersatz (%)</label>
+          <input id="vatRate" type="number" step="1" value="19">
+        </div>
+        <div></div>
+      </div>
+
+      <div class="sum">
+        <div>Summe netto</div><div class="num" id="sumNet">0,00 €</div>
+        <div>USt.</div><div class="num" id="sumVat">0,00 €</div>
+        <div style="font-weight:700">Gesamt (brutto)</div><div class="num" id="sumGross">0,00 €</div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:16px">
+      <button class="btn primary" onclick="downloadPDF()">PDF herunterladen</button>
+    </div>
+
+    <div class="footer">© <span id="y"></span> · lokal · keine Gewähr.</div>
+  </div>
+
+  <!-- Lib‑Loader: versucht lokal (/vendor), dann alternative CDNs -->
+  <script>
+    (function(){
+      function loadScript(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.async=true;s.onload=res;s.onerror=function(){rej(new Error('Failed '+src))};document.head.appendChild(s);});}
+      window.__libsReady=(async function(){
+        var okQR=false, okPDF=false;
+        try{await loadScript('/vendor/qrcode.min.js'); okQR=!!window.QRCode;}catch(e){}
+        if(!okQR){try{await loadScript('https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js'); okQR=!!window.QRCode;}catch(e){}}
+        if(!okQR){try{await loadScript('https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js'); okQR=!!window.QRCode;}catch(e){}}
+        try{await loadScript('https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js'); okPDF=!!window.PDFLib;}catch(e){}
+        if(!okPDF){try{await loadScript('/vendor/pdf-lib.min.js'); okPDF=!!window.PDFLib;}catch(e){}}
+        if(!okQR||!okPDF) console.warn('Lib load status',{okQR,okPDF});
+        return {okQR,okPDF};
+      })();
+    })();
+  </script>
+
+  <script>
+    // ===== Theme toggle =====
+    const root=document.documentElement; const themeBtn=document.getElementById('themeBtn');
+    const saved=localStorage.getItem('theme'); if(saved){ root.setAttribute('data-theme', saved); themeBtn.textContent = saved==='light'?'☀️ Light':'🌙 Dark'; }
+    themeBtn.addEventListener('click',()=>{ const cur=root.getAttribute('data-theme')||'dark'; const next=cur==='dark'?'light':'dark'; root.setAttribute('data-theme',next); localStorage.setItem('theme',next); themeBtn.textContent = next==='light'?'☀️ Light':'🌙 Dark'; });
+
+    // ===== Basic helpers =====
+    document.getElementById('y').textContent=new Date().getFullYear();
+    function setQRStatus(msg, ok){var el=document.getElementById('qrStatus'); el.textContent=msg||''; el.className= ok? 'ok':'err';}
+    function clearQR(){const c=document.getElementById('qrCanvas'); const x=c.getContext('2d'); x.clearRect(0,0,c.width,c.height);}    
+
+    // ===== IBAN Check (mod 97) =====
+    function sanitizeIBAN(iban){return (iban||'').toUpperCase().replace(/\s+/g,'');}
+    function ibanIsValid(iban){
+      iban=sanitizeIBAN(iban); if(iban.length<15||iban.length>34)return false; const r=iban.slice(4)+iban.slice(0,4);
+      const ex=r.replace(/[A-Z]/g,ch=>(ch.charCodeAt(0)-55).toString()); let rem=0; for(const d of ex){ rem=(rem*10+(+d))%97; } return rem===1;
+    }
+
+    // ===== Items model & totals =====
+    const bodyEl=document.getElementById('itemsBody'); const vatEl=document.getElementById('vatRate'); const autoAmountEl=document.getElementById('autoAmount');
+    function fmt(n){return (isFinite(n)?n:0).toFixed(2).replace('.',',')+' €';}
+    function parseNum(v){const n=parseFloat(String(v).replace(',','.')); return isFinite(n)?n:0;}
+
+    function addItem(data={desc:'', qty:1, price:0}){
+      const i=bodyEl.children.length+1;
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td><input aria-label="Pos" value="${i}" style="width:48px" disabled></td>
+        <td><input aria-label="Beschreibung" class="desc" value="${data.desc||''}"></td>
+        <td><input aria-label="Menge" class="qty" type="number" min="0" step="0.01" value="${data.qty||1}"></td>
+        <td><input aria-label="Preis" class="price" type="number" min="0" step="0.01" value="${data.price||0}"></td>
+        <td class="t-right subtotal">0,00 €</td>
+        <td class="t-right"><button class="btn" title="Entfernen">✕</button></td>`;
+      bodyEl.appendChild(tr);
+      tr.addEventListener('input', computeTotals);
+      tr.querySelector('button').addEventListener('click', ()=>{ tr.remove(); renumber(); computeTotals(); });
+      computeTotals();
+    }
+
+    function renumber(){[...bodyEl.children].forEach((tr,idx)=>{ tr.querySelector('td:first-child input').value = idx+1; });}
+
+    function getItems(){
+      return [...bodyEl.children].map(tr=>{
+        const desc = tr.querySelector('.desc').value.trim();
+        const qty = parseNum(tr.querySelector('.qty').value);
+        const price = parseNum(tr.querySelector('.price').value);
+        return { desc, qty, price };
+      });
+    }
+
+    function computeTotals(){
+      const items=getItems(); let net=0;
+      [...bodyEl.children].forEach((tr,idx)=>{
+        const it=items[idx]; const sub=it.qty*it.price; net+=sub; tr.querySelector('.subtotal').textContent=fmt(sub);
+      });
+      const vatRate=parseNum(vatEl.value); const vatAmt=+(net*vatRate/100); const gross=net+vatAmt;
+      document.getElementById('sumNet').textContent=fmt(net);
+      document.getElementById('sumVat').textContent=fmt(vatAmt);
+      document.getElementById('sumGross').textContent=fmt(gross);
+      if(autoAmountEl.checked){ window.__lastGross = gross; }
+    }
+
+    // Seed rows
+    addItem({desc:'Dienstleistung A', qty:1, price:100});
+    addItem({desc:'Dienstleistung B', qty:1, price:50});
+    vatEl.addEventListener('input', computeTotals);
+
+    function getSafeGross(){
+      if(typeof window.__lastGross === 'number' && isFinite(window.__lastGross)) return window.__lastGross;
+      const items=getItems(); const net=items.reduce((a,c)=>a+c.qty*c.price,0); const vatRate=parseNum(vatEl.value); return net + net*vatRate/100;
+    }
+
+    // ===== EPC/GiroCode String =====
+    function toAmountEUR(v){if(!v&&v!==0)return'';const num=Number(v);if(!isFinite(num)||num<=0)return'';return 'EUR'+num.toFixed(2);}    
+    function buildEPC({name,iban,bic,amount,purpose}){
+      const lines=['BCD','001','1','SCT',(bic||'').trim(),(name||'').trim().slice(0,70),sanitizeIBAN(iban),toAmountEUR(amount),'','',(purpose||'').trim().slice(0,140)];
+      return lines.join('\n');
+    }
+
+    // ===== QR kompatibel zeichnen =====
+    async function drawQRToCanvas(epc){
+      const canvas=document.getElementById('qrCanvas'); const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height);
+      if(window.QRCode && typeof window.QRCode.toCanvas==='function'){ await window.QRCode.toCanvas(canvas, epc, {errorCorrectionLevel:'M', margin:2, width:220}); return; }
+      if(window.QRCode && window.QRCode.CorrectLevel){ const tmp=document.createElement('div'); tmp.style.position='fixed'; tmp.style.left='-9999px'; document.body.appendChild(tmp); new window.QRCode(tmp,{text:epc,width:220,height:220,correctLevel:window.QRCode.CorrectLevel.M}); await new Promise(r=>setTimeout(r,0)); const el=tmp.querySelector('canvas, img'); if(el){ if(el.tagName==='CANVAS')ctx.drawImage(el,0,0,220,220); else {await new Promise((res,rej)=>{el.onload=res; el.onerror=rej;}); ctx.drawImage(el,0,0,220,220);} } tmp.remove(); return; }
+      if(typeof window.qrcode==='function'){ const qr=window.qrcode(0,'M'); qr.addData(epc); qr.make(); const html=qr.createImgTag(4,0); const src=(html.match(/src=\"([^\"]+)\"/)||[])[1]; const img=new Image(); img.src=src; await new Promise((res,rej)=>{img.onload=res; img.onerror=rej;}); ctx.drawImage(img,0,0,220,220); return; }
+      throw new Error('Keine kompatible QR‑Bibliothek gefunden.');
+    }
+
+    async function makeQR(){
+      const name=document.getElementById('name').value; const iban=document.getElementById('iban').value; const bic=document.getElementById('bic').value; const purpose=document.getElementById('purpose').value;
+      if(!ibanIsValid(iban)){ setQRStatus('IBAN ungültig – bitte prüfen.', false); clearQR(); return; }
+      const amount = getSafeGross();
+      try{ await (window.__libsReady||Promise.resolve()); const epc=buildEPC({name,iban,bic,amount,purpose}); await drawQRToCanvas(epc); setQRStatus('QR erfolgreich generiert.', true);} catch(e){ console.error(e); setQRStatus(e.message||'Unbekannter Fehler bei der QR‑Generierung.', false);} }
+
+    // ===== PDF =====
+    async function downloadPDF(){
+      try{ await (window.__libsReady||Promise.resolve()); if(typeof PDFLib==='undefined'){ alert('PDF‑Bibliothek nicht geladen.'); return; }
+        const items=getItems(); const vatRate=parseNum(vatEl.value); const sumNet=items.reduce((a,c)=>a+c.qty*c.price,0); const vatAmt=sumNet*vatRate/100; const sumGross=sumNet+vatAmt;
+        const name=document.getElementById('name').value||''; const iban=document.getElementById('iban').value||''; const bic=document.getElementById('bic').value||''; const purpose=document.getElementById('purpose').value||'';
+        const { PDFDocument, StandardFonts, rgb }=PDFLib; const pdf=await PDFDocument.create(); const page=pdf.addPage([595.28,841.89]); const font=await pdf.embedFont(StandardFonts.Helvetica); const bold=await pdf.embedFont(StandardFonts.HelveticaBold);
+        const M=50; let y=800;
+        // Header
+        page.drawText('Rechnung', {x:M,y, size:22, font:bold});
+        page.drawText(`Datum: ${new Date().toISOString().slice(0,10)}`, {x:M+360,y, size:10, font}); y-=26;
+        // Zahlungsdaten links
+        page.drawText('Zahlungsdaten', {x:M, y, size:10, font:bold, color:rgb(0.7,0.75,0.85)}); y-=14;
+        const rows=[["Empfänger",name],["IBAN",iban],["BIC",bic||'-'],["Verwendungszweck",purpose||'-']];
+        const labelW=110; rows.forEach(([k,v])=>{ page.drawText(k+':', {x:M, y, size:11, font, color:rgb(0.45,0.5,0.65)}); page.drawText(String(v), {x:M+labelW, y, size:11, font}); y-=14; });
+        // QR rechts oben
+        try{ const c=document.getElementById('qrCanvas'); if(c){ const data=c.toDataURL('image/png'); if(data && data.length>100){ const bytes=await fetch(data).then(r=>r.arrayBuffer()); const img=await pdf.embedPng(bytes); const q=120; page.drawImage(img,{x:595.28-M-q,y:800-q/2,width:q,height:q}); } } }catch(_){ }
+        // Linie
+        y-=6; page.drawLine({start:{x:M,y}, end:{x:595.28-M,y}, thickness:1, color:rgb(0.16,0.18,0.25)}); y-=18;
+
+        // Tabelle – Kopf
+        const cols=[M, M+28, M+360, M+430, M+510];
+        page.drawText('Pos', {x:cols[0], y, size:10, font:bold, color:rgb(0.6,0.65,0.75)});
+        page.drawText('Beschreibung', {x:cols[1], y, size:10, font:bold, color:rgb(0.6,0.65,0.75)});
+        page.drawText('Menge', {x:cols[2], y, size:10, font:bold, color:rgb(0.6,0.65,0.75)});
+        page.drawText('Preis', {x:cols[3], y, size:10, font:bold, color:rgb(0.6,0.65,0.75)});
+        page.drawText('Summe', {x:cols[4], y, size:10, font:bold, color:rgb(0.6,0.65,0.75)});
+        y-=10; page.drawLine({start:{x:M,y}, end:{x:595.28-M,y}, thickness:1, color:rgb(0.16,0.18,0.25)}); y-=12;
+
+        // Tabelle – Zeilen (mit Umbruch)
+        const wrap=(text,w)=>{const words=String(text||'').split(/\s+/); let line='', out=[]; for(const w0 of words){ const t=line?line+' '+w0:w0; if(font.widthOfTextAtSize(t,11) > w){ out.push(line); line=w0; } else line=t; } if(line) out.push(line); return out; };
+        items.forEach((it,idx)=>{
+          const sub=it.qty*it.price; const lines=wrap(it.desc, cols[2]-cols[1]-6); const h=lines.length*12; const rowY=y;
+          page.drawText(String(idx+1), {x:cols[0], y:rowY, size:11, font});
+          lines.forEach((ln,i)=>page.drawText(ln,{x:cols[1], y:rowY - i*12, size:11, font}));
+          page.drawText(String(it.qty), {x:cols[2], y:rowY, size:11, font});
+          page.drawText(it.price.toFixed(2)+' €', {x:cols[3], y:rowY, size:11, font});
+          page.drawText(sub.toFixed(2)+' €', {x:cols[4], y:rowY, size:11, font});
+          y -= Math.max(h, 14) + 6;
+        });
+
+        y-=6; page.drawLine({start:{x:M,y}, end:{x:595.28-M,y}, thickness:1, color:rgb(0.16,0.18,0.25)}); y-=12;
+
+        // Summenbox rechts
+        const boxW=220, boxH=56;
+        page.drawRectangle({x:595.28-M-boxW,y:y-boxH+4,width:boxW,height:boxH,borderWidth:1,color:rgb(0.85,0.88,0.95)});
+        page.drawText('Summe netto:', {x:595.28-M-boxW+12, y:y+34, size:10, font});
+        page.drawText(sumNet.toFixed(2)+' €', {x:595.28-M-12, y:y+34, size:10, font});
+        page.drawText(`USt (${vatRate}%) :`, {x:595.28-M-boxW+12, y:y+20, size:10, font});
+        page.drawText(vatAmt.toFixed(2)+' €', {x:595.28-M-12, y:y+20, size:10, font});
+        page.drawText('Gesamt (brutto):', {x:595.28-M-boxW+12, y:y+6, size:11, font:bold});
+        page.drawText(sumGross.toFixed(2)+' €', {x:595.28-M-12, y:y+6, size:11, font:bold});
+
+        // Footer
+        page.drawText('Erstellt lokal im Browser · keine Datenübertragung', {x:M, y:60, size:9, font, color:rgb(0.7,0.75,0.85)});
+
+        const bytes=await pdf.save(); const blob=new Blob([bytes],{type:'application/pdf'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='rechnung.pdf'; a.click(); setTimeout(()=>URL.revokeObjectURL(url), 5000);
+      }catch(e){ console.error(e); alert('PDF‑Fehler: '+(e.message||e)); }
+    }
+
+    // ===== Init =====
+    document.addEventListener('DOMContentLoaded',()=>{ if(bodyEl.children.length===0){ addItem({desc:'Dienstleistung A', qty:1, price:100}); addItem({desc:'Dienstleistung B', qty:1, price:50}); } computeTotals(); });
+  </script>
+</body>
+</html>
