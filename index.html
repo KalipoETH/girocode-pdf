@@ -288,7 +288,7 @@
         const size={w:595.28,h:841.89}; let page=pdf.addPage([size.w,size.h]);
         const font=await pdf.embedFont(StandardFonts.Helvetica); const bold=await pdf.embedFont(StandardFonts.HelveticaBold);
         const lineCol=rgb(0.16,0.18,0.25); const muted=rgb(0.45,0.5,0.65);
-        const M=50; let y=size.h-M;
+        const M=50; let y=size.h-M; let pageNum=0;
 
         let logoImg=null, qrImg=null;
         if(window.__logoBytes){
@@ -296,7 +296,8 @@
         }
         try{
           const c=document.getElementById('qrCanvas');
-          if(c){ const data=c.toDataURL('image/png'); if(data && data.length>100){ const bytes=await fetch(data).then(r=>r.arrayBuffer()); qrImg=await pdf.embedPng(bytes); } }
+          const dataUrl=c?.toDataURL('image/png');
+          if(dataUrl && dataUrl.length>100){ const bytes=await fetch(dataUrl).then(r=>r.arrayBuffer()); qrImg=await pdf.embedPng(bytes); }
         }catch(_){ }
 
         function wrap(text,width){
@@ -306,18 +307,26 @@
         }
         function line(){ page.drawLine({start:{x:M,y}, end:{x:size.w-M,y}, thickness:1, color:lineCol}); }
         function drawHeader(){
-          let top=size.h-M;
-          if(logoImg){
-            const maxW=130,maxH=60; const s=Math.min(maxW/logoImg.width,maxH/logoImg.height,1); const w=logoImg.width*s, h=logoImg.height*s;
-            page.drawImage(logoImg,{x:size.w-M-w,y:top-h,width:w,height:h}); top-=h+10;
-          }
-          y=top;
-          page.drawText('Rechnung',{x:M,y,size:24,font:bold});
+          const ty=size.h-M;
+          page.drawText('Rechnung',{x:M,y:ty,size:24,font:bold});
           const ds=new Date().toISOString().slice(0,10); const dw=font.widthOfTextAtSize(ds,10);
-          page.drawText(ds,{x:size.w-M-dw,y:y+8,size:10,font,color:muted});
-          y-=32;
+          page.drawText(ds,{x:size.w-M-dw,y:ty+8,size:10,font,color:muted});
+          let logoH=0, qrH=0;
+          if(logoImg){
+            const maxW=130,maxH=60; const s=Math.min(maxW/logoImg.width,maxH/logoImg.height,1);
+            const w=logoImg.width*s, h=logoImg.height*s;
+            page.drawImage(logoImg,{x:size.w-M-w,y:size.h-M-h,width:w,height:h});
+            logoH=h;
+          }
+          if(pageNum===0 && qrImg){
+            const qW=110; const s=qW/qrImg.width; const qH=qrImg.height*s;
+            let qY=size.h-M-qH; if(logoH) qY=size.h-M-logoH-8-qH;
+            page.drawImage(qrImg,{x:size.w-M-qW,y:qY,width:qW,height:qH}); qrH=qH;
+          }
+          const topRightBlock=(logoH && qrH)?logoH+8+qrH:Math.max(logoH,qrH);
+          y=size.h-M-topRightBlock-16; if(!logoH && !qrH) y-=16;
         }
-        function newPage(){ page=pdf.addPage([size.w,size.h]); drawHeader(); }
+        function newPage(){ page=pdf.addPage([size.w,size.h]); pageNum++; drawHeader(); }
         function addPageIfNeeded(h,after){ if(y-h<M+40){ newPage(); if(after) after(); } }
         function drawTableHeader(){
           page.drawText('Pos',{x:cols[0],y,size:11,font:bold,color:muted});
@@ -337,12 +346,10 @@
           y-=6;
         }
 
-        const payTop=y;
         page.drawText('Zahlungsdaten',{x:M,y,size:11,font:bold,color:muted}); y-=14;
         const rows=[["Empfänger",name],["IBAN",iban],["BIC",bic||'-'],["Verwendungszweck",purpose||'-']];
         const labelW=110; rows.forEach(([k,v])=>{ page.drawText(k+':',{x:M,y,size:11,font,color:muted}); page.drawText(String(v),{x:M+labelW,y,size:11,font}); y-=14; });
         line(); y-=18;
-        if(qrImg){ const q=110; page.drawImage(qrImg,{x:size.w-M-q,y:payTop-q+10,width:q,height:q}); }
 
         const cols=[M,M+30,M+300,M+380,M+460];
         drawTableHeader();
