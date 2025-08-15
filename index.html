@@ -390,5 +390,15 @@
     // ===== Init =====
     document.addEventListener('DOMContentLoaded',()=>{ if(bodyEl.children.length===0){ addItem({desc:'Dienstleistung A', qty:1, price:100}); addItem({desc:'Dienstleistung B', qty:1, price:50}); } computeTotals(); });
   </script>
+<nav class="site-nav" aria-label="Fußnavigation">
+  <a href="/">Start</a>
+  <a href="/impressum">Impressum</a>
+  <a href="/datenschutz">Datenschutz</a>
+</nav>
+<style>
+.site-nav{display:flex;gap:14px;justify-content:center;margin:16px 0;font-size:14px}
+.site-nav a{color:inherit;opacity:.8;text-decoration:none}
+.site-nav a:hover{opacity:1;text-decoration:underline}
+</style>
 </body>
 </html>
