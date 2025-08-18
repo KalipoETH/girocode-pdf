@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="de"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EPC-Standard für SEPA-QR (GiroCode) – Felder & Format</title>
+<meta name="description" content="Der EPC-Standard definiert Aufbau und Felder des SEPA-QR (GiroCode). Übersicht der Pflicht- und optionalen Angaben.">
+<link rel="canonical" href="https://www.girocodegenerator.com/wissen/epc-standard">
+<meta name="robots" content="index,follow">
+<style>
+  body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;background:#0b0c10;color:#e8eaf0}
+  .wrap{max-width:860px;margin:0 auto;padding:28px}
+  h1{margin:0 0 12px} h2{margin:24px 0 8px} p,li{line-height:1.65}
+  a{color:#86efac}
+  .card{background:#121318;border:1px solid #1f2431;border-radius:14px;padding:16px}
+  .site-nav{display:flex;gap:14px;justify-content:center;margin:16px 0;font-size:14px}
+  .site-nav a{color:inherit;opacity:.85;text-decoration:none}
+  .site-nav a:hover{opacity:1;text-decoration:underline}
+  .cta{display:inline-block;margin-top:12px;padding:10px 14px;border:1px solid #1f2431;border-radius:10px;background:#0f172a;color:#e8eaf0;text-decoration:none}
+  code{background:#0f1117;border:1px solid #1f2431;border-radius:8px;padding:2px 6px}
+</style>
+</head><body>
+<main class="wrap">
+  <nav class="site-nav" aria-label="Hauptnavigation">
+    <a href="/">Start</a><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a>
+  </nav>
+
+  <h1>EPC-Standard: Aufbau & Felder</h1>
+  <div class="card">
+    <p>Der <strong>EPC-Standard</strong> (European Payments Council) definiert, wie ein SEPA-QR (GiroCode) strukturiert ist. Das Tool erzeugt genau dieses Format, damit Banking-Apps die Daten zuverlässig erkennen.</p>
+
+    <h2>Typische Felder</h2>
+    <ul>
+      <li>Service Tag: <code>BCD</code></li>
+      <li>Version: <code>001</code></li>
+      <li>Char Set: <code>1</code> (UTF-8)</li>
+      <li>SEPA Credit Transfer: <code>SCT</code></li>
+      <li>BIC (optional)</li>
+      <li>Empfängername (max. ~70 Zeichen)</li>
+      <li>IBAN (Pflicht)</li>
+      <li>Betrag: <code>EUR12.34</code> (optional)</li>
+      <li>Verwendungszweck (optional, ~140 Zeichen)</li>
+    </ul>
+
+    <h2>Praxis-Hinweise</h2>
+    <ul>
+      <li>IBAN immer ohne Leerzeichen verwenden.</li>
+      <li>Verwendungszweck kurz und eindeutig halten.</li>
+      <li>BIC nur falls nötig; viele Banken erkennen IBAN allein.</li>
+    </ul>
+
+    <a class="cta" href="/">GiroCode jetzt erstellen →</a>
+  </div>
+</main>
+</body></html>
