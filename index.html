@@ -58,6 +58,42 @@
     .footer{margin-top:20px;font-size:12px;color:var(--muted)}
     @media (max-width:960px){.grid{grid-template-columns:1fr}}
   </style>
+  <style>
+/* ——— Top-Nav (gekapselt, überschreibt nichts Globales) ——— */
+.app-nav{position:sticky;top:0;z-index:1000;border-bottom:1px solid rgba(125,125,125,.18);
+  background:rgba(255,255,255,.65);backdrop-filter:saturate(180%) blur(10px)}
+[data-theme="dark"] .app-nav{background:rgba(18,18,18,.65);border-color:rgba(255,255,255,.12)}
+.app-nav .nav-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1100px;margin:0 auto;padding:10px 16px}
+.app-nav .brand{font-weight:700;text-decoration:none;color:inherit;letter-spacing:.2px}
+.app-nav .nav-burger{display:none;cursor:pointer;width:36px;height:28px;align-items:center;justify-content:center}
+.app-nav .nav-burger span{display:block;height:2px;width:22px;background:currentColor;margin:4px 0;transition:transform .25s ease,opacity .25s ease}
+.app-nav .nav-menu{max-width:1100px;margin:0 auto;padding:0 8px 10px;display:flex;gap:6px;align-items:center}
+.app-nav .nav-menu a,
+.app-nav .dropdown > summary{color:inherit;text-decoration:none;padding:10px 12px;border-radius:10px;opacity:.9;transition:opacity .2s ease,background .2s ease,transform .2s ease}
+.app-nav .nav-menu a:hover,
+.app-nav .dropdown > summary:hover{opacity:1;background:rgba(127,127,127,.12)}
+/* Dropdown */
+.app-nav .dropdown{position:relative;list-style:none}
+.app-nav .dropdown > summary{list-style:none;cursor:pointer}
+.app-nav .dropdown > summary::-webkit-details-marker{display:none}
+.app-nav .dropdown[open] > summary{background:rgba(127,127,127,.12)}
+.app-nav .dropdown .dropdown-panel{position:absolute;top:42px;left:0;min-width:230px;padding:8px;border-radius:12px;border:1px solid rgba(125,125,125,.18);
+  background:rgba(255,255,255,.95);backdrop-filter:saturate(180%) blur(10px);display:flex;flex-direction:column}
+[data-theme="dark"] .app-nav .dropdown .dropdown-panel{background:rgba(18,18,18,.95);border-color:rgba(255,255,255,.12)}
+.app-nav .dropdown .dropdown-panel a{padding:10px;border-radius:8px}
+.app-nav .dropdown .dropdown-panel a:hover{background:rgba(127,127,127,.12)}
+/* Responsive */
+@media (max-width: 900px){
+  .app-nav .nav-burger{display:flex}
+  .app-nav .nav-menu{display:none;flex-direction:column;gap:4px;padding:8px 16px 16px}
+  .app-nav .dropdown .dropdown-panel{position:static;border:1px solid rgba(125,125,125,.18)}
+  .app-nav .nav-check:checked ~ .nav-menu{display:flex}
+  /* Burger Animation */
+  .app-nav .nav-check:checked + .nav-bar .nav-burger span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+  .app-nav .nav-check:checked + .nav-bar .nav-burger span:nth-child(2){opacity:0}
+  .app-nav .nav-check:checked + .nav-bar .nav-burger span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+}
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -83,6 +119,31 @@
   </script>
 </head>
 <body>
+<header class="app-nav" role="banner">
+  <input type="checkbox" id="nav-check" class="nav-check" aria-hidden="true">
+  <div class="nav-bar">
+    <a class="brand" href="/">GiroCode&nbsp;Generator</a>
+    <label for="nav-check" class="nav-burger" aria-label="Menü öffnen/schließen">
+      <span></span><span></span><span></span>
+    </label>
+  </div>
+  <nav id="nav-menu" class="nav-menu" aria-label="Hauptnavigation">
+    <a href="/">Start</a>
+    <details class="dropdown">
+      <summary>Wissen</summary>
+      <div class="dropdown-panel">
+        <a href="/wissen/girocode">GiroCode</a>
+        <a href="/wissen/epc-standard">EPC-Standard</a>
+        <a href="/wissen/iban-bic">IBAN &amp; BIC</a>
+        <a href="/wissen/betrag-und-zweck">Betrag &amp; Zweck</a>
+        <a href="/wissen/scannen">Scannen</a>
+        <a href="/wissen/rechnung">Rechnung</a>
+      </div>
+    </details>
+    <a href="/impressum">Impressum</a>
+    <a href="/datenschutz">Datenschutz</a>
+  </nav>
+</header>
   <div class="wrap">
     <div class="toolbar">
       <div class="kicker">Lokal · keine Uploads</div>
@@ -434,15 +495,5 @@
       <p>Viele Banking-Apps unterstützen SEPA-QR (GiroCode). QR-Scanner in der App öffnen & Code scannen.</p>
     </details>
   </section>
-<nav class="site-nav" aria-label="Fußnavigation">
-  <a href="/">Start</a>
-  <a href="/impressum">Impressum</a>
-  <a href="/datenschutz">Datenschutz</a>
-</nav>
-<style>
-.site-nav{display:flex;gap:14px;justify-content:center;margin:16px 0;font-size:14px}
-.site-nav a{color:inherit;opacity:.8;text-decoration:none}
-.site-nav a:hover{opacity:1;text-decoration:underline}
-</style>
 </body>
 </html>
