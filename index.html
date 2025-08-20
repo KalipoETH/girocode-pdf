@@ -56,6 +56,17 @@
     .sum div{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--input)}
     .sum .num{font-variant-numeric:tabular-nums;text-align:right}
     .footer{margin-top:20px;font-size:12px;color:var(--muted)}
+    .visually-hidden{position:absolute!important;clip:rect(1px,1px,1px,1px)!important;padding:0!important;border:0!important;height:1px!important;width:1px!important;overflow:hidden!important;white-space:nowrap!important}
+    .disclaimer{margin:14px 0;padding:12px;border:1px solid rgba(125,125,125,.18);border-radius:12px;background:rgba(255,255,255,.04)}
+    [data-theme="light"] .disclaimer{background:rgba(0,0,0,.03)}
+    .disclaimer-row{display:flex;gap:10px;align-items:flex-start}
+    .disclaimer input[type="checkbox"]{margin-top:.2rem;min-width:18px;min-height:18px}
+    .disclaimer-details{margin-top:8px}
+    .disclaimer-details > summary{cursor:pointer;opacity:.9}
+    .disclaimer-text{margin-top:8px;line-height:1.65;opacity:.95}
+    .disclaimer-hint{margin-top:8px;color:#fbbf24}
+    .disclaimer.attn{animation:shake .3s linear 1;border-color:#ef4444}
+    @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(6px)}75%{transform:translateX(-6px)}}
     @media (max-width:960px){.grid{grid-template-columns:1fr}}
   </style>
   <style>
@@ -176,20 +187,36 @@
             <input id="bic" placeholder="z. B. COLSDE33" />
           </div>
         </div>
-        <div class="two">
-          <div>
-            <label>Verwendungszweck</label>
-            <input id="purpose" maxlength="140" placeholder="Rechnung 2025‑0001" />
+          <div class="two">
+            <div>
+              <label>Verwendungszweck</label>
+              <input id="purpose" maxlength="140" placeholder="Rechnung 2025‑0001" />
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:16px">
+              <input id="autoAmount" type="checkbox" checked>
+              <span class="muted">Betrag automatisch aus Positionen übernehmen</span>
+            </div>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:16px">
-            <input id="autoAmount" type="checkbox" checked>
-            <span class="muted">Betrag automatisch aus Positionen übernehmen</span>
+          <section id="disclaimer" class="disclaimer" role="group" aria-labelledby="disclaimer-title">
+            <h2 id="disclaimer-title" class="visually-hidden">Haftungsausschluss</h2>
+            <div class="disclaimer-row">
+              <input type="checkbox" id="disclaimer-accept" aria-describedby="disclaimer-text">
+              <label for="disclaimer-accept">
+                Ich habe den <strong>Haftungsausschluss</strong> gelesen und akzeptiere ihn.
+              </label>
+            </div>
+            <details class="disclaimer-details">
+              <summary>Haftungsausschluss anzeigen</summary>
+              <div id="disclaimer-text" class="disclaimer-text">
+                <p><strong>Haftungsausschluss:</strong> Die bereitgestellten Funktionen (GiroCode‑/SEPA‑QR‑Erzeugung, Rechnungs‑PDF) werden „wie besehen“ und ohne Gewährleistung bereitgestellt. Du bist selbst dafür verantwortlich, <em>alle</em> Eingaben (insbesondere Empfängername, IBAN, BIC, Betrag und Verwendungszweck) vor Nutzung zu prüfen. Es werden keine Zahlungsdienste erbracht und keine Bankgeschäfte vermittelt. Eine Haftung für fehlerhafte Eingaben, Übertragungsfehler, Inkompatibilitäten mit einzelnen Banking‑Apps, Folgeschäden oder versäumte Zahlungen ist ausgeschlossen, soweit gesetzlich zulässig. Die Verarbeitung erfolgt lokal im Browser; es findet keine serverseitige Speicherung deiner eingegebenen Inhalte statt. Beachte zusätzlich die Hinweise im <a href="/impressum">Impressum</a> und in der <a href="/datenschutz">Datenschutzerklärung</a>.</p>
+              </div>
+            </details>
+            <p class="disclaimer-hint" aria-live="polite" hidden>Bitte bestätige den Haftungsausschluss, um fortzufahren.</p>
+          </section>
+          <div class="row" style="margin-top:10px">
+            <button class="btn primary" onclick="makeQR()" disabled aria-disabled="true">GiroCode generieren</button>
+            <button class="btn" onclick="clearQR()">Zurücksetzen</button>
           </div>
-        </div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn primary" onclick="makeQR()">GiroCode generieren</button>
-          <button class="btn" onclick="clearQR()">Zurücksetzen</button>
-        </div>
         <div id="qrStatus" class="muted" style="margin-top:8px"></div>
       </div>
 
@@ -235,9 +262,9 @@
       </div>
     </div>
 
-    <div class="row" style="margin-top:16px">
-      <button class="btn primary" onclick="downloadPDF()">PDF herunterladen</button>
-    </div>
+      <div class="row" style="margin-top:16px">
+        <button class="btn primary" onclick="downloadPDF()" disabled aria-disabled="true">PDF herunterladen</button>
+      </div>
 
     <div class="footer">© <span id="y"></span> · lokal · keine Gewähr.</div>
   </div>
@@ -496,5 +523,71 @@
       <p>Viele Banking-Apps unterstützen SEPA-QR (GiroCode). QR-Scanner in der App öffnen & Code scannen.</p>
     </details>
   </section>
+  <script>
+(function(){
+  const STORAGE_KEY = 'disclaimerAccepted_v1';
+  const box = document.getElementById('disclaimer-accept');
+  const hint = document.querySelector('.disclaimer-hint');
+  const shell = document.getElementById('disclaimer');
+  if(!box || !shell){ return; }
+
+  // Kandidaten für Aktionsbuttons (bekannte IDs/Klassen)…
+  const selectors = [
+    '#generate-qr','#btn-generate','#generate','#create-qr','button.generate-qr',
+    '#download-pdf','#btn-download-pdf','#pdfDownload','button.download-pdf',
+    'a.download-pdf','a[download][href$=".pdf"]'
+  ];
+  let targets = Array.from(document.querySelectorAll(selectors.join(',')));
+  // Fallback: per Textinhalt markieren
+  if(!targets.length){
+    document.querySelectorAll('button, a[role="button"], a').forEach(el=>{
+      const t = (el.textContent||'').toLowerCase();
+      if(/(girocode|qr|generieren|erzeugen|pdf|rechnung)/.test(t)){
+        el.dataset.requiresConsent = 'true';
+        targets.push(el);
+      }
+    });
+  } else {
+    targets.forEach(el=>el.dataset.requiresConsent='true');
+  }
+
+  const accepted = () => box.checked || localStorage.getItem(STORAGE_KEY) === '1';
+  const applyState = () => {
+    const ok = accepted();
+    targets.forEach(el=>{
+      if(ok){
+        el.removeAttribute('disabled'); el.setAttribute('aria-disabled','false');
+      } else {
+        el.setAttribute('disabled',''); el.setAttribute('aria-disabled','true');
+      }
+    });
+    if(hint) hint.hidden = ok;
+    if(!ok){ shell.classList.remove('attn'); }
+  };
+
+  // Initialzustand aus localStorage herstellen
+  if(localStorage.getItem(STORAGE_KEY)==='1'){ box.checked = true; }
+  applyState();
+
+  box.addEventListener('change', ()=>{
+    if(box.checked){ localStorage.setItem(STORAGE_KEY,'1'); }
+    else { localStorage.removeItem(STORAGE_KEY); }
+    applyState();
+  });
+
+  // Klicks auf gesperrte Ziele abfangen
+  document.addEventListener('click', (e)=>{
+    const el = e.target.closest('[data-requires-consent], button, a[role="button"]');
+    if(!el || !targets.includes(el)) return;
+    if(!accepted()){
+      e.preventDefault(); e.stopPropagation();
+      shell.classList.add('attn');
+      if(hint){ hint.hidden = false; }
+      shell.scrollIntoView({behavior:'smooth', block:'center'});
+      setTimeout(()=>shell.classList.remove('attn'), 600);
+    }
+  }, true);
+})();
+  </script>
 </body>
 </html>
