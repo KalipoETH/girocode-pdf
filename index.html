@@ -68,6 +68,11 @@
     .disclaimer.attn{animation:shake .3s linear 1;border-color:#ef4444}
     @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(6px)}75%{transform:translateX(-6px)}}
     @media (max-width:960px){.grid{grid-template-columns:1fr}}
+    /* internal links grid */
+    .link-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:12px 0}
+    .link-grid a{display:block;padding:10px 12px;border:1px solid rgba(125,125,125,.18);border-radius:12px;text-decoration:none;opacity:.95}
+    .link-grid a:hover{opacity:1;transform:translateY(-1px)}
+    .link-grid small{display:block;opacity:.75;margin-top:4px}
   </style>
   <style>
 /* ——— Top-Nav (gekapselt, überschreibt nichts Globales) ——— */
@@ -191,6 +196,29 @@
     <a href="/datenschutz">Datenschutz</a>
   </nav>
 </header>
+<!-- INTERNAL-LINKS:START -->
+<section aria-label="Beliebte Anwendungsfälle">
+  <h2>Beliebte Anwendungsfälle</h2>
+  <div class="link-grid">
+    <a href="/" title="GiroCode Generator (SEPA‑QR/EPC) – kostenlos & lokal">
+      <strong>SEPA‑QR jetzt erstellen</strong>
+      <small>GiroCode Generator – kostenlos & lokal im Browser</small>
+    </a>
+    <a href="/wissen/rechnung/" title="GiroCode auf Rechnungen richtig platzieren">
+      <strong>GiroCode für Rechnungen</strong>
+      <small>Platzierung, Größe, Zuordnung & PDF‑Tipps</small>
+    </a>
+    <a href="/wissen/epc-standard/" title="EPC‑Standard für SEPA‑QR (GiroCode)">
+      <strong>EPC‑Standard (SEPA‑QR)</strong>
+      <small>Aufbau, Felder, Formatregeln</small>
+    </a>
+    <a href="/wissen/betrag-und-zweck/" title="Betrag & Verwendungszweck im GiroCode">
+      <strong>Betrag & Verwendungszweck</strong>
+      <small>Format (EUR12.34) & klare Zwecke</small>
+    </a>
+  </div>
+</section>
+<!-- INTERNAL-LINKS:END -->
   <div class="wrap">
     <div class="toolbar">
       <div class="kicker">Lokal · keine Uploads</div>
