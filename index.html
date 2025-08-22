@@ -7,13 +7,6 @@
   <meta name="description" content="SEPA‑QR in Sekunden erstellen: IBAN, Betrag, Verwendungszweck. 100% lokal, PDF‑Rechnung, keine Datenübertragung.">
   <link rel="canonical" href="https://www.girocodegenerator.com/">
   <meta name="robots" content="index,follow">
-  <!-- (Optional aber sinnvoll) Open Graph / Twitter ohne bestehendes Layout zu ändern -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.girocodegenerator.com/">
-  <meta property="og:title" content="GiroCode Generator – SEPA-QR (EPC) & Rechnungs-PDF">
-  <meta property="og:description" content="SEPA-QR erstellen & Rechnungs-PDF – lokal, schnell, kostenlos.">
-  <meta property="og:image" content="/og-image.png">
-  <meta name="twitter:card" content="summary_large_image">
   <style>
     :root{
       --bg:#0b0c10; --card:#121318; --text:#e8eaf0; --muted:#98a1b3; --line:#1f2431; --input:#0f1117;
@@ -174,15 +167,6 @@
   }
 }
 </script>
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebSite",
-  "@id":"https://www.girocodegenerator.com/#website",
-  "url":"https://www.girocodegenerator.com/",
-  "name":"GiroCodeGenerator.com"
-}
-</script>
   <style>
   /* CLS‑Reserven (ändern nichts an deiner Logik, nur Platzhalter) */
   .qr-slot{display:inline-block;min-width:180px;min-height:180px;aspect-ratio:1/1}
@@ -192,6 +176,33 @@
   #qr-area,#qr-wrap,.qr-preview{min-width:180px;min-height:180px}
   #pdf-preview,#invoicePreview,.invoice-preview{min-height:480px}
   </style>
+  <!-- SEO: WebSite + SearchAction -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "url":"https://www.girocodegenerator.com",
+    "name":"GiroCodeGenerator.com",
+    "potentialAction":{
+      "@type":"SearchAction",
+      "target":"https://www.google.com/search?q=site:girocodegenerator.com+{search_term_string}",
+      "query-input":"required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="GiroCode Generator – SEPA‑QR/EPC, kostenlos & lokal">
+  <meta property="og:description" content="SEPA‑QR in Sekunden: IBAN, Betrag, Zweck. PDF‑Rechnung. Keine Datenspeicherung.">
+  <meta property="og:url" content="https://www.girocodegenerator.com">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://www.girocodegenerator.com/og-image.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GiroCode Generator – SEPA‑QR/EPC, kostenlos & lokal">
+  <meta name="twitter:description" content="SEPA‑QR in Sekunden: IBAN, Betrag, Zweck. PDF‑Rechnung. Keine Datenspeicherung.">
+  <meta name="twitter:image" content="https://www.girocodegenerator.com/og-image.png">
 </head>
 <body>
 <header class="app-nav" role="banner">
