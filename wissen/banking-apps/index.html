@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="de"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banking‑Apps & GiroCode – Kompatibilität & Troubleshooting</title>
+<meta name="author" content="Kaleb Jahnke">
+<meta name="description" content="Welche Banking‑Apps SEPA‑QR (GiroCode) unterstützen, Tipps zu Scan, QR‑Größe, Weißraum und Fehlerbehebung.">
+<link rel="canonical" href="https://www.girocodegenerator.com/wissen/banking-apps">
+<meta name="robots" content="index,follow">
+
+<style>
+  body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;background:#0b0c10;color:#e8eaf0}
+  .wrap{max-width:980px;margin:0 auto;padding:28px}
+  h1{margin:0 0 12px}h2{margin:24px 0 8px}h3{margin:18px 0 8px}
+  p,li{line-height:1.75}a{color:#86efac}
+  .site-nav{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:16px 0;font-size:14px}
+  .site-nav a{color:inherit;opacity:.85;text-decoration:none}.site-nav a:hover{opacity:1;text-decoration:underline}
+  .card{background:#121318;border:1px solid #1f2431;border-radius:14px;padding:18px;margin:12px 0}
+  .toc{background:#0f1117;border:1px solid #1f2431;border-radius:10px;padding:12px;margin:12px 0}
+  ul.check{list-style:"✓  ";padding-left:1.2em}
+  code{background:#0f1117;border:1px solid #1f2431;border-radius:6px;padding:2px 6px}
+  .note{color:#9aa1b6;font-size:.95em}
+  .cta{display:inline-block;margin-top:14px;padding:10px 14px;border:1px solid #1f2431;border-radius:10px;background:#0f172a;color:#e8eaf0;text-decoration:none}
+  blockquote{border-left:3px solid #1f2431;padding-left:12px;color:#c9d1d9}
+  table{width:100%;border-collapse:collapse;margin:12px 0}
+  th,td{border:1px solid #1f2431;padding:8px;text-align:left}
+  th{background:#0f1117}
+  /* internal links grid */
+  .link-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:12px 0}
+  .link-grid a{display:block;padding:10px 12px;border:1px solid rgba(125,125,125,.18);border-radius:12px;text-decoration:none;opacity:.95}
+  .link-grid a:hover{opacity:1;transform:translateY(-1px)}
+  .link-grid small{display:block;opacity:.75;margin-top:4px}
+  .intent-syn{margin:16px 0;padding:12px;border:1px solid rgba(125,125,125,.18);border-radius:12px;background:rgba(255,255,255,.04)}
+  [data-theme="light"] .intent-syn{background:rgba(0,0,0,.03)}
+  .intent-syn h2{margin:0 0 8px;font-size:1.05rem}
+  .intent-syn p{margin:0 0 6px;opacity:.95}
+  .intent-syn ul{margin:8px 0 0 1.2em}
+  .intent-syn li{margin:.15rem 0}
+  .author-box{display:flex;gap:12px;align-items:center;margin:12px 0;padding:12px;border:1px solid rgba(125,125,125,.18);border-radius:12px;background:rgba(255,255,255,.04)}
+  [data-theme="light"] .author-box{background:rgba(0,0,0,.03)}
+  .author-box .meta{font-size:.95rem;opacity:.95}
+  .author-box .meta .muted{opacity:.75}
+  .trust-bar{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:14px 0}
+  .trust-bar .badge{border:1px solid rgba(125,125,125,.18);border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.04)}
+  [data-theme="light"] .trust-bar .badge{background:rgba(0,0,0,.03)}
+  .breadcrumbs{font-size:.9rem;opacity:.85;margin:8px 0}
+</style>
+</head><body><main class="wrap">
+
+<nav class="site-nav" aria-label="Navigation">
+  <a href="/">GiroCode Generator</a>
+  <a href="/wissen/girocode">GiroCode</a>
+  <a href="/wissen/epc-standard">EPC‑Standard</a>
+  <a href="/wissen/iban-bic">IBAN &amp; BIC</a>
+  <a href="/wissen/betrag-und-zweck">Betrag &amp; Zweck</a>
+  <a href="/wissen/scannen">Scannen</a>
+  <a href="/wissen/rechnung">Rechnung</a>
+  <a href="/wissen/banking-apps">Banking‑Apps</a>
+  <a href="/ueber-uns/">Über uns</a>
+  <a href="/impressum">Impressum</a>
+  <a href="/datenschutz">Datenschutz</a>
+</nav>
+
+<h1>Banking‑Apps &amp; GiroCode</h1>
+<!-- AUTHOR-BOX:START -->
+<section class="author-box" aria-label="Autor & Aktualisierung">
+  <div class="meta">
+    <strong>Autor:</strong> Kaleb Jahnke<br>
+    <span class="muted">Letzte Aktualisierung: <time datetime="2025-08-21">21.08.2025</time></span><br>
+    <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a>
+  </div>
+</section>
+<!-- AUTHOR-BOX:END -->
+<div class="card">
+<div class="toc"><strong>Inhalt:</strong> <a href="#scan-kompatibilitaet">Scan‑Kompatibilität</a> · <a href="#groesse-und-weissraum">Größe &amp; Weißraum</a> · <a href="#fehler-und-loesungen">Fehler &amp; Lösungen</a> · <a href="#faq">FAQ</a></div>
+<p>Viele Banken liefern eigene Apps mit QR‑Scanner für SEPA‑Überweisungen. Trotz gemeinsamer Standards verhalten sich die Anwendungen unterschiedlich. Der folgende Überblick erklärt, worauf bei Scan, QR‑Größe und Weißraum zu achten ist und wie sich häufige Fehler beheben lassen.</p>
+<p>Für Details zum technischen Format lohnt ein Blick in den <a href="/wissen/epc-standard">EPC‑Standard</a>. Praktische Hinweise zum eigentlichen Scanvorgang findest du im Abschnitt <a href="/wissen/scannen">Scannen</a>.</p>
+<h2 id="scan-kompatibilitaet">Scan‑Kompatibilität</h2>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dictum est vel maximus placerat. Sed elementum lorem at ante mollis, nec lacinia sem fermentum. Praesent blandit, urna at cursus euismod, risus nisi facilisis augue, sit amet interdum nibh nibh eu neque. Integer viverra aliquam ex, non varius est bibendum id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus scelerisque nisi et massa sollicitudin, quis laoreet nunc aliquam. Aliquam hendrerit est sed massa porttitor facilisis.</p>
+<p>Vivamus convallis nisl mauris, vitae consectetur neque lacinia id. Nullam quis ultricies arcu. Phasellus quis sapien at lacus ullamcorper interdum. Sed malesuada rhoncus mauris, vel pulvinar odio tincidunt eget. Phasellus auctor dolor at orci hendrerit, vel convallis neque tristique. Aenean posuere, mauris at ultricies varius, lectus risus mattis lectus, sit amet auctor sem urna et mauris. Integer porttitor vel augue vitae feugiat.</p>
+<h2 id="groesse-und-weissraum">Größe &amp; Weißraum</h2>
+<p>Curabitur eget vulputate mauris. Suspendisse potenti. Sed non rhoncus ipsum. Duis pellentesque eros in purus fermentum blandit. Suspendisse vel magna vitae tortor interdum placerat. Phasellus laoreet bibendum tincidunt. Donec ac nisi erat. Proin in erat ac magna convallis eleifend. Cras dignissim sem quis orci facilisis, in elementum lectus efficitur. Morbi vel sodales neque. Cras nec arcu tempor, aliquet quam et, aliquam odio. Vivamus pharetra metus a neque sodales, nec aliquet lorem pharetra.</p>
+<p>Nunc a neque nec neque vulputate consequat. Sed elementum fermentum nisl at accumsan. Morbi ac mi at dui facilisis vulputate. Nam efficitur gravida mi, eu scelerisque urna dictum vitae. Pellentesque vitae mi sed magna aliquam venenatis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vestibulum tempor ante eget mi hendrerit auctor. Maecenas sed venenatis lectus.</p>
+<h2 id="fehler-und-loesungen">Fehler &amp; Lösungen</h2>
+<p>Integer nec mauris sed ligula porta hendrerit. In at turpis et sapien hendrerit fermentum. Aenean eget ipsum libero. Etiam vel aliquam justo. Sed dictum, ipsum a blandit porta, erat sem convallis nunc, eget viverra ligula orci nec velit. Duis dignissim sapien eget ex efficitur pulvinar. Mauris aliquam iaculis augue, in bibendum sapien tristique sed. Donec aliquet, nisl et ultrices malesuada, ligula justo sollicitudin justo, ac tempus sem neque sed nunc.</p>
+<p>Nam tristique, odio sed hendrerit scelerisque, erat arcu rhoncus dolor, sit amet rhoncus purus ipsum in metus. Cras posuere nisl ipsum, et lacinia risus cursus ac. Nulla facilisi. Etiam vel convallis quam. Aenean eleifend ligula nec pellentesque malesuada. Duis a orci vitae augue imperdiet commodo a in orci. Curabitur tempor vehicula tellus sed hendrerit. Morbi in gravida leo.</p>
+<h2 id="faq">FAQ</h2>
+<details><summary>Welche Apps unterstützen den GiroCode?</summary><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer porttitor, sem ut tincidunt aliquam, nulla diam dignissim neque, sit amet convallis odio quam eget urna.</p></details>
+<details><summary>Warum erkennt meine App den QR nicht?</summary><p>Probleme entstehen oft durch geringe Größe oder fehlenden Weißraum. Siehe auch den Abschnitt <a href="/wissen/scannen">Scannen</a> für Tipps zur Kameraausrichtung.</p></details>
+<p class="note">Dieser Artikel dient als Platzhalter und wird in Kürze mit konkreten Testergebnissen, Tabellen und App‑Vergleichen ergänzt.</p>
+<h2 id="weiterfuehrend">Weiterführende Inhalte</h2>
+<p><a href="/wissen/epc-standard">EPC‑Standard</a> · <a href="/wissen/scannen">Scannen</a> · <a href="/wissen/girocode">GiroCode</a> · <a href="/">Start</a></p>
+<a class="cta" href="/">GiroCode jetzt erstellen →</a>
+</div>
+
+</main></body></html>
