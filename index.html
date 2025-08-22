@@ -193,7 +193,7 @@
       <span></span><span></span><span></span>
     </label>
   </div>
-  <nav id="nav-menu" class="nav-menu" aria-label="Hauptnavigation">
+  <nav id="nav-menu" class="nav-menu" aria-label="Hauptnavigation" data-skip-consent="true">
     <a href="/">Start</a>
     <details class="dropdown">
       <summary>Wissen</summary>
@@ -310,7 +310,7 @@
             <p class="disclaimer-hint" aria-live="polite" hidden>Bitte bestätige den Haftungsausschluss, um fortzufahren.</p>
           </section>
           <div class="row" style="margin-top:10px">
-            <button class="btn primary" onclick="makeQR()" disabled aria-disabled="true">GiroCode generieren</button>
+            <button id="generate-qr" class="btn primary" data-requires-consent="true" onclick="makeQR()" disabled aria-disabled="true">GiroCode generieren</button>
             <button class="btn" onclick="clearQR()">Zurücksetzen</button>
           </div>
         <div id="qrStatus" class="muted" style="margin-top:8px"></div>
@@ -359,7 +359,7 @@
     </div>
 
       <div class="row" style="margin-top:16px">
-        <button class="btn primary" onclick="downloadPDF()" disabled aria-disabled="true">PDF herunterladen</button>
+        <button id="download-pdf" class="btn primary" data-requires-consent="true" onclick="downloadPDF()" disabled aria-disabled="true">PDF herunterladen</button>
       </div>
 
     <div class="footer">© <span id="y"></span> · lokal · keine Gewähr.</div>
@@ -619,71 +619,67 @@
       <p>Viele Banking-Apps unterstützen SEPA-QR (GiroCode). QR-Scanner in der App öffnen & Code scannen.</p>
     </details>
   </section>
-  <script>
+<script>
+/* Haftungsausschluss-Logik: Nur für Generieren/PDF, nie für Navigation */
 (function(){
   const STORAGE_KEY = 'disclaimerAccepted_v1';
   const box = document.getElementById('disclaimer-accept');
   const hint = document.querySelector('.disclaimer-hint');
   const shell = document.getElementById('disclaimer');
-  if(!box || !shell){ return; }
-
-  // Kandidaten für Aktionsbuttons (bekannte IDs/Klassen)…
-  const selectors = [
-    '#generate-qr','#btn-generate','#generate','#create-qr','button.generate-qr',
-    '#download-pdf','#btn-download-pdf','#pdfDownload','button.download-pdf',
-    'a.download-pdf','a[download][href$=".pdf"]'
+  // Targets: nur explizit markierte Aktions-Buttons/Links
+  const targetSelectors = [
+    '[data-requires-consent]',
+    '#generate-qr', '#create-qr', '#btn-generate', 'button.generate-qr', '[data-action="generate-qr"]',
+    '#download-pdf', '#btn-download-pdf', '#pdfDownload', 'a.download-pdf', '[data-action="download-pdf"]'
   ];
-  let targets = Array.from(document.querySelectorAll(selectors.join(',')));
-  // Fallback: per Textinhalt markieren
-  if(!targets.length){
-    document.querySelectorAll('button, a[role="button"], a').forEach(el=>{
-      const t = (el.textContent||'').toLowerCase();
-      if(/(girocode|qr|generieren|erzeugen|pdf|rechnung)/.test(t)){
-        el.dataset.requiresConsent = 'true';
-        targets.push(el);
+
+  function qsa(sel){ return Array.from(document.querySelectorAll(sel)); }
+  let targets = qsa(targetSelectors.join(','));
+
+  // Navigation/Nicht-Ziel-Elemente werden grundsätzlich ignoriert
+  // (z. B. Nav hat data-skip-consent="true")
+  const accepted = () => (box && (box.checked || localStorage.getItem(STORAGE_KEY) === '1'));
+
+  function applyState(){
+    const ok = accepted();
+    targets.forEach(el => {
+      if (ok) {
+        el.removeAttribute('disabled');
+        el.setAttribute('aria-disabled','false');
+      } else {
+        // Buttons und pseudo-Buttons sperren; Navigation NIE sperren
+        el.setAttribute('disabled','');
+        el.setAttribute('aria-disabled','true');
       }
     });
-  } else {
-    targets.forEach(el=>el.dataset.requiresConsent='true');
+    if (hint) hint.hidden = !!ok;
+    if (shell && !ok) shell.classList.remove('attn');
   }
 
-  const accepted = () => box.checked || localStorage.getItem(STORAGE_KEY) === '1';
-  const applyState = () => {
-    const ok = accepted();
-    targets.forEach(el=>{
-      if(ok){
-        el.removeAttribute('disabled'); el.setAttribute('aria-disabled','false');
-      } else {
-        el.setAttribute('disabled',''); el.setAttribute('aria-disabled','true');
-      }
-    });
-    if(hint) hint.hidden = ok;
-    if(!ok){ shell.classList.remove('attn'); }
-  };
-
-  // Initialzustand aus localStorage herstellen
-  if(localStorage.getItem(STORAGE_KEY)==='1'){ box.checked = true; }
+  if (box && localStorage.getItem(STORAGE_KEY)==='1'){ box.checked = true; }
   applyState();
 
-  box.addEventListener('change', ()=>{
-    if(box.checked){ localStorage.setItem(STORAGE_KEY,'1'); }
-    else { localStorage.removeItem(STORAGE_KEY); }
-    applyState();
-  });
+  if (box){
+    box.addEventListener('change', ()=>{
+      if (box.checked){ localStorage.setItem(STORAGE_KEY,'1'); }
+      else { localStorage.removeItem(STORAGE_KEY); }
+      applyState();
+    });
+  }
 
-  // Klicks auf gesperrte Ziele abfangen
+  // Klicks nur auf Targets abfangen; Navigation nie blockieren
   document.addEventListener('click', (e)=>{
-    const el = e.target.closest('[data-requires-consent], button, a[role="button"]');
-    if(!el || !targets.includes(el)) return;
-    if(!accepted()){
-      e.preventDefault(); e.stopPropagation();
-      shell.classList.add('attn');
-      if(hint){ hint.hidden = false; }
-      shell.scrollIntoView({behavior:'smooth', block:'center'});
-      setTimeout(()=>shell.classList.remove('attn'), 600);
+    const el = e.target.closest(targetSelectors.join(','));
+    if (!el) return; // kein Target → Navigation/sonstiges zulassen
+    if (el.closest('[data-skip-consent="true"]')) return; // Safety: Nie in Navs/Skip-Bereichen
+    if (!accepted()){
+      e.preventDefault();
+      e.stopPropagation();
+      if (shell){ shell.classList.add('attn'); shell.scrollIntoView({behavior:'smooth', block:'center'}); setTimeout(()=>shell.classList.remove('attn'), 600); }
+      if (hint){ hint.hidden = false; }
     }
   }, true);
 })();
-  </script>
+</script>
 </body>
 </html>
