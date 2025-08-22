@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>GiroCodeGenerator.com</title>
+  <link href="https://www.girocodegenerator.com/feed.xml" rel="self" />
+  <link href="https://www.girocodegenerator.com/" />
+  <updated>2025-08-22T00:00:00Z</updated>
+  <id>https://www.girocodegenerator.com/</id>
+  <author>
+    <name>GiroCode Generator</name>
+  </author>
+  <entry>
+    <title>GiroCode Generator (SEPA‑QR/EPC) – kostenlos & lokal</title>
+    <link href="https://www.girocodegenerator.com/" />
+    <id>https://www.girocodegenerator.com/</id>
+    <updated>2025-08-22T00:00:00Z</updated>
+    <summary>SEPA‑QR in Sekunden erstellen: IBAN, Betrag, Verwendungszweck. 100% lokal, PDF‑Rechnung, keine Datenübertragung.</summary>
+  </entry>
+  <entry>
+    <title>GiroCode erklärt – SEPA‑QR (EPC), Nutzen & Beispiele</title>
+    <link href="https://www.girocodegenerator.com/wissen/girocode/" />
+    <id>https://www.girocodegenerator.com/wissen/girocode/</id>
+    <updated>2025-08-22T00:00:00Z</updated>
+    <summary>Was ist ein GiroCode? Aufbau, Vorteile, Praxisbeispiele & FAQ. Mit Links zu EPC‑Standard, IBAN/BIC, Betrag & Zweck, Scannen und Rechnung.</summary>
+  </entry>
+  <entry>
+    <title>EPC‑Standard für SEPA‑QR – Felder, Regeln & Praxis</title>
+    <link href="https://www.girocodegenerator.com/wissen/epc-standard/" />
+    <id>https://www.girocodegenerator.com/wissen/epc-standard/</id>
+    <updated>2025-08-22T00:00:00Z</updated>
+    <summary>EPC‑Standard für GiroCode: Aufbau, Felder, Längen, Formatregeln und Praxistipps. So wird der SEPA‑QR zuverlässig erkannt.</summary>
+  </entry>
+  <entry>
+    <title>IBAN & BIC im GiroCode – Prüfung, Format, Fehler</title>
+    <link href="https://www.girocodegenerator.com/wissen/iban-bic/" />
+    <id>https://www.girocodegenerator.com/wissen/iban-bic/</id>
+    <updated>2025-08-22T00:00:00Z</updated>
+    <summary>IBAN & BIC im GiroCode richtig nutzen: Mod‑97‑Prüfung, Format ohne Leerzeichen, typische Fehler und Tipps.</summary>
+  </entry>
+  <entry>
+    <title>Betrag & Verwendungszweck im GiroCode – Format & Beispiele</title>
+    <link href="https://www.girocodegenerator.com/wissen/betrag-und-zweck/" />
+    <id>https://www.girocodegenerator.com/wissen/betrag-und-zweck/</id>
+    <updated>2025-08-22T00:00:00Z</updated>
+    <summary>Betrag (EUR12.34) und Verwendungszweck im GiroCode korrekt setzen: Beispiele, Best Practices & FAQ.</summary>
+  </entry>
+  <entry>
+    <title>GiroCode scannen – Anleitung, Probleme lösen, Drucktipps</title>
+    <link href="https://www.girocodegenerator.com/wissen/scannen/" />
+    <id>https://www.girocodegenerator.com/wissen/scannen/</id>
+    <updated>2025-08-22T00:00:00Z</updated>
+    <summary>GiroCode scannen in Banking‑Apps: Schritt‑für‑Schritt, häufige Probleme und Druck/Größe‑Empfehlungen.</summary>
+  </entry>
+  <entry>
+    <title>Rechnung mit GiroCode – schneller bezahlt werden</title>
+    <link href="https://www.girocodegenerator.com/wissen/rechnung/" />
+    <id>https://www.girocodegenerator.com/wissen/rechnung/</id>
+    <updated>2025-08-22T00:00:00Z</updated>
+    <summary>GiroCode auf Rechnungen richtig platzieren: Vorteile, Größe, Gestaltung, Zuordnung und FAQ.</summary>
+  </entry>
+</feed>
