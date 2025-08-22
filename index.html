@@ -183,6 +183,14 @@
   "name":"GiroCodeGenerator.com"
 }
 </script>
+<style>
+.qr-slot{width:180px;height:180px;aspect-ratio:1/1}
+.pdf-slot{min-height:480px}
+/* Fallbacks für gängige IDs/Klassen, falls vorhanden */
+#qrCanvas,canvas.qr,#qr,.qr-canvas{width:180px;height:180px}
+#qr-area,#qr-wrap,.qr-preview{width:180px;height:180px}
+#pdf-preview,#invoicePreview,.invoice-preview{min-height:480px}
+</style>
 </head>
 <body>
 <header class="app-nav" role="banner">
@@ -269,7 +277,7 @@
         <textarea id="senderAddress"></textarea>
         <label>Logo (optional)</label>
         <input id="logoInput" type="file" accept="image/*">
-        <img id="logoPreview">
+        <img id="logoPreview" loading="lazy" width="120" height="120" decoding="async">
         <h3 style="margin:20px 0 8px">Zahlungsdaten</h3>
         <label>Empfänger (Name)</label>
         <input id="name" placeholder="z. B. Max Mustermann e. K." />
@@ -318,7 +326,7 @@
 
       <div class="card">
         <h3 style="margin:0 0 8px">Vorschau (QR)</h3>
-        <div class="qrbox"><canvas id="qrCanvas" width="220" height="220"></canvas></div>
+        <div class="qrbox qr-slot"><canvas id="qrCanvas" width="220" height="220"></canvas></div>
         <div class="muted" style="margin-top:8px">Tipp: Banking‑App öffnen & Code testen.</div>
       </div>
     </div>
@@ -365,22 +373,44 @@
     <div class="footer">© <span id="y"></span> · lokal · keine Gewähr.</div>
   </div>
 
-  <!-- Lib‑Loader: versucht lokal (/vendor), dann alternative CDNs -->
   <script>
-    (function(){
-      function loadScript(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.async=true;s.onload=res;s.onerror=function(){rej(new Error('Failed '+src))};document.head.appendChild(s);});}
-      window.__libsReady=(async function(){
-        var okQR=false, okPDF=false;
-        try{await loadScript('/vendor/qrcode.min.js'); okQR=!!window.QRCode;}catch(e){}
-        if(!okQR){try{await loadScript('https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js'); okQR=!!window.QRCode;}catch(e){}}
-        if(!okQR){try{await loadScript('https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js'); okQR=!!window.QRCode;}catch(e){}}
-        try{await loadScript('https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js'); okPDF=!!window.PDFLib;}catch(e){}
-        if(!okPDF){try{await loadScript('/vendor/pdf-lib.min.js'); okPDF=!!window.PDFLib;}catch(e){}}
-        if(!okQR||!okPDF) console.warn('Lib load status',{okQR,okPDF});
-        return {okQR,okPDF};
-      })();
-    })();
-  </script>
+// Lazy Loader für schwere Libs: nur bei Bedarf laden (INP ↓, LCP/LCP-Budget ↑)
+const __libs = {
+  qrcode: { src: '/vendor/qrcode.min.js', test: () => !!(window.QRCode || window.QRCodeStyling) },
+  jspdf:  { src: '/vendor/jspdf.umd.min.js', test: () => !!(window.jspdf || window.jsPDF) }
+};
+function loadLib(name){
+  return new Promise((resolve,reject)=>{
+    const L = __libs[name]; if(!L){ return reject(new Error('Unknown lib:'+name)); }
+    if (L.test()) return resolve();
+    const s = document.createElement('script'); s.src = L.src; s.defer = true;
+    s.onload = () => (L.test() ? resolve() : reject(new Error('Lib loaded but not found: '+name)));
+    s.onerror = () => reject(new Error('Failed to load '+name));
+    document.head.appendChild(s);
+  });
+}
+// Optional: das erste Bild oberhalb der Falz priorisieren (LCP-Hint)
+(function(){
+  const hero = document.querySelector('main img, header img');
+  if(hero && !hero.hasAttribute('fetchpriority')) {
+    hero.setAttribute('fetchpriority','high');
+    hero.setAttribute('decoding','async');
+  }
+})();
+</script>
+<script>
+(function(){
+  const genSel = ['#generate-qr','#create-qr','#btn-generate','button.generate-qr','[data-action="generate-qr"]'].join(',');
+  const pdfSel = ['#download-pdf','#btn-download-pdf','#pdfDownload','a.download-pdf','[data-action="download-pdf"]'].join(',');
+  function once(el,type,fn){ el.addEventListener(type,fn,{capture:true}); } // vor existierenden click-Handlern
+  document.querySelectorAll(genSel).forEach(el=>{
+    once(el,'click', async (e)=>{ await loadLib('qrcode'); });
+  });
+  document.querySelectorAll(pdfSel).forEach(el=>{
+    once(el,'click', async (e)=>{ await Promise.all([loadLib('jspdf'), loadLib('qrcode')]).catch(()=>{}); });
+  });
+})();
+</script>
 
   <script>
     // ===== Theme toggle =====

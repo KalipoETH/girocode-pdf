@@ -66,7 +66,14 @@
     {"@type":"ListItem","position":3,"name":"IBAN & BIC","item":"https://www.girocodegenerator.com/wissen/iban-bic"}
   ]
 }
-</script>
+</script><style>
+.qr-slot{width:180px;height:180px;aspect-ratio:1/1}
+.pdf-slot{min-height:480px}
+/* Fallbacks für gängige IDs/Klassen, falls vorhanden */
+#qrCanvas,canvas.qr,#qr,.qr-canvas{width:180px;height:180px}
+#qr-area,#qr-wrap,.qr-preview{width:180px;height:180px}
+#pdf-preview,#invoicePreview,.invoice-preview{min-height:480px}
+</style>
 </head><body><main class="wrap">
 
 <nav class="site-nav" aria-label="Navigation">
@@ -158,4 +165,12 @@
 <!-- INTENT-SYNONYMS:END -->
 <details><summary>Unterscheidet sich IBAN im GiroCode von SEPA‑QR?</summary><p>Nein. Es ist derselbe Datensatz: IBAN blockfrei, optional BIC.</p></details>
 <details><summary>Akzeptieren Apps „Überweisungs‑QR“ mit BIC?</summary><p>Ja, sofern der Scanner den EPC‑Standard unterstützt. BIC ist optional.</p></details>
-</main></body></html>
+</main><script>
+// Bilder, die nicht als kritisch markiert sind, lazy-laden (CLS/LCP helfen)
+(function(){
+  document.querySelectorAll('img:not([data-critical])').forEach(img=>{
+    if(!img.hasAttribute('loading')) img.setAttribute('loading','lazy');
+    if(!img.hasAttribute('decoding')) img.setAttribute('decoding','async');
+  });
+})();
+</script></body></html>

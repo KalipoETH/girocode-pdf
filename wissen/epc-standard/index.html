@@ -66,7 +66,14 @@
     {"@type":"ListItem","position":3,"name":"EPC-Standard","item":"https://www.girocodegenerator.com/wissen/epc-standard"}
   ]
 }
-</script>
+</script><style>
+.qr-slot{width:180px;height:180px;aspect-ratio:1/1}
+.pdf-slot{min-height:480px}
+/* Fallbacks für gängige IDs/Klassen, falls vorhanden */
+#qrCanvas,canvas.qr,#qr,.qr-canvas{width:180px;height:180px}
+#qr-area,#qr-wrap,.qr-preview{width:180px;height:180px}
+#pdf-preview,#invoicePreview,.invoice-preview{min-height:480px}
+</style>
 </head><body><main class="wrap">
 
 <nav class="site-nav" aria-label="Navigation">
@@ -162,4 +169,12 @@
 <!-- INTENT-SYNONYMS:END -->
 <details><summary>Heißt „EPC‑QR“ dasselbe wie „SEPA‑QR“?</summary><p>Ja. EPC beschreibt den Standard; SEPA‑QR bzw. GiroCode ist die praktische Bezeichnung in Apps.</p></details>
 <details><summary>Welche Begriffe verwenden Banken?</summary><p>Üblich sind „GiroCode“, „SEPA‑QR“, „EPC‑QR“ oder „Überweisungs‑QR“. Alle beziehen sich auf denselben QR‑Zahlungsstandard.</p></details>
-</main></body></html>
+</main><script>
+// Bilder, die nicht als kritisch markiert sind, lazy-laden (CLS/LCP helfen)
+(function(){
+  document.querySelectorAll('img:not([data-critical])').forEach(img=>{
+    if(!img.hasAttribute('loading')) img.setAttribute('loading','lazy');
+    if(!img.hasAttribute('decoding')) img.setAttribute('decoding','async');
+  });
+})();
+</script></body></html>

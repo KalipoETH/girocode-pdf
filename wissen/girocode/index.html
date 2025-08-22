@@ -66,7 +66,14 @@
     {"@type":"ListItem","position":3,"name":"GiroCode","item":"https://www.girocodegenerator.com/wissen/girocode"}
   ]
 }
-</script>
+</script><style>
+.qr-slot{width:180px;height:180px;aspect-ratio:1/1}
+.pdf-slot{min-height:480px}
+/* Fallbacks für gängige IDs/Klassen, falls vorhanden */
+#qrCanvas,canvas.qr,#qr,.qr-canvas{width:180px;height:180px}
+#qr-area,#qr-wrap,.qr-preview{width:180px;height:180px}
+#pdf-preview,#invoicePreview,.invoice-preview{min-height:480px}
+</style>
 </head><body><main class="wrap">
 
 <nav class="site-nav" aria-label="Navigation">
@@ -163,4 +170,12 @@
 <!-- INTENT-SYNONYMS:END -->
 <details><summary>Ist GiroCode dasselbe wie SEPA‑QR / EPC‑QR?</summary><p>Ja. „GiroCode“, „SEPA‑QR“ und „EPC‑QR“ bezeichnen denselben standardisierten QR‑Code für SEPA‑Überweisungen nach EPC‑Spezifikation.</p></details>
 <details><summary>Kann ich den GiroCode als „Überweisungs‑QR“ nutzen?</summary><p>Ja. Viele Banking‑Apps nennen die Funktion „Überweisungs‑QR“. Unser Generator erzeugt kompatible Codes für diese Scanner.</p></details>
-</main></body></html>
+</main><script>
+// Bilder, die nicht als kritisch markiert sind, lazy-laden (CLS/LCP helfen)
+(function(){
+  document.querySelectorAll('img:not([data-critical])').forEach(img=>{
+    if(!img.hasAttribute('loading')) img.setAttribute('loading','lazy');
+    if(!img.hasAttribute('decoding')) img.setAttribute('decoding','async');
+  });
+})();
+</script></body></html>
