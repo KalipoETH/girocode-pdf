@@ -183,6 +183,15 @@
   "name":"GiroCodeGenerator.com"
 }
 </script>
+  <style>
+  /* CLS‑Reserven (ändern nichts an deiner Logik, nur Platzhalter) */
+  .qr-slot{display:inline-block;min-width:180px;min-height:180px;aspect-ratio:1/1}
+  .pdf-slot{min-height:480px}
+  /* Fallbacks für gängige IDs/Klassen (ohne Überschreiben harter Styles) */
+  #qrCanvas,canvas.qr,#qr,.qr-canvas{min-width:180px;min-height:180px}
+  #qr-area,#qr-wrap,.qr-preview{min-width:180px;min-height:180px}
+  #pdf-preview,#invoicePreview,.invoice-preview{min-height:480px}
+  </style>
 </head>
 <body>
 <header class="app-nav" role="banner">
@@ -681,5 +690,21 @@
   }, true);
 })();
 </script>
-</body>
+    <script>
+  // Sanfte Bild-Optimierung: CLS vermeiden, ohne QR/JS zu berühren
+  (function(){
+    // Nicht-kritische Bilder lazy + async decodieren
+    document.querySelectorAll('img:not([data-critical])').forEach(function(img){
+      if(!img.hasAttribute('loading')) img.setAttribute('loading','lazy');
+      if(!img.hasAttribute('decoding')) img.setAttribute('decoding','async');
+    });
+    // Falls es ein Logo-Preview gibt, feste Größe setzen (nur wenn nicht vorhanden)
+    var lp = document.getElementById('logoPreview');
+    if(lp){
+      if(!lp.hasAttribute('width')) lp.setAttribute('width','120');
+      if(!lp.hasAttribute('height')) lp.setAttribute('height','120');
+    }
+  })();
+  </script>
+  </body>
 </html>
