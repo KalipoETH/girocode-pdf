@@ -1,48 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Previous sitemap replaced on 2025-08-23; see git history for prior versions. -->
+<!-- Updated 2025-08-23 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Startseite -->
   <url>
-    <loc>https://www.girocodegenerator.com/</loc>
+    <loc>https://www.girocodegenerator.com</loc>
     <lastmod>2025-08-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
   </url>
+
+  <!-- Wissensseiten -->
   <url>
-    <loc>https://www.girocodegenerator.com/datenschutz</loc>
+    <loc>https://www.girocodegenerator.com/wissen/girocode</loc>
     <lastmod>2025-08-23</lastmod>
-  </url>
-  <url>
-    <loc>https://www.girocodegenerator.com/impressum</loc>
-    <lastmod>2025-08-23</lastmod>
-  </url>
-  <url>
-    <loc>https://www.girocodegenerator.com/ueber-uns</loc>
-    <lastmod>2025-08-23</lastmod>
-  </url>
-  <url>
-    <loc>https://www.girocodegenerator.com/wissen/</loc>
-    <lastmod>2025-08-23</lastmod>
-  </url>
-  <url>
-    <loc>https://www.girocodegenerator.com/wissen/betrag-und-zweck</loc>
-    <lastmod>2025-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.girocodegenerator.com/wissen/epc-standard</loc>
     <lastmod>2025-08-23</lastmod>
-  </url>
-  <url>
-    <loc>https://www.girocodegenerator.com/wissen/girocode</loc>
-    <lastmod>2025-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.girocodegenerator.com/wissen/iban-bic</loc>
     <lastmod>2025-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.girocodegenerator.com/wissen/rechnung</loc>
+    <loc>https://www.girocodegenerator.com/wissen/betrag-und-zweck</loc>
     <lastmod>2025-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.girocodegenerator.com/wissen/scannen</loc>
     <lastmod>2025-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.girocodegenerator.com/wissen/rechnung</loc>
+    <lastmod>2025-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.girocodegenerator.com/wissen/banking-apps</loc>
+    <lastmod>2025-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Info & Recht -->
+  <url>
+    <loc>https://www.girocodegenerator.com/ueber-uns</loc>
+    <lastmod>2025-08-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.girocodegenerator.com/impressum</loc>
+    <lastmod>2025-08-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.girocodegenerator.com/datenschutz</loc>
+    <lastmod>2025-08-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
 </urlset>
