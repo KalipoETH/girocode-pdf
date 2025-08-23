@@ -1,6 +1,11 @@
 {
   "redirects": [
-    { "source": "http://girocodegenerator.com/:path*", "destination": "https://www.girocodegenerator.com/:path*", "permanent": true },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "girocodegenerator.com" }],
+      "destination": "https://www.girocodegenerator.com/:path*",
+      "permanent": true
+    },
     { "source": "/wissen/:slug/", "destination": "/wissen/:slug", "permanent": true }
   ],
   "cleanUrls": true
