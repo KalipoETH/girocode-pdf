@@ -6,7 +6,8 @@
       "destination": "https://www.girocodegenerator.com/:path*",
       "permanent": true
     },
-    { "source": "/wissen/:slug/", "destination": "/wissen/:slug", "permanent": true }
+    { "source": "/wissen/:slug/", "destination": "/wissen/:slug", "permanent": true },
+    { "source": "/ueber-uns/", "destination": "/ueber-uns", "permanent": true }
   ],
   "headers": [
     {
