@@ -1,0 +1,75 @@
+import type { Metadata } from 'next';
+import './globals.css';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+
+export const metadata: Metadata = {
+  title: {
+    default:
+      'GiroCode Generator – SEPA-QR kostenlos erstellen | girocodegenerator.com',
+    template: '%s | GiroCode Generator',
+  },
+  description:
+    'GiroCode (SEPA-QR / EPC) kostenlos online erstellen – 100% lokal im Browser, keine Datenweitergabe. Inkl. Rechnungs-PDF mit eingebettetem QR-Code.',
+  keywords: [
+    'GiroCode Generator',
+    'GiroCode erstellen',
+    'SEPA QR Code Generator',
+    'EPC QR Code erstellen',
+    'QR Code Überweisung',
+    'GiroCode Rechnung',
+    'SEPA QR Code kostenlos',
+    'EPC Standard QR',
+    'Überweisung QR Code Generator',
+    'GiroCode online',
+  ],
+  authors: [{ name: 'Kaleb Jahnke' }],
+  creator: 'Kaleb Jahnke',
+  metadataBase: new URL('https://www.girocodegenerator.com'),
+  alternates: {
+    canonical: 'https://www.girocodegenerator.com',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'de_DE',
+    url: 'https://www.girocodegenerator.com',
+    siteName: 'GiroCode Generator',
+    title: 'GiroCode Generator – SEPA-QR kostenlos erstellen',
+    description:
+      'GiroCode (SEPA-QR / EPC) kostenlos online erstellen – 100% lokal im Browser, keine Datenweitergabe. Inkl. Rechnungs-PDF.',
+    images: [
+      { url: '/og-image.png', width: 1200, height: 630, alt: 'GiroCode Generator' },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'GiroCode Generator – SEPA-QR kostenlos erstellen',
+    description:
+      'GiroCode (SEPA-QR / EPC) kostenlos online erstellen – 100% lokal, keine Datenweitergabe.',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="de" className="h-full">
+      <body className="min-h-full bg-[#0b0c10] font-sans text-slate-100">
+        <div className="flex min-h-screen flex-col">
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
+      </body>
+    </html>
+  );
+}
+
