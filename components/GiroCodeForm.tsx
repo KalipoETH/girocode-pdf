@@ -3,6 +3,11 @@
 import React, { useState } from 'react';
 import { buildEPC, ibanIsValid } from '../lib/girocode';
 import { QRPreview, QRStatusType } from './QRPreview';
+import { en } from '../lib/translations/en';
+import { fr } from '../lib/translations/fr';
+import { es } from '../lib/translations/es';
+
+type Locale = 'de' | 'en' | 'fr' | 'es';
 
 interface GiroCodeFormState {
   name: string;
@@ -13,10 +18,106 @@ interface GiroCodeFormState {
 }
 
 interface GiroCodeFormProps {
+  locale: Locale;
   onQrDataUrlChange?: (dataUrl: string | null) => void;
 }
 
-export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({ onQrDataUrlChange }) => {
+function getTexts(locale: Locale) {
+  if (locale === 'en') {
+    return {
+      badge: en.hero.badge,
+      title: en.hero.title,
+      description:
+        'Generate a SEPA-compliant GiroCode (EPC QR) directly in your browser. Ideal for invoices, donations or payment forms.',
+      nameLabel: 'Recipient (Name)',
+      ibanLabel: 'IBAN',
+      bicLabel: 'BIC (optional)',
+      amountLabel: 'Amount (EUR)',
+      purposeLabel: 'Payment reference (max. 140 characters)',
+      purposeCounter: (len: number) => `${len}/140 characters`,
+      generateButton: 'Generate GiroCode',
+      requiredError: 'Please fill in name, IBAN and amount.',
+      ibanInvalid: en.form.ibanInvalid,
+      generateSuccess: en.qr.success,
+      generateError: 'Error while generating the GiroCode. Please check your entries.',
+      ibanPlaceholder: 'DE00 0000 0000 0000 0000 00',
+      bicPlaceholder: 'BANKDEFFXXX',
+    };
+  }
+
+  if (locale === 'fr') {
+    return {
+      badge: fr.hero.badge,
+      title: fr.hero.title,
+      description:
+        'Générez un GiroCode compatible SEPA (EPC-QR) directement dans votre navigateur. Idéal pour les factures, dons ou formulaires de paiement.',
+      nameLabel: 'Bénéficiaire (Nom)',
+      ibanLabel: 'IBAN',
+      bicLabel: 'BIC (optionnel)',
+      amountLabel: 'Montant (EUR)',
+      purposeLabel: 'Référence de paiement (max. 140 caractères)',
+      purposeCounter: (len: number) => `${len}/140 caractères`,
+      generateButton: 'Générer GiroCode',
+      requiredError: 'Veuillez renseigner le nom, l’IBAN et le montant.',
+      ibanInvalid: fr.form.ibanInvalid,
+      generateSuccess: fr.qr.success,
+      generateError:
+        'Erreur lors de la génération du GiroCode. Veuillez vérifier les données saisies.',
+      ibanPlaceholder: 'FR76 1234 5678 9012 3456 7890 185',
+      bicPlaceholder: 'BANKFRPPXXX',
+    };
+  }
+
+  if (locale === 'es') {
+    return {
+      badge: es.hero.badge,
+      title: es.hero.title,
+      description:
+        'Genera un GiroCode compatible SEPA (EPC-QR) directamente en tu navegador. Ideal para facturas, donaciones o formularios de pago.',
+      nameLabel: 'Beneficiario (Nombre)',
+      ibanLabel: 'IBAN',
+      bicLabel: 'BIC (opcional)',
+      amountLabel: 'Importe (EUR)',
+      purposeLabel: 'Concepto de pago (máx. 140 caracteres)',
+      purposeCounter: (len: number) => `${len}/140 caracteres`,
+      generateButton: 'Generar GiroCode',
+      requiredError: 'Introduce nombre, IBAN e importe.',
+      ibanInvalid: es.form.ibanInvalid,
+      generateSuccess: es.qr.success,
+      generateError:
+        'Error al generar el GiroCode. Por favor, comprueba los datos introducidos.',
+      ibanPlaceholder: 'ES12 3456 7890 1234 5678 9012',
+      bicPlaceholder: 'BANKESMMXXX',
+    };
+  }
+
+  // Deutsch (Standard)
+  return {
+    badge: '100% client-seitig · keine Uploads',
+    title: 'GiroCode / EPC-Generator',
+    description:
+      'Erzeuge einen SEPA-konformen GiroCode (EPC-QR) direkt im Browser. Ideal für Rechnungen, Spenden oder Überweisungsformulare.',
+    nameLabel: 'Empfängername / Kontoinhaber',
+    ibanLabel: 'IBAN',
+    bicLabel: 'BIC (optional)',
+    amountLabel: 'Betrag (EUR)',
+    purposeLabel: 'Verwendungszweck (max. 140 Zeichen)',
+    purposeCounter: (len: number) => `${len}/140 Zeichen`,
+    generateButton: 'GiroCode generieren',
+    requiredError: 'Bitte Name, IBAN und Betrag ausfüllen.',
+    ibanInvalid: 'IBAN ist ungültig (Mod-97-Prüfung fehlgeschlagen).',
+    generateSuccess: 'GiroCode erfolgreich erzeugt.',
+    generateError: 'Fehler beim Erzeugen des GiroCodes. Bitte Eingaben prüfen.',
+    ibanPlaceholder: 'DE00 0000 0000 0000 0000 00',
+    bicPlaceholder: 'BANKDEFFXXX',
+  };
+}
+
+export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({
+  locale,
+  onQrDataUrlChange,
+}) => {
+  const t = getTexts(locale);
   const [form, setForm] = useState<GiroCodeFormState>({
     name: '',
     iban: '',
@@ -45,14 +146,14 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({ onQrDataUrlChange })
 
     if (!trimmedName || !trimmedIban || !trimmedAmount) {
       setStatusType('error');
-      setStatusMessage('Bitte Name, IBAN und Betrag ausfüllen.');
+      setStatusMessage(t.requiredError);
       setEpcPayload(null);
       return;
     }
 
     if (!ibanIsValid(trimmedIban)) {
       setStatusType('error');
-      setStatusMessage('IBAN ist ungültig (Mod-97-Prüfung fehlgeschlagen).');
+      setStatusMessage(t.ibanInvalid);
       setEpcPayload(null);
       return;
     }
@@ -68,10 +169,10 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({ onQrDataUrlChange })
 
       setEpcPayload(payload);
       setStatusType('success');
-      setStatusMessage('GiroCode erfolgreich erzeugt.');
+      setStatusMessage(t.generateSuccess);
     } catch (err) {
       setStatusType('error');
-      setStatusMessage('Fehler beim Erzeugen des GiroCodes. Bitte Eingaben prüfen.');
+      setStatusMessage(t.generateError);
       setEpcPayload(null);
     }
   };
@@ -100,19 +201,16 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({ onQrDataUrlChange })
       <div className="flex flex-col gap-2">
         <div className="inline-flex w-fit items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-[11px] font-medium text-emerald-300 ring-1 ring-emerald-500/40">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          100% client-seitig · keine Uploads
+          {t.badge}
         </div>
         <div>
           <h2
             id="girocode-generator-heading"
             className="text-lg font-semibold tracking-tight text-slate-50"
           >
-            GiroCode / EPC-Generator
+            {t.title}
           </h2>
-          <p className="text-sm text-slate-400">
-            Erzeuge einen SEPA-konformen GiroCode (EPC-QR) direkt im Browser. Ideal für Rechnungen,
-            Spenden oder Überweisungsformulare.
-          </p>
+          <p className="text-sm text-slate-400">{t.description}</p>
         </div>
       </div>
 
@@ -123,7 +221,7 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({ onQrDataUrlChange })
         <div className="flex flex-col gap-4">
           <div className="grid gap-3">
             <label className="text-xs font-medium text-slate-200">
-              Empfängername / Kontoinhaber
+              {t.nameLabel}
               <input
                 type="text"
                 className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
@@ -134,7 +232,7 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({ onQrDataUrlChange })
             </label>
 
             <label className="text-xs font-medium text-slate-200">
-              IBAN
+              {t.ibanLabel}
               <input
                 type="text"
                 inputMode="text"
@@ -142,14 +240,14 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({ onQrDataUrlChange })
                 className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
                 value={form.iban}
                 onChange={handleChange('iban')}
-                placeholder="DE00 0000 0000 0000 0000 00"
+                placeholder={t.ibanPlaceholder}
                 required
               />
             </label>
 
             <div className="grid grid-cols-2 gap-3">
               <label className="text-xs font-medium text-slate-200">
-                BIC (optional)
+                {t.bicLabel}
                 <input
                   type="text"
                   inputMode="text"
@@ -157,12 +255,12 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({ onQrDataUrlChange })
                   className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
                   value={form.bic}
                   onChange={handleChange('bic')}
-                  placeholder="BANKDEFFXXX"
+                  placeholder={t.bicPlaceholder}
                 />
               </label>
 
               <label className="text-xs font-medium text-slate-200">
-                Betrag (EUR)
+                {t.amountLabel}
                 <input
                   type="number"
                   min="0"
@@ -176,7 +274,7 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({ onQrDataUrlChange })
             </div>
 
             <label className="text-xs font-medium text-slate-200">
-              Verwendungszweck (max. 140 Zeichen)
+              {t.purposeLabel}
               <textarea
                 className="mt-1 min-h-[72px] w-full resize-y rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
                 value={form.purpose}
@@ -184,7 +282,7 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({ onQrDataUrlChange })
                 maxLength={140}
               />
               <div className="mt-1 text-right text-[10px] text-slate-500">
-                {form.purpose.length}/140 Zeichen
+                {t.purposeCounter(form.purpose.length)}
               </div>
             </label>
           </div>
@@ -194,12 +292,13 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({ onQrDataUrlChange })
               type="submit"
               className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-5 py-2 text-xs font-semibold text-slate-950 shadow-lg shadow-emerald-500/40 transition duration-200 hover:-translate-y-0.5 hover:bg-emerald-400 hover:shadow-xl hover:shadow-emerald-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 motion-reduce:hover:translate-y-0"
             >
-              GiroCode generieren
+              {t.generateButton}
             </button>
           </div>
         </div>
 
         <QRPreview
+          locale={locale}
           epcPayload={epcPayload}
           statusType={statusType}
           statusMessage={statusMessage}

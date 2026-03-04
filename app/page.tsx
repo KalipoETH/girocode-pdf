@@ -61,10 +61,10 @@ export default function HomePage() {
 
         <div className="flex flex-col gap-6">
           <div className="animate-card-in" style={{ animationDelay: '0.1s' }}>
-            <GiroCodeForm onQrDataUrlChange={setQrPngDataUrl} />
+            <GiroCodeForm locale="de" onQrDataUrlChange={setQrPngDataUrl} />
           </div>
           <div className="animate-card-in" style={{ animationDelay: '0.2s' }}>
-            <InvoiceForm qrPngDataUrl={qrPngDataUrl} />
+            <InvoiceForm locale="de" qrPngDataUrl={qrPngDataUrl} />
           </div>
         </div>
 

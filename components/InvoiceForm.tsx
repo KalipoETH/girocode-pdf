@@ -2,8 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { PdfButton } from './PdfButton';
+import { en } from '../lib/translations/en';
+import { fr } from '../lib/translations/fr';
+import { es } from '../lib/translations/es';
+
+type Locale = 'de' | 'en' | 'fr' | 'es';
 
 export interface InvoiceFormProps {
+  locale: Locale;
   qrPngDataUrl: string | null;
 }
 
@@ -17,7 +23,121 @@ interface InvoiceFormState {
   vatRate: string;
 }
 
-export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
+function getTexts(locale: Locale) {
+  if (locale === 'en') {
+    return {
+      title: en.invoice.title,
+      description:
+        'Create a compliant invoice with embedded GiroCode QR code – fully local in your browser.',
+      invoiceNo: en.invoice.invoiceNo,
+      invoiceDate: en.invoice.invoiceDate,
+      seller: en.invoice.seller,
+      buyer: en.invoice.buyer,
+      logo: en.invoice.logo,
+      serviceDescription: en.invoice.description,
+      net: en.invoice.net,
+      vat: en.invoice.vat,
+      vatSummaryLabel: (rate: string) => `VAT (${rate || '0'} %)`,
+      vatAmount: en.invoice.vatAmount,
+      gross: en.invoice.gross,
+      summaryNet: 'Net',
+      summaryGross: 'Gross',
+      logoErrorType: 'Please select a PNG or JPG file.',
+      logoErrorRead: 'Logo could not be read.',
+      infoUsesQr:
+        'The invoice PDF uses the currently generated GiroCode QR code and places it in the bottom right corner.',
+      infoNoQr:
+        'Note: no QR code is available yet. Please first generate a QR code in the GiroCode generator.',
+      currencySuffix: (v: number) => `${v.toFixed(2)} €`,
+    };
+  }
+
+  if (locale === 'fr') {
+    return {
+      title: fr.invoice.title,
+      description:
+        'Créez une facture avec code QR GiroCode intégré – entièrement localement dans votre navigateur.',
+      invoiceNo: fr.invoice.invoiceNo,
+      invoiceDate: fr.invoice.invoiceDate,
+      seller: fr.invoice.seller,
+      buyer: fr.invoice.buyer,
+      logo: fr.invoice.logo,
+      serviceDescription: fr.invoice.description,
+      net: fr.invoice.net,
+      vat: fr.invoice.vat,
+      vatSummaryLabel: (rate: string) => `TVA (${rate || '0'} %)`,
+      vatAmount: fr.invoice.vatAmount,
+      gross: fr.invoice.gross,
+      summaryNet: 'Net',
+      summaryGross: 'TTC',
+      logoErrorType: 'Veuillez sélectionner un fichier PNG ou JPG.',
+      logoErrorRead: "Le logo n'a pas pu être lu.",
+      infoUsesQr:
+        'La facture PDF utilise le code QR GiroCode actuellement généré et l’intègre en bas à droite.',
+      infoNoQr:
+        'Remarque : aucun code QR n’est encore disponible. Veuillez d’abord générer un code dans le générateur GiroCode.',
+      currencySuffix: (v: number) => `${v.toFixed(2)} €`,
+    };
+  }
+
+  if (locale === 'es') {
+    return {
+      title: es.invoice.title,
+      description:
+        'Crea una factura con código QR GiroCode integrado – completamente local en tu navegador.',
+      invoiceNo: es.invoice.invoiceNo,
+      invoiceDate: es.invoice.invoiceDate,
+      seller: es.invoice.seller,
+      buyer: es.invoice.buyer,
+      logo: es.invoice.logo,
+      serviceDescription: es.invoice.description,
+      net: es.invoice.net,
+      vat: es.invoice.vat,
+      vatSummaryLabel: (rate: string) => `IVA (${rate || '0'} %)`,
+      vatAmount: es.invoice.vatAmount,
+      gross: es.invoice.gross,
+      summaryNet: 'Neto',
+      summaryGross: 'Bruto',
+      logoErrorType: 'Selecciona un archivo PNG o JPG.',
+      logoErrorRead: 'No se ha podido leer el logo.',
+      infoUsesQr:
+        'El PDF de la factura utiliza el código QR GiroCode generado y lo coloca en la esquina inferior derecha.',
+      infoNoQr:
+        'Nota: todavía no hay ningún código QR disponible. Primero genera un código en el generador GiroCode.',
+      currencySuffix: (v: number) => `${v.toFixed(2)} €`,
+    };
+  }
+
+  // Deutsch
+  return {
+    title: 'Rechnungs-PDF',
+    description:
+      'Erstelle eine DIN-konforme Rechnung mit eingebettetem GiroCode-QR-Code – vollständig lokal im Browser.',
+    invoiceNo: 'Rechnungs-Nr.',
+    invoiceDate: 'Rechnungsdatum',
+    seller: 'Absender / Firmendaten',
+    buyer: 'Kundendaten / Empfängeradresse',
+    logo: 'Logo (PNG/JPG, optional)',
+    serviceDescription: 'Leistungsbeschreibung',
+    net: 'Nettobetrag (EUR)',
+    vat: 'USt-Satz (%)',
+    vatSummaryLabel: (rate: string) => `USt (${rate || '0'} %)`,
+    vatAmount: 'Umsatzsteuer-Betrag',
+    gross: 'Bruttobetrag',
+    summaryNet: 'Netto',
+    summaryGross: 'Brutto',
+    logoErrorType: 'Bitte eine PNG- oder JPG-Datei auswählen.',
+    logoErrorRead: 'Logo konnte nicht gelesen werden.',
+    infoUsesQr:
+      'Die Rechnungs-PDF nutzt den aktuell erzeugten GiroCode-QR-Code und bettet ihn unten rechts ein.',
+    infoNoQr:
+      'Hinweis: Aktuell ist noch kein QR-Code vorhanden. Bitte zuerst im GiroCode-Generator einen QR-Code erzeugen.',
+    currencySuffix: (v: number) => `${v.toFixed(2).replace('.', ',')} €`,
+  };
+}
+
+export const InvoiceForm: React.FC<InvoiceFormProps> = ({ locale, qrPngDataUrl }) => {
+  const t = getTexts(locale);
   const [form, setForm] = useState<InvoiceFormState>({
     invoiceNumber: '',
     invoiceDate: '',
@@ -68,7 +188,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
     }
 
     if (!['image/png', 'image/jpeg'].includes(file.type)) {
-      setLogoError('Bitte eine PNG- oder JPG-Datei auswählen.');
+      setLogoError(t.logoErrorType);
       setLogoBytes(null);
       setLogoMimeType(undefined);
       return;
@@ -84,7 +204,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
       }
     };
     reader.onerror = () => {
-      setLogoError('Logo konnte nicht gelesen werden.');
+      setLogoError(t.logoErrorRead);
       setLogoBytes(null);
       setLogoMimeType(undefined);
     };
@@ -93,7 +213,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
   };
 
   const formatAmount = (value: number) =>
-    `${value.toFixed(2).replace('.', ',')} €`;
+    t.currencySuffix(value);
 
   return (
     <section
@@ -105,11 +225,10 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
           id="invoice-generator-heading"
           className="text-lg font-semibold tracking-tight text-slate-50"
         >
-          Rechnungs-PDF
+          {t.title}
         </h2>
         <p className="text-sm text-slate-400">
-          Erstelle eine DIN-konforme Rechnung mit eingebettetem GiroCode-QR-Code – vollständig lokal
-          im Browser.
+          {t.description}
         </p>
       </div>
 
@@ -118,7 +237,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
           <div className="grid gap-3">
             <div className="grid grid-cols-2 gap-3">
               <label className="text-xs font-medium text-slate-200">
-                Rechnungs-Nr.
+                {t.invoiceNo}
                 <input
                   type="text"
                   className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
@@ -128,7 +247,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
               </label>
 
               <label className="text-xs font-medium text-slate-200">
-                Rechnungsdatum
+                {t.invoiceDate}
                 <input
                   type="date"
                   className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
@@ -139,7 +258,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
             </div>
 
             <label className="text-xs font-medium text-slate-200">
-              Absender / Firmendaten
+              {t.seller}
               <textarea
                 className="mt-1 min-h-[80px] w-full resize-y rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
                 value={form.sender}
@@ -148,7 +267,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
             </label>
 
             <label className="text-xs font-medium text-slate-200">
-              Kundendaten / Empfängeradresse
+              {t.buyer}
               <textarea
                 className="mt-1 min-h-[80px] w-full resize-y rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
                 value={form.recipient}
@@ -157,7 +276,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
             </label>
 
             <label className="text-xs font-medium text-slate-200">
-              Logo (PNG/JPG, optional)
+              {t.logo}
               <input
                 type="file"
                 accept="image/png,image/jpeg"
@@ -172,7 +291,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
             </label>
 
             <label className="text-xs font-medium text-slate-200">
-              Leistungsbeschreibung
+              {t.serviceDescription}
               <textarea
                 className="mt-1 min-h-[96px] w-full resize-y rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
                 value={form.description}
@@ -182,7 +301,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
 
             <div className="grid grid-cols-2 gap-3">
               <label className="text-xs font-medium text-slate-200">
-                Nettobetrag (EUR)
+                {t.net}
                 <input
                   type="number"
                   min="0"
@@ -194,7 +313,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
               </label>
 
               <label className="text-xs font-medium text-slate-200">
-                USt-Satz (%)
+                {t.vat}
                 <input
                   type="number"
                   min="0"
@@ -209,7 +328,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
             <div className="mt-2 grid grid-cols-3 gap-3 rounded-xl border border-slate-800/80 bg-slate-950/50 p-3 text-[11px] text-slate-200">
               <div className="flex flex-col gap-0.5">
                 <span className="text-[10px] font-medium text-slate-400">
-                  Netto
+                  {t.summaryNet}
                 </span>
                 <span className="font-semibold">
                   {formatAmount(net)}
@@ -217,7 +336,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-[10px] font-medium text-slate-400">
-                  USt ({form.vatRate || '0'} %)
+                  {t.vatSummaryLabel(form.vatRate)}
                 </span>
                 <span className="font-semibold">
                   {formatAmount(vatAmount)}
@@ -225,7 +344,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-[10px] font-medium text-emerald-300">
-                  Brutto
+                  {t.summaryGross}
                 </span>
                 <span className="font-semibold text-emerald-300">
                   {formatAmount(gross)}
@@ -238,19 +357,17 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ qrPngDataUrl }) => {
         <div className="flex flex-col justify-between gap-4 rounded-2xl border border-white/5 bg-black/20 p-4">
           <div className="space-y-2 text-xs text-slate-300">
             <p>
-              Die Rechnungs-PDF nutzt den aktuell erzeugten{' '}
-              <span className="font-semibold text-emerald-300">GiroCode-QR-Code</span> und bettet
-              ihn unten rechts ein.
+              {t.infoUsesQr}
             </p>
             {!qrPngDataUrl && (
               <p className="text-[11px] text-amber-300">
-                Hinweis: Aktuell ist noch kein QR-Code vorhanden. Bitte zuerst im GiroCode-Generator
-                einen QR-Code erzeugen.
+                {t.infoNoQr}
               </p>
             )}
           </div>
 
           <PdfButton
+            locale={locale}
             invoiceData={{
               invoiceNumber: form.invoiceNumber,
               invoiceDate: form.invoiceDate,

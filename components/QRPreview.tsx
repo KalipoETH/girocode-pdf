@@ -2,10 +2,16 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
+import { en } from '../lib/translations/en';
+import { fr } from '../lib/translations/fr';
+import { es } from '../lib/translations/es';
 
 export type QRStatusType = 'success' | 'error' | null;
 
+type Locale = 'de' | 'en' | 'fr' | 'es';
+
 export interface QRPreviewProps {
+  locale: Locale;
   epcPayload: string | null;
   statusType: QRStatusType;
   statusMessage: string | null;
@@ -13,13 +19,72 @@ export interface QRPreviewProps {
   onQrRendered?: (dataUrl: string | null) => void;
 }
 
+function getTexts(locale: Locale) {
+  if (locale === 'en') {
+    return {
+      heading: en.qr.title,
+      helper: en.qr.tip,
+      fallbackLabel: en.qr.fallback,
+      fallbackWarning:
+        'Warning: payment data is transmitted to the external service.',
+      emptyText:
+        'No GiroCode generated yet. Please fill in the payment data and click “Generate GiroCode”.',
+      reset: 'Reset',
+      externalAlt: 'GiroCode via external QR service',
+    };
+  }
+
+  if (locale === 'fr') {
+    return {
+      heading: fr.qr.title,
+      helper: fr.qr.tip,
+      fallbackLabel: fr.qr.fallback,
+      fallbackWarning:
+        'Attention : les données de paiement sont transmises au service externe.',
+      emptyText:
+        'Aucun GiroCode généré pour le moment. Veuillez saisir les données de paiement et cliquer sur « Générer GiroCode ».',
+      reset: 'Réinitialiser',
+      externalAlt: 'GiroCode via service QR externe',
+    };
+  }
+
+  if (locale === 'es') {
+    return {
+      heading: es.qr.title,
+      helper: es.qr.tip,
+      fallbackLabel: es.qr.fallback,
+      fallbackWarning:
+        'Atención: los datos de pago se envían al servicio externo.',
+      emptyText:
+        'Todavía no se ha generado ningún GiroCode. Rellena los datos de pago y haz clic en «Generar GiroCode».',
+      reset: 'Restablecer',
+      externalAlt: 'GiroCode mediante servicio QR externo',
+    };
+  }
+
+  return {
+    heading: 'GiroCode-Vorschau',
+    helper:
+      'QR wird ausschließlich im Browser erzeugt. Optionaler Fallback sendet Daten an einen externen Dienst.',
+    fallbackLabel:
+      'Externer QR-Fallback (api.qrserver.com) – Achtung: Zahlungsdaten werden an einen externen Dienst übertragen.',
+    fallbackWarning: '',
+    emptyText:
+      'Noch kein GiroCode erzeugt. Bitte Zahlungsdaten ausfüllen und auf „GiroCode generieren“ klicken.',
+    reset: 'Zurücksetzen',
+    externalAlt: 'GiroCode über externen QR-Dienst',
+  };
+}
+
 export const QRPreview: React.FC<QRPreviewProps> = ({
+  locale,
   epcPayload,
   statusType,
   statusMessage,
   onReset,
   onQrRendered,
 }) => {
+  const t = getTexts(locale);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [useExternal, setUseExternal] = useState(false);
 
@@ -94,10 +159,8 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
     <div className="flex flex-col gap-4 rounded-2xl border border-white/5 bg-[#121318]/80 p-4 shadow-lg shadow-black/40 backdrop-blur">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h3 className="text-sm font-medium text-slate-100">GiroCode-Vorschau</h3>
-          <p className="text-xs text-slate-400">
-            QR wird ausschließlich im Browser erzeugt. Optionaler Fallback sendet Daten an einen externen Dienst.
-          </p>
+          <h3 className="text-sm font-medium text-slate-100">{t.heading}</h3>
+          <p className="text-xs text-slate-400">{t.helper}</p>
         </div>
         {hasStatus && (
           <span
@@ -128,7 +191,7 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
             {useExternal && externalUrl && (
               <img
                 src={externalUrl}
-                alt="GiroCode über externen QR-Dienst"
+                alt={t.externalAlt}
                 className="h-56 w-56 rounded-lg bg-white object-contain shadow-md shadow-black/40"
               />
             )}
@@ -140,20 +203,11 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
                 checked={useExternal}
                 onChange={(e) => setUseExternal(e.target.checked)}
               />
-              <span>
-                Externer QR-Fallback (
-                <span className="font-mono text-[11px] text-slate-400">api.qrserver.com</span>) –{' '}
-                <span className="font-semibold text-amber-300">
-                  Achtung: Zahlungsdaten werden an einen externen Dienst übertragen.
-                </span>
-              </span>
+              <span>{t.fallbackLabel}</span>
             </label>
           </>
         ) : (
-          <p className="text-xs text-slate-400">
-            Noch kein GiroCode erzeugt. Bitte Zahlungsdaten ausfüllen und auf
-            <span className="font-semibold text-slate-200"> „GiroCode generieren“</span> klicken.
-          </p>
+          <p className="text-xs text-slate-400">{t.emptyText}</p>
         )}
       </div>
 
@@ -162,8 +216,8 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
           type="button"
           onClick={handleReset}
           className="inline-flex items-center justify-center rounded-full border border-slate-700/80 bg-slate-900/70 px-4 py-1.5 text-xs font-medium text-slate-200 shadow-sm shadow-black/30 transition hover:border-slate-500 hover:bg-slate-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
-        >
-          Zurücksetzen
+          >
+          {t.reset}
         </button>
       </div>
     </div>
