@@ -33,6 +33,18 @@ export const fr = {
     success:
       "QR généré avec succès. Testez avec votre application bancaire.",
   },
+  pdf: {
+    title: 'Facture',
+    invoiceNo: 'N°:',
+    date: 'Date:',
+    sender: 'Expéditeur',
+    recipient: 'Destinataire',
+    serviceDescription: 'Description de la prestation',
+    net: 'Net HT',
+    vat: 'TVA',
+    gross: 'Total TTC',
+    footer: 'Généré localement · aucune transmission de données',
+  },
   invoice: {
     title: 'Facture (PDF)',
     invoiceNo: 'N° de facture',

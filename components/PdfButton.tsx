@@ -1,13 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { InvoiceData } from '../lib/pdf';
+import { usePathname } from 'next/navigation';
+import type { InvoiceData, PdfLocale } from '../lib/pdf';
 import { makePDF } from '../lib/pdf';
 import { en } from '../lib/translations/en';
 import { fr } from '../lib/translations/fr';
 import { es } from '../lib/translations/es';
 
-type Locale = 'de' | 'en' | 'fr' | 'es';
+type Locale = PdfLocale;
+
+function getLocaleFromPathname(pathname: string | null): Locale {
+  if (!pathname) return 'de';
+  if (pathname.startsWith('/en')) return 'en';
+  if (pathname.startsWith('/fr')) return 'fr';
+  if (pathname.startsWith('/es')) return 'es';
+  return 'de';
+}
 
 interface PdfButtonProps {
   locale: Locale;
@@ -61,12 +70,14 @@ function getTexts(locale: Locale) {
 }
 
 export const PdfButton: React.FC<PdfButtonProps> = ({
-  locale,
+  locale: localeProp,
   invoiceData,
   qrPngDataUrl,
   logoBytes,
   logoMimeType,
 }) => {
+  const pathname = usePathname();
+  const locale = pathname ? getLocaleFromPathname(pathname) : (localeProp ?? 'de');
   const t = getTexts(locale);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -87,7 +98,7 @@ export const PdfButton: React.FC<PdfButtonProps> = ({
         logoMimeType: logoMimeType ?? undefined,
       };
 
-      const pdfBytes = await makePDF(fullData);
+      const pdfBytes = await makePDF(fullData, locale);
       const blob = new Blob([pdfBytes as unknown as BlobPart], {
         type: 'application/pdf',
       });

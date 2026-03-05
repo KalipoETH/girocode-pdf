@@ -33,6 +33,18 @@ export const es = {
     success:
       'QR generado con éxito. Prueba con tu aplicación bancaria.',
   },
+  pdf: {
+    title: 'Factura',
+    invoiceNo: 'N.º:',
+    date: 'Fecha:',
+    sender: 'Remitente',
+    recipient: 'Destinatario',
+    serviceDescription: 'Descripción del servicio',
+    net: 'Neto',
+    vat: 'IVA',
+    gross: 'Bruto total',
+    footer: 'Generado localmente · sin transmisión de datos',
+  },
   invoice: {
     title: 'Factura (PDF)',
     invoiceNo: 'N.º de factura',

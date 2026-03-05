@@ -1,8 +1,15 @@
+import { de } from './translations/de';
+import { en } from './translations/en';
+import { es } from './translations/es';
+import { fr } from './translations/fr';
+
 type RGB = {
   red: number;
   green: number;
   blue: number;
 };
+
+export type PdfLocale = 'de' | 'en' | 'fr' | 'es';
 
 // A4 im Punktformat laut Vorgabe
 export const A4_WIDTH = 595.28;
@@ -21,6 +28,8 @@ export interface InvoiceData {
   logoMimeType?: 'image/png' | 'image/jpeg';
 }
 
+const PDF_TRANSLATIONS = { de: de.pdf, en: en.pdf, fr: fr.pdf, es: es.pdf } as const;
+
 // Standardfarben
 const COLOR_TEXT: RGB = { red: 0.91, green: 0.92, blue: 0.94 }; // #e8eaf0
 const COLOR_MUTED: RGB = { red: 0.55, green: 0.56, blue: 0.63 }; // #8b90a0
@@ -29,15 +38,11 @@ const COLOR_ACCENT: RGB = { red: 0.13, green: 0.77, blue: 0.37 }; // #22c55e
 /**
  * Erzeugt eine Rechnungs-PDF (DIN A4) und gibt sie als Uint8Array zurück.
  *
- * - Header mit "Rechnung", Rechnungs-Nr. und Datum
- * - Logo oben rechts (120 px breit, falls vorhanden)
- * - Absender und Empfänger in zwei Spalten
- * - Leistungsbeschreibung
- * - Betragsbox mit Netto, USt, Brutto (Brutto fett / hervorgehoben)
- * - QR-Code (160x160) unten rechts
- * - Fußzeile mit Hinweis auf lokale Erstellung
+ * @param data - Rechnungsdaten
+ * @param locale - Sprache der PDF-Texte (de/en/fr/es)
  */
-export async function makePDF(data: InvoiceData): Promise<Uint8Array> {
+export async function makePDF(data: InvoiceData, locale: PdfLocale = 'de'): Promise<Uint8Array> {
+  const t = PDF_TRANSLATIONS[locale];
   const pdfLib = await import('pdf-lib');
   const { PDFDocument, StandardFonts, rgb } = pdfLib;
 
@@ -63,7 +68,7 @@ export async function makePDF(data: InvoiceData): Promise<Uint8Array> {
 
   // HEADER: Titel + Rechnungsdaten links
   const titleSize = 20;
-  page.drawText('Rechnung', {
+  page.drawText(t.title, {
     x: margin,
     y: cursorY,
     size: titleSize,
@@ -73,7 +78,7 @@ export async function makePDF(data: InvoiceData): Promise<Uint8Array> {
 
   const metaSize = 10;
   const metaY = cursorY - titleSize - 6;
-  page.drawText(`Rechnungs-Nr.: ${data.invoiceNumber}`, {
+  page.drawText(`${t.invoiceNo} ${data.invoiceNumber}`, {
     x: margin,
     y: metaY,
     size: metaSize,
@@ -81,7 +86,7 @@ export async function makePDF(data: InvoiceData): Promise<Uint8Array> {
     color: rgb(COLOR_TEXT.red, COLOR_TEXT.green, COLOR_TEXT.blue),
   });
 
-  page.drawText(`Datum: ${data.invoiceDate}`, {
+  page.drawText(`${t.date} ${data.invoiceDate}`, {
     x: margin,
     y: metaY - metaSize - 2,
     size: metaSize,
@@ -129,17 +134,14 @@ export async function makePDF(data: InvoiceData): Promise<Uint8Array> {
   const senderX = margin;
   const recipientX = margin + columnWidth + 20;
 
-  const senderLabel = 'Absender';
-  const recipientLabel = 'Empfänger';
-
-  page.drawText(senderLabel, {
+  page.drawText(t.sender, {
     x: senderX,
     y: cursorY,
     size: 10,
     font: helveticaBold,
     color: rgb(COLOR_MUTED.red, COLOR_MUTED.green, COLOR_MUTED.blue),
   });
-  page.drawText(recipientLabel, {
+  page.drawText(t.recipient, {
     x: recipientX,
     y: cursorY,
     size: 10,
@@ -198,7 +200,7 @@ export async function makePDF(data: InvoiceData): Promise<Uint8Array> {
   cursorY = Math.min(senderY, recipientY) - 28;
 
   // LEISTUNGSBESCHREIBUNG
-  page.drawText('Leistungsbeschreibung', {
+  page.drawText(t.serviceDescription, {
     x: margin,
     y: cursorY,
     size: 11,
@@ -251,7 +253,7 @@ export async function makePDF(data: InvoiceData): Promise<Uint8Array> {
   const valueSize = 11;
 
   // Netto
-  page.drawText('Netto', {
+  page.drawText(t.net, {
     x: boxX + 10,
     y: rowYStart,
     size: labelSize,
@@ -267,7 +269,7 @@ export async function makePDF(data: InvoiceData): Promise<Uint8Array> {
   });
 
   // USt
-  const vatLabel = `USt (${data.vatRate.toFixed(2).replace('.', ',')} %)`;
+  const vatLabel = `${t.vat} (${data.vatRate.toFixed(2).replace('.', ',')} %)`;
   const vatY = rowYStart - 18;
   page.drawText(vatLabel, {
     x: boxX + 10,
@@ -286,10 +288,9 @@ export async function makePDF(data: InvoiceData): Promise<Uint8Array> {
 
   // Brutto (fett / hervorgehoben)
   const grossY = vatY - 20;
-  const grossLabel = 'Brutto gesamt';
   const grossValue = formatAmount(gross);
 
-  page.drawText(grossLabel, {
+  page.drawText(t.gross, {
     x: boxX + 10,
     y: grossY,
     size: labelSize + 1,
@@ -326,8 +327,7 @@ export async function makePDF(data: InvoiceData): Promise<Uint8Array> {
   }
 
   // FUSSZEILE
-  const footerText = 'Erstellt lokal im Browser · keine Datenübertragung';
-  page.drawText(footerText, {
+  page.drawText(t.footer, {
     x: margin,
     y: margin - 4,
     size: 8,

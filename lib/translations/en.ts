@@ -36,6 +36,19 @@ export const en = {
       'External QR fallback (api.qrserver.com) – sends payment data to the service.',
     success: 'QR successfully generated. Test with your banking app.',
   },
+  // PDF (Rechnungs-PDF)
+  pdf: {
+    title: 'Invoice',
+    invoiceNo: 'No.:',
+    date: 'Date:',
+    sender: 'Sender',
+    recipient: 'Recipient',
+    serviceDescription: 'Service description',
+    net: 'Net',
+    vat: 'VAT',
+    gross: 'Gross total',
+    footer: 'Generated locally in browser · no data transmission',
+  },
   // Rechnung
   invoice: {
     title: 'Invoice (PDF)',
