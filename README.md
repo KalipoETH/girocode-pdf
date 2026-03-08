@@ -1,36 +1,149 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GiroCode Generator – Free SEPA-QR / EPC Generator
 
-## Getting Started
+[![Product Hunt](https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1090895&theme=dark&t=1772743698922)](https://www.producthunt.com/products/girocode-generator)
 
-First, run the development server:
+**🔗 [girocodegenerator.com](https://www.girocodegenerator.com)**
+
+A free, privacy-first GiroCode (SEPA-QR / EPC) generator for freelancers and small businesses – running 100% locally in your browser.
+
+---
+
+## ✨ Features
+
+- **GiroCode Generator** – Create SEPA-QR / EPC codes for bank transfers and invoices
+- **Real-time IBAN Validation** – Mod-97 checksum verification
+- **Invoice PDF** – Generate professional invoices with embedded QR code
+- **Logo Upload** – Add your company logo to the invoice
+- **100% Local** – Your IBAN and payment data never leave your device
+- **No Registration** – No account, no subscription, completely free
+- **Multilingual** – Available in 🇩🇪 DE, 🇬🇧 EN, 🇫🇷 FR, 🇪🇸 ES
+- **Mobile-friendly** – Fully responsive design
+
+---
+
+## 🔒 Privacy First
+
+Most SEPA QR code generators send your banking data to their servers. GiroCode Generator processes everything **client-side** in your browser:
+
+- ✅ No backend server
+- ✅ No database
+- ✅ No analytics or tracking
+- ✅ No cookies
+- ✅ IBAN and payment data never transmitted
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js 14 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **QR Generation:** qrcode (npm)
+- **PDF Generation:** pdf-lib
+- **Deployment:** Vercel (static site)
+
+---
+
+## 🚀 Getting Started
 
 ```bash
+# Clone the repository
+git clone https://github.com/KalipoETH/girocode-pdf.git
+cd girocode-pdf
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Build & Deploy
 
-## Learn More
+```bash
+# Build for production
+npm run build
 
-To learn more about Next.js, take a look at the following resources:
+# Deploy to Vercel
+vercel deploy
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📋 How It Works
 
-## Deploy on Vercel
+### GiroCode (EPC Payload)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The generator creates a QR code following the **EPC (European Payments Council)** standard:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+BCD
+001
+1
+SCT
+[BIC]
+[Recipient Name]
+[IBAN]
+EUR[Amount]
+[empty]
+[empty]
+[Payment Reference]
+```
+
+### IBAN Validation
+
+Real-time validation using the **Mod-97 checksum algorithm**:
+
+```typescript
+function ibanIsValid(iban: string): boolean {
+  iban = iban.toUpperCase().replace(/\s+/g, '');
+  if (iban.length < 15 || iban.length > 34) return false;
+  const r = iban.slice(4) + iban.slice(0, 4);
+  const ex = r.replace(/[A-Z]/g, ch => (ch.charCodeAt(0) - 55).toString());
+  let rem = 0;
+  for (const d of ex) { rem = (rem * 10 + (+d)) % 97; }
+  return rem === 1;
+}
+```
+
+---
+
+## 🌍 Supported Languages
+
+| Language | URL |
+|---|---|
+| 🇩🇪 Deutsch | girocodegenerator.com |
+| 🇬🇧 English | girocodegenerator.com/en |
+| 🇫🇷 Français | girocodegenerator.com/fr |
+| 🇪🇸 Español | girocodegenerator.com/es |
+
+---
+
+## 📄 License
+
+MIT License – feel free to use, modify and distribute.
+
+---
+
+## 👤 Author
+
+**Kaleb Jahnke**
+- Website: [girocodegenerator.com](https://www.girocodegenerator.com)
+- Email: kontakt@girocodegenerator.com
+
+---
+
+## ⭐ Support
+
+If you find this project useful, please consider:
+- Giving it a ⭐ on GitHub
+- Upvoting on [Product Hunt](https://www.producthunt.com/products/girocode-generator)
+- Sharing it with freelancers and small businesses
+
+---
+
+*Built with ❤️ in Osterholz-Scharmbeck, Germany*
