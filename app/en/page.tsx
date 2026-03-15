@@ -113,12 +113,18 @@ export default function HomePageEn() {
           <div className="animate-card-in" style={{ animationDelay: '0.1s' }}>
             <GiroCodeForm locale="en" onQrDataUrlChange={setQrPngDataUrl} />
           </div>
+          {/* FIX 5: Divider */}
+          <div className="flex items-center gap-4 my-8">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+            <span className="text-slate-500 text-sm px-4">Invoice PDF</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+          </div>
           <div className="animate-card-in" style={{ animationDelay: '0.2s' }}>
             <InvoiceForm locale="en" qrPngDataUrl={qrPngDataUrl} />
           </div>
         </section>
 
-        {/* Trust section */}
+        {/* FIX 4: Trust section */}
         <section
           aria-label="Trust & Security"
           className="animate-card-in grid gap-4 sm:grid-cols-3"
@@ -131,11 +137,11 @@ export default function HomePageEn() {
           ].map((card) => (
             <div
               key={card.title}
-              className="flex flex-col gap-2 rounded-2xl border border-slate-800/80 bg-slate-900/50 p-5"
+              className="flex flex-col gap-2 rounded-2xl border border-slate-800/80 border-t-2 border-t-emerald-500/20 bg-slate-900/50 p-7 transition-all duration-200 hover:bg-[#1a1d25] hover:border-t-emerald-500"
             >
-              <span className="text-2xl">{card.icon}</span>
-              <p className="text-sm font-semibold text-slate-100">{card.title}</p>
-              <p className="text-xs text-slate-400">{card.sub}</p>
+              <span className="text-3xl">{card.icon}</span>
+              <p className="font-bold text-slate-100" style={{ fontSize: '18px' }}>{card.title}</p>
+              <p className="text-[14px] text-[#8b90a0]">{card.sub}</p>
             </div>
           ))}
         </section>
@@ -155,17 +161,18 @@ export default function HomePageEn() {
             <p className="mt-2">{en.seo.howText}</p>
           </div>
 
+          {/* FIX 2: FAQ */}
           <div className="pt-2">
             <h2 className="text-base font-semibold tracking-tight text-slate-50">
               {en.seo.faqTitle}
             </h2>
-            <dl className="mt-3 space-y-3">
+            <dl className="mt-3 flex flex-col gap-3">
               {en.seo.faq.map((item, index) => (
-                <div key={index} className="rounded-lg bg-slate-950/40 p-3">
-                  <dt className="text-xs font-semibold text-slate-100">
-                    {index + 1}. {item.q}
+                <div key={index} className="rounded-[12px] border-l-[3px] border-l-[#22c55e] bg-[#1a1d25] p-5 transition-colors duration-200 hover:bg-[#1e2130]">
+                  <dt className="font-semibold text-slate-100" style={{ fontSize: '15px' }}>
+                    {item.q}
                   </dt>
-                  <dd className="mt-1 text-xs text-slate-300">{item.a}</dd>
+                  <dd className="mt-1 text-xs leading-[1.7] text-[#9aa1b6]">{item.a}</dd>
                 </div>
               ))}
             </dl>
@@ -179,6 +186,7 @@ export default function HomePageEn() {
           </div>
         </section>
 
+        {/* FIX 3: Knowledge Cards */}
         <section
           aria-labelledby="learn-more-en"
           className="animate-card-in mt-8 space-y-4"
@@ -193,74 +201,74 @@ export default function HomePageEn() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Link
               href="/en/wissen/girocode"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:-translate-y-[3px] hover:border-[#22c55e] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '0.5s' }}
             >
-              <span className="text-2xl" aria-hidden>📄</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>📄</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">What is a GiroCode?</h3>
-                <p className="mt-0.5 text-xs text-slate-400">Basics and how the SEPA-QR code works.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">What is a GiroCode?</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">Basics and how the SEPA-QR code works.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
             <Link
               href="/en/wissen/epc-standard"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:-translate-y-[3px] hover:border-[#22c55e] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '0.6s' }}
             >
-              <span className="text-2xl" aria-hidden>⚙️</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>⚙️</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">EPC standard explained</h3>
-                <p className="mt-0.5 text-xs text-slate-400">Technical structure of the EPC payload in detail.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">EPC standard explained</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">Technical structure of the EPC payload in detail.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
             <Link
               href="/en/wissen/iban-bic"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:-translate-y-[3px] hover:border-[#22c55e] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '0.7s' }}
             >
-              <span className="text-2xl" aria-hidden>🏦</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>🏦</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">IBAN &amp; BIC in GiroCode</h3>
-                <p className="mt-0.5 text-xs text-slate-400">Mandatory fields, format and IBAN validation.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">IBAN &amp; BIC in GiroCode</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">Mandatory fields, format and IBAN validation.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
             <Link
               href="/en/wissen/rechnung"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:-translate-y-[3px] hover:border-[#22c55e] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '0.8s' }}
             >
-              <span className="text-2xl" aria-hidden>🧾</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>🧾</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">GiroCode on invoices</h3>
-                <p className="mt-0.5 text-xs text-slate-400">How to integrate it correctly into invoices.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">GiroCode on invoices</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">How to integrate it correctly into invoices.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
             <Link
               href="/en/wissen/banking-apps"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:-translate-y-[3px] hover:border-[#22c55e] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '0.9s' }}
             >
-              <span className="text-2xl" aria-hidden>📱</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>📱</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">Banking apps overview</h3>
-                <p className="mt-0.5 text-xs text-slate-400">Which apps support GiroCodes.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">Banking apps overview</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">Which apps support GiroCodes.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
             <Link
               href="/en/wissen/scannen"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:-translate-y-[3px] hover:border-[#22c55e] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '1s' }}
             >
-              <span className="text-2xl" aria-hidden>📷</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>📷</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">Scan a GiroCode</h3>
-                <p className="mt-0.5 text-xs text-slate-400">Step-by-step with your banking app.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">Scan a GiroCode</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">Step-by-step with your banking app.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
           </div>
@@ -269,4 +277,3 @@ export default function HomePageEn() {
     </main>
   );
 }
-

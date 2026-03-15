@@ -122,12 +122,18 @@ export default function HomePage() {
           <div className="animate-card-in" style={{ animationDelay: '0.1s' }}>
             <GiroCodeForm locale="de" onQrDataUrlChange={setQrPngDataUrl} />
           </div>
+          {/* FIX 5: Visueller Trenner */}
+          <div className="flex items-center gap-4 my-8">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+            <span className="text-slate-500 text-sm px-4">Rechnungs-PDF</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+          </div>
           <div className="animate-card-in" style={{ animationDelay: '0.2s' }}>
             <InvoiceForm locale="de" qrPngDataUrl={qrPngDataUrl} />
           </div>
         </section>
 
-        {/* Trust-Sektion */}
+        {/* FIX 4: Trust-Sektion */}
         <section
           aria-label="Vertrauen & Sicherheit"
           className="animate-card-in grid gap-4 sm:grid-cols-3"
@@ -152,11 +158,11 @@ export default function HomePage() {
           ].map((card) => (
             <div
               key={card.title}
-              className="flex flex-col gap-2 rounded-2xl border border-slate-800/80 bg-slate-900/50 p-5"
+              className="flex flex-col gap-2 rounded-2xl border border-slate-800/80 border-t-2 border-t-emerald-500/20 bg-slate-900/50 p-7 transition-all duration-200 hover:bg-[#1a1d25] hover:border-t-emerald-500"
             >
-              <span className="text-2xl">{card.icon}</span>
-              <p className="text-sm font-semibold text-slate-100">{card.title}</p>
-              <p className="text-xs text-slate-400">{card.sub}</p>
+              <span className="text-3xl">{card.icon}</span>
+              <p className="font-bold text-slate-100" style={{ fontSize: '18px' }}>{card.title}</p>
+              <p className="text-[14px] text-[#8b90a0]">{card.sub}</p>
             </div>
           ))}
         </section>
@@ -192,55 +198,56 @@ export default function HomePage() {
             </p>
           </div>
 
+          {/* FIX 2: FAQ-Box */}
           <div className="pt-2">
             <h2 className="text-base font-semibold tracking-tight text-slate-50">
               Häufige Fragen zum GiroCode Generator
             </h2>
-            <dl className="mt-3 space-y-3">
-              <div className="rounded-lg bg-slate-950/40 p-3">
-                <dt className="text-xs font-semibold text-slate-100">
-                  1. Ist der GiroCode Generator wirklich kostenlos?
+            <dl className="mt-3 flex flex-col gap-3">
+              <div className="rounded-[12px] border-l-[3px] border-l-[#22c55e] bg-[#1a1d25] p-5 transition-colors duration-200 hover:bg-[#1e2130]">
+                <dt className="font-semibold text-slate-100" style={{ fontSize: '15px' }}>
+                  Ist der GiroCode Generator wirklich kostenlos?
                 </dt>
-                <dd className="mt-1 text-xs text-slate-300">
+                <dd className="mt-1 text-xs leading-[1.7] text-[#9aa1b6]">
                   Ja. Du kannst den Generator dauerhaft kostenlos nutzen – es fallen nur die üblichen
                   Gebühren deiner Bank für SEPA-Überweisungen an, sofern diese nicht ohnehin
                   kostenfrei sind.
                 </dd>
               </div>
-              <div className="rounded-lg bg-slate-950/40 p-3">
-                <dt className="text-xs font-semibold text-slate-100">
-                  2. Werden meine Daten gespeichert?
+              <div className="rounded-[12px] border-l-[3px] border-l-[#22c55e] bg-[#1a1d25] p-5 transition-colors duration-200 hover:bg-[#1e2130]">
+                <dt className="font-semibold text-slate-100" style={{ fontSize: '15px' }}>
+                  Werden meine Daten gespeichert?
                 </dt>
-                <dd className="mt-1 text-xs text-slate-300">
+                <dd className="mt-1 text-xs leading-[1.7] text-[#9aa1b6]">
                   Nein. Alle Eingaben werden ausschließlich in deinem Browser verarbeitet. Es findet
                   keine serverseitige Speicherung oder Auswertung statt.
                 </dd>
               </div>
-              <div className="rounded-lg bg-slate-950/40 p-3">
-                <dt className="text-xs font-semibold text-slate-100">
-                  3. Welche Banking-Apps können den GiroCode scannen?
+              <div className="rounded-[12px] border-l-[3px] border-l-[#22c55e] bg-[#1a1d25] p-5 transition-colors duration-200 hover:bg-[#1e2130]">
+                <dt className="font-semibold text-slate-100" style={{ fontSize: '15px' }}>
+                  Welche Banking-Apps können den GiroCode scannen?
                 </dt>
-                <dd className="mt-1 text-xs text-slate-300">
+                <dd className="mt-1 text-xs leading-[1.7] text-[#9aa1b6]">
                   Viele Apps im deutschsprachigen Raum unterstützen SEPA-QR / GiroCode, darunter
                   Sparkasse, Volks- und Raiffeisenbanken, ING, DKB, Comdirect, Deutsche Bank, N26 und
-                  weitere. Details findest du im Wissensbereich unter „Banking-Apps mit GiroCode“.
+                  weitere. Details findest du im Wissensbereich unter „Banking-Apps mit GiroCode".
                 </dd>
               </div>
-              <div className="rounded-lg bg-slate-950/40 p-3">
-                <dt className="text-xs font-semibold text-slate-100">
-                  4. Muss ich einen Betrag angeben?
+              <div className="rounded-[12px] border-l-[3px] border-l-[#22c55e] bg-[#1a1d25] p-5 transition-colors duration-200 hover:bg-[#1e2130]">
+                <dt className="font-semibold text-slate-100" style={{ fontSize: '15px' }}>
+                  Muss ich einen Betrag angeben?
                 </dt>
-                <dd className="mt-1 text-xs text-slate-300">
+                <dd className="mt-1 text-xs leading-[1.7] text-[#9aa1b6]">
                   Nein. Du kannst den Betrag frei lassen – dann trägt der Zahler den gewünschten Betrag
                   selbst ein. Für klassische Rechnungen empfiehlt sich jedoch ein fest hinterlegter
                   Betrag.
                 </dd>
               </div>
-              <div className="rounded-lg bg-slate-950/40 p-3">
-                <dt className="text-xs font-semibold text-slate-100">
-                  5. Kann ich den GiroCode direkt in eine Rechnung einbinden?
+              <div className="rounded-[12px] border-l-[3px] border-l-[#22c55e] bg-[#1a1d25] p-5 transition-colors duration-200 hover:bg-[#1e2130]">
+                <dt className="font-semibold text-slate-100" style={{ fontSize: '15px' }}>
+                  Kann ich den GiroCode direkt in eine Rechnung einbinden?
                 </dt>
-                <dd className="mt-1 text-xs text-slate-300">
+                <dd className="mt-1 text-xs leading-[1.7] text-[#9aa1b6]">
                   Ja. Mit der integrierten Rechnungsfunktion erzeugst du eine <strong>
                     PDF-Rechnung mit eingebettetem GiroCode
                   </strong>
@@ -258,6 +265,7 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* FIX 3: Wissens-Cards */}
         <section aria-labelledby="mehr-wissen" className="animate-card-in mt-8 space-y-4" style={{ animationDelay: '0.4s' }}>
           <h2 id="mehr-wissen" className="text-base font-semibold tracking-tight text-slate-50 md:text-lg">
             Mehr über GiroCodes erfahren
@@ -265,74 +273,74 @@ export default function HomePage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Link
               href="/wissen/girocode"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:border-[#22c55e] hover:-translate-y-[3px] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '0.5s' }}
             >
-              <span className="text-2xl" aria-hidden>📄</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>📄</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">Was ist ein GiroCode?</h3>
-                <p className="mt-0.5 text-xs text-slate-400">Grundlagen und Funktionsweise des SEPA-QR-Codes.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">Was ist ein GiroCode?</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">Grundlagen und Funktionsweise des SEPA-QR-Codes.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
             <Link
               href="/wissen/epc-standard"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:border-[#22c55e] hover:-translate-y-[3px] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '0.6s' }}
             >
-              <span className="text-2xl" aria-hidden>⚙️</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>⚙️</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">EPC-Standard erklärt</h3>
-                <p className="mt-0.5 text-xs text-slate-400">Technischer Aufbau des EPC-Payloads im Detail.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">EPC-Standard erklärt</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">Technischer Aufbau des EPC-Payloads im Detail.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
             <Link
               href="/wissen/iban-bic"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:border-[#22c55e] hover:-translate-y-[3px] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '0.7s' }}
             >
-              <span className="text-2xl" aria-hidden>🏦</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>🏦</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">IBAN &amp; BIC im GiroCode</h3>
-                <p className="mt-0.5 text-xs text-slate-400">Pflichtangaben, Format und IBAN-Prüfung.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">IBAN &amp; BIC im GiroCode</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">Pflichtangaben, Format und IBAN-Prüfung.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
             <Link
               href="/wissen/rechnung"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:border-[#22c55e] hover:-translate-y-[3px] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '0.8s' }}
             >
-              <span className="text-2xl" aria-hidden>🧾</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>🧾</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">GiroCode auf Rechnungen</h3>
-                <p className="mt-0.5 text-xs text-slate-400">Rechtssicher integrieren und PDF-Rechnungen erstellen.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">GiroCode auf Rechnungen</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">Rechtssicher integrieren und PDF-Rechnungen erstellen.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
             <Link
               href="/wissen/banking-apps"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:border-[#22c55e] hover:-translate-y-[3px] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '0.9s' }}
             >
-              <span className="text-2xl" aria-hidden>📱</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>📱</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">Banking-Apps Übersicht</h3>
-                <p className="mt-0.5 text-xs text-slate-400">Welche Apps GiroCodes scannen können.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">Banking-Apps Übersicht</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">Welche Apps GiroCodes scannen können.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
             <Link
               href="/wissen/scannen"
-              className="animate-card-in group flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition duration-200 ease-out hover:border-[#22c55e] hover:-translate-y-[3px] motion-reduce:transform-none"
+              className="animate-card-in group flex items-start gap-3 rounded-xl border border-[#1f2431] bg-[#121318] p-5 transition-all duration-200 ease-out hover:bg-[#1a1d25] hover:border-emerald-500/25 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,197,94,0.08)] motion-reduce:transform-none"
               style={{ animationDelay: '1s' }}
             >
-              <span className="text-2xl" aria-hidden>📷</span>
+              <span className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-[#133018] p-2 text-xl" aria-hidden>📷</span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">GiroCode scannen</h3>
-                <p className="mt-0.5 text-xs text-slate-400">Schritt-für-Schritt mit der Banking-App scannen.</p>
-                <span className="mt-2 inline-flex items-center text-xs font-medium text-slate-500 group-hover:text-[#22c55e]">→</span>
+                <h3 className="text-[15px] font-bold text-[#e8eaf0] group-hover:text-emerald-300">GiroCode scannen</h3>
+                <p className="mt-1 text-[13px] text-[#8b90a0]">Schritt-für-Schritt mit der Banking-App scannen.</p>
+                <span className="mt-2 inline-flex items-center text-sm font-medium text-[#22c55e] transition-transform duration-200 group-hover:translate-x-1">→</span>
               </div>
             </Link>
           </div>
@@ -341,4 +349,3 @@ export default function HomePage() {
     </main>
   );
 }
-

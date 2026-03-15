@@ -360,8 +360,9 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ locale, qrPngDataUrl }
               {t.infoUsesQr}
             </p>
             {!qrPngDataUrl && (
-              <p className="text-[11px] text-amber-300">
-                {t.infoNoQr}
+              <p className="mt-1 flex items-center gap-1.5 text-[13px] leading-snug text-[#8b90a0]">
+                <span className="flex-shrink-0" aria-hidden>ℹ️</span>
+                <span>{t.infoNoQr}</span>
               </p>
             )}
           </div>

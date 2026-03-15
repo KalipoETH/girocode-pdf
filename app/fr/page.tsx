@@ -113,12 +113,18 @@ export default function HomePageFr() {
           <div className="animate-card-in" style={{ animationDelay: '0.1s' }}>
             <GiroCodeForm locale="fr" onQrDataUrlChange={setQrPngDataUrl} />
           </div>
+          {/* FIX 5: Séparateur */}
+          <div className="flex items-center gap-4 my-8">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+            <span className="text-slate-500 text-sm px-4">Facture PDF</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+          </div>
           <div className="animate-card-in" style={{ animationDelay: '0.2s' }}>
             <InvoiceForm locale="fr" qrPngDataUrl={qrPngDataUrl} />
           </div>
         </section>
 
-        {/* Trust section */}
+        {/* FIX 4: Trust section */}
         <section
           aria-label="Confiance et sécurité"
           className="animate-card-in grid gap-4 sm:grid-cols-3"
@@ -131,11 +137,11 @@ export default function HomePageFr() {
           ].map((card) => (
             <div
               key={card.title}
-              className="flex flex-col gap-2 rounded-2xl border border-slate-800/80 bg-slate-900/50 p-5"
+              className="flex flex-col gap-2 rounded-2xl border border-slate-800/80 border-t-2 border-t-emerald-500/20 bg-slate-900/50 p-7 transition-all duration-200 hover:bg-[#1a1d25] hover:border-t-emerald-500"
             >
-              <span className="text-2xl">{card.icon}</span>
-              <p className="text-sm font-semibold text-slate-100">{card.title}</p>
-              <p className="text-xs text-slate-400">{card.sub}</p>
+              <span className="text-3xl">{card.icon}</span>
+              <p className="font-bold text-slate-100" style={{ fontSize: '18px' }}>{card.title}</p>
+              <p className="text-[14px] text-[#8b90a0]">{card.sub}</p>
             </div>
           ))}
         </section>
@@ -155,17 +161,18 @@ export default function HomePageFr() {
             <p className="mt-2">{fr.seo.howText}</p>
           </div>
 
+          {/* FIX 2: FAQ */}
           <div className="pt-2">
             <h2 className="text-base font-semibold tracking-tight text-slate-50">
               {fr.seo.faqTitle}
             </h2>
-            <dl className="mt-3 space-y-3">
+            <dl className="mt-3 flex flex-col gap-3">
               {fr.seo.faq.map((item, index) => (
-                <div key={index} className="rounded-lg bg-slate-950/40 p-3">
-                  <dt className="text-xs font-semibold text-slate-100">
-                    {index + 1}. {item.q}
+                <div key={index} className="rounded-[12px] border-l-[3px] border-l-[#22c55e] bg-[#1a1d25] p-5 transition-colors duration-200 hover:bg-[#1e2130]">
+                  <dt className="font-semibold text-slate-100" style={{ fontSize: '15px' }}>
+                    {item.q}
                   </dt>
-                  <dd className="mt-1 text-xs text-slate-300">{item.a}</dd>
+                  <dd className="mt-1 text-xs leading-[1.7] text-[#9aa1b6]">{item.a}</dd>
                 </div>
               ))}
             </dl>
@@ -182,4 +189,3 @@ export default function HomePageFr() {
     </main>
   );
 }
-
