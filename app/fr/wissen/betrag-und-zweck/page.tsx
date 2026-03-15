@@ -2,16 +2,16 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Montant & référence de paiement dans le GiroCode',
+  title: 'Montant & Référence de paiement dans GiroCode – Guide complet',
   description:
-    'Comment saisir correctement le montant et la référence de paiement dans un GiroCode – format, limites et bonnes pratiques pour les factures.',
+    'Comment saisir correctement le montant et la référence de paiement dans un GiroCode : format, limites, bonnes pratiques et exemples.',
 };
 
 export default function WissenBetragUndZweckPageFr() {
   return (
     <main className="min-h-screen bg-[#0b0c10] text-slate-100">
       <div className="mx-auto max-w-3xl px-4 py-10 md:py-12">
-        <nav aria-label="Fil d’Ariane" className="mb-6 text-xs text-slate-500">
+        <nav aria-label="Fil d'Ariane" className="mb-6 text-xs text-slate-500">
           <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <li>
               <Link href="/fr" className="text-sky-400 hover:text-sky-300">
@@ -25,167 +25,550 @@ export default function WissenBetragUndZweckPageFr() {
               </Link>
             </li>
             <li aria-hidden>›</li>
-            <li className="text-slate-400">Montant &amp; référence de paiement</li>
+            <li className="text-slate-400">Montant &amp; Référence de paiement</li>
           </ol>
         </nav>
-        <header className="mb-6 space-y-3">
+
+        <header className="mb-8 space-y-3">
           <p className="inline-flex items-center gap-2 rounded-full bg-sky-500/10 px-3 py-1 text-[11px] font-medium text-sky-300 ring-1 ring-sky-500/40">
             <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
-            Pratique · Montant &amp; référence
+            Pratique · Montant &amp; Référence
           </p>
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-50 md:text-3xl">
-              Montant &amp; référence de paiement dans le GiroCode
+              Montant &amp; Référence de paiement dans GiroCode – Guide complet
             </h1>
-            <p className="max-w-2xl text-sm text-slate-400 md:text-base">
-              Le choix du montant et de la référence de paiement dans le GiroCode détermine à quel
-              point les paiements pourront être rapprochés facilement par la suite. Voici ce qu’il
-              faut savoir.
+            <p className="mt-2 max-w-2xl text-sm text-slate-400 md:text-base">
+              Dois-je inclure un montant dans mon GiroCode ? Que mettre dans la référence de
+              paiement ? Ce guide répond à toutes les questions pratiques sur ces deux champs
+              cruciaux pour des paiements sans erreur.
             </p>
           </div>
         </header>
 
         <article className="prose prose-invert prose-slate max-w-none prose-headings:text-slate-50 prose-p:text-slate-300">
-          <section aria-labelledby="montant-format-fr">
-            <h2 id="montant-format-fr">Montant : format et options</h2>
+
+          {/* ── Section 1 ── */}
+          <section aria-labelledby="montant-fr">
+            <h2 id="montant-fr">Le montant dans un GiroCode</h2>
+
+            <h3>Format : EUR12.34</h3>
             <p>
-              Dans un GiroCode, le montant est généralement indiqué au format{' '}
-              <strong>EUR12.34</strong> – c’est-à-dire le code devise <code>EUR</code> suivi d’un
-              montant avec deux décimales, par exemple <code>EUR19.99</code>.
+              Dans la norme EPC, le montant d&apos;un GiroCode doit être encodé dans un format très
+              précis : le code de devise <strong>EUR</strong> (en majuscules) suivi immédiatement du
+              montant avec un <strong>point</strong> comme séparateur décimal. Il ne doit y avoir
+              aucun espace entre <code>EUR</code> et le montant.
             </p>
+
+            <p>Exemples de formats valides :</p>
+            <ul>
+              <li><code>EUR0.50</code> – 50 centimes d&apos;euro</li>
+              <li><code>EUR12.34</code> – 12 euros et 34 centimes</li>
+              <li><code>EUR1250.00</code> – 1 250 euros exactement</li>
+              <li><code>EUR99999.99</code> – 99 999,99 euros</li>
+            </ul>
+
+            <p>Exemples de formats <strong>invalides</strong> (à éviter) :</p>
+            <ul>
+              <li><code>EUR 12.34</code> – espace entre EUR et le montant</li>
+              <li><code>12.34 EUR</code> – EUR après le montant</li>
+              <li><code>EUR12,34</code> – virgule au lieu du point décimal</li>
+              <li><code>EUR12.345</code> – trois décimales (doit être exactement 2)</li>
+              <li><code>€12.34</code> – symbole € au lieu de EUR</li>
+            </ul>
+
+            <h3>Le montant est-il obligatoire ?</h3>
             <p>
-              Important : le montant est <strong>optionnel</strong>. Vous pouvez décider de fixer un
-              montant précis ou de laisser le champ vide. Les deux variantes ont leurs avantages :
+              <strong>Non, le montant est entièrement optionnel</strong> dans un GiroCode. Si vous
+              ne renseignez pas de montant, le champ correspondant dans le payload EPC sera vide
+              (ligne 8 vide). Le GiroCode sera tout à fait valide et fonctionnel – simplement, le
+              payeur devra saisir manuellement le montant dans son application bancaire.
+            </p>
+
+            <h3>Que se passe-t-il sans montant ?</h3>
+            <p>
+              Lorsqu&apos;un GiroCode sans montant est scanné par une application bancaire, le
+              comportement typique est le suivant :
             </p>
             <ul>
               <li>
-                <strong>Avec montant fixe&nbsp;:</strong> idéal pour les factures avec un total
-                déterminé ou des contributions standard (p. ex. cotisation annuelle).
+                L&apos;application remplit automatiquement l&apos;IBAN du bénéficiaire, son nom et
+                la référence de paiement
               </li>
               <li>
-                <strong>Sans montant&nbsp;:</strong> utile pour les dons ou paiements libres, où la
-                personne qui paie doit choisir elle-même le montant.
+                Le champ « montant » reste vide ou à zéro, et le payeur est invité à le saisir
+                manuellement
+              </li>
+              <li>
+                Le payeur peut saisir n&apos;importe quel montant, y compris un montant différent
+                de celui figurant sur la facture (risque d&apos;erreur ou de paiement partiel)
               </li>
             </ul>
-          </section>
 
-          <section aria-labelledby="reference-fr" className="mt-8">
-            <h2 id="reference-fr">Référence de paiement : longueur maximale et contenu</h2>
+            <h3>Montant maximum</h3>
             <p>
-              La référence de paiement d’un GiroCode est limitée à environ{' '}
-              <strong>140 caractères</strong>. Dans cet espace, vous devez placer toutes les
-              informations nécessaires à l’identification du paiement.
-            </p>
-            <p>Exemples typiques :</p>
-            <ul>
-              <li>numéro de facture (p. ex. FA-2024-015),</li>
-              <li>numéro de client ou d’adhérent,</li>
-              <li>nom ou courte description de la prestation.</li>
-            </ul>
-            <p>
-              L’objectif est d’avoir une référence <strong>claire et non ambiguë</strong>. Évitez les
-              textes très longs ou les notes internes pour ne pas atteindre inutilement la limite de
-              caractères.
+              La norme EPC autorise des montants jusqu&apos;à <strong>999 999 999,99 €</strong>
+              (environ un milliard d&apos;euros). En pratique, les banques peuvent appliquer leurs
+              propres limites de virement (généralement de l&apos;ordre de 25 000 € à 100 000 €
+              pour les virements SEPA standards), mais le format du GiroCode lui-même ne fixe pas
+              de limite inférieure à celle du standard EPC.
             </p>
           </section>
 
-          <section aria-labelledby="facture-fr" className="mt-8">
-            <h2 id="facture-fr">Numéro de facture dans la référence</h2>
-            <p>
-              Pour les <strong>indépendants et petites entreprises</strong>, le numéro de facture
-              est l’élément le plus important. Il devrait toujours figurer dans la référence, par
-              exemple&nbsp;:
-            </p>
-            <p>
-              <code>Facture FA-2024-015, Client 12345</code>
-            </p>
-            <p>
-              Ainsi, il est beaucoup plus simple de rapprocher le paiement dans la comptabilité – y
-              compris lorsque la personne qui paie ajoute du texte libre dans le libellé de
-              virement.
-            </p>
-          </section>
+          {/* ── Section 2 ── */}
+          <section aria-labelledby="sans-montant-fr" className="mt-10">
+            <h2 id="sans-montant-fr">Avantages et inconvénients : GiroCode avec vs. sans montant</h2>
 
-          <section aria-labelledby="montant-vide-fr" className="mt-8">
-            <h2 id="montant-vide-fr">Que se passe-t-il si le montant est vide ?</h2>
-            <p>
-              Si vous laissez le montant vide, l’application bancaire ne remplira que les champs{' '}
-              <strong>bénéficiaire, IBAN (et éventuellement BIC) ainsi que la référence</strong>. Le
-              champ du montant reste vide.
-            </p>
-            <p>
-              La personne qui paie doit alors saisir elle-même la somme. C’est particulièrement utile
-              lorsque vous ne souhaitez <strong>pas imposer de montant fixe</strong> – par exemple
-              pour des dons ou des contributions variables.
-            </p>
-          </section>
-
-          <section aria-labelledby="recommandations-fr" className="mt-8">
-            <h2 id="recommandations-fr">Recommandations pour les indépendants</h2>
-            <p>Les bonnes pratiques suivantes fonctionnent bien pour les indépendants :</p>
-            <ul>
-              <li>
-                Utiliser un <strong>montant fixe</strong> lorsque vous envoyez une facture avec un
-                total déterminé.
-              </li>
-              <li>
-                Toujours inclure le <strong>numéro de facture</strong> – et si nécessaire le numéro
-                de client – dans la référence.
-              </li>
-              <li>
-                Garder la référence <strong>courte et explicite</strong> – les commentaires internes
-                devraient rester dans vos propres systèmes.
-              </li>
-            </ul>
-            <p>
-              Avec notre générateur, vous pouvez saisir facilement le montant et la référence, puis
-              créer une <strong>facture PDF avec GiroCode intégré</strong>.
-            </p>
-          </section>
-
-          <div className="mt-10 flex flex-col gap-6 border-t border-slate-800 pt-8">
-            <p className="mb-2">
-              <Link
-                href="/fr"
-                className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-500"
-              >
-                Créer un GiroCode maintenant
-                <span aria-hidden>→</span>
-              </Link>
-            </p>
-            <div>
-              <h2 className="text-sm font-semibold text-slate-50">Autres articles</h2>
-              <ul className="mt-2 space-y-2 text-sm">
-                <li>
-                  <Link
-                    href="/fr/wissen/rechnung"
-                    className="text-sky-400 underline underline-offset-2 hover:text-sky-300"
-                  >
-                    GiroCode sur les factures
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/fr/wissen/iban-bic"
-                    className="text-sky-400 underline underline-offset-2 hover:text-sky-300"
-                  >
-                    IBAN &amp; BIC dans le GiroCode
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/fr/wissen/girocode"
-                    className="text-sky-400 underline underline-offset-2 hover:text-sky-300"
-                  >
-                    Qu’est-ce qu’un GiroCode ?
-                  </Link>
-                </li>
-              </ul>
+            <div className="not-prose my-6 overflow-x-auto rounded-xl border border-slate-700">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-700 bg-slate-800/60">
+                    <th className="px-4 py-3 text-left font-semibold text-slate-200">Aspect</th>
+                    <th className="px-4 py-3 text-left font-semibold text-emerald-400">Avec montant</th>
+                    <th className="px-4 py-3 text-left font-semibold text-sky-400">Sans montant</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800">
+                  <tr className="bg-slate-900/30">
+                    <td className="px-4 py-3 text-slate-300">Risque d&apos;erreur de montant</td>
+                    <td className="px-4 py-3 text-emerald-400">Très faible (automatique)</td>
+                    <td className="px-4 py-3 text-red-400">Élevé (saisie manuelle)</td>
+                  </tr>
+                  <tr className="bg-slate-900/10">
+                    <td className="px-4 py-3 text-slate-300">Flexibilité pour le payeur</td>
+                    <td className="px-4 py-3 text-red-400">Faible (montant fixe)</td>
+                    <td className="px-4 py-3 text-emerald-400">Totale (choix libre)</td>
+                  </tr>
+                  <tr className="bg-slate-900/30">
+                    <td className="px-4 py-3 text-slate-300">Cas d&apos;usage principal</td>
+                    <td className="px-4 py-3 text-slate-300">Factures précises</td>
+                    <td className="px-4 py-3 text-slate-300">Dons, abonnements variables</td>
+                  </tr>
+                  <tr className="bg-slate-900/10">
+                    <td className="px-4 py-3 text-slate-300">Rapidité de paiement</td>
+                    <td className="px-4 py-3 text-emerald-400">Maximum (aucune saisie)</td>
+                    <td className="px-4 py-3 text-yellow-400">Réduite (saisie du montant)</td>
+                  </tr>
+                  <tr className="bg-slate-900/30">
+                    <td className="px-4 py-3 text-slate-300">Taille du QR code</td>
+                    <td className="px-4 py-3 text-slate-300">Légèrement plus grand</td>
+                    <td className="px-4 py-3 text-slate-300">Légèrement plus petit</td>
+                  </tr>
+                  <tr className="bg-slate-900/10">
+                    <td className="px-4 py-3 text-slate-300">Réconciliation comptable</td>
+                    <td className="px-4 py-3 text-emerald-400">Automatique et fiable</td>
+                    <td className="px-4 py-3 text-yellow-400">Possible mais moins fiable</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+
+            <h3>Recommandation pratique</h3>
+            <p>
+              Pour les <strong>factures professionnelles</strong> avec un montant précis, incluez
+              toujours le montant. Cela garantit que le paiement reçu correspond exactement au
+              montant facturé et facilite la réconciliation comptable.
+            </p>
+            <p>
+              Pour les <strong>associations</strong> (collecte de dons), les <strong>collectes
+              informelles</strong> entre amis ou collègues, ou les situations où le montant est
+              vraiment variable, un GiroCode sans montant est tout à fait approprié.
+            </p>
+          </section>
+
+          {/* ── Section 3 ── */}
+          <section aria-labelledby="reference-fr" className="mt-10">
+            <h2 id="reference-fr">La référence de paiement dans un GiroCode</h2>
+
+            <h3>Caractéristiques techniques</h3>
+            <p>
+              La référence de paiement (ou libellé) correspond à la ligne 11 du payload EPC. Elle
+              présente les caractéristiques suivantes :
+            </p>
+            <ul>
+              <li>
+                <strong>Longueur maximale :</strong> 140 caractères (selon la norme EPC)
+              </li>
+              <li>
+                <strong>Encodage :</strong> UTF-8 – les caractères accentués (é, è, ê, à, ü, ö, ä)
+                et les caractères spéciaux courants sont supportés
+              </li>
+              <li>
+                <strong>Optionnel :</strong> La référence peut être laissée vide, mais c&apos;est
+                fortement déconseillé pour les contextes professionnels
+              </li>
+              <li>
+                <strong>Traitement par la banque :</strong> La référence est transmise telle quelle
+                dans le message de virement SEPA et apparaîtra dans le relevé bancaire du
+                bénéficiaire
+              </li>
+            </ul>
+
+            <h3>Que mettre dans la référence ?</h3>
+            <p>
+              La référence de paiement est l&apos;information qui permettra de retrouver facilement
+              le paiement reçu et de l&apos;associer à la facture ou prestation correspondante.
+              Voici les informations essentielles à inclure :
+            </p>
+            <ul>
+              <li>
+                <strong>Numéro de facture :</strong> L&apos;élément le plus important. Il doit être
+                unique et permettre d&apos;identifier sans ambiguïté la facture concernée.
+                Exemple : <code>Facture 2025-042</code>
+              </li>
+              <li>
+                <strong>Date :</strong> La date de la facture peut aider à retrouver rapidement un
+                document. Exemple : <code>Facture 042 du 15/03/2025</code>
+              </li>
+              <li>
+                <strong>Description courte :</strong> Une brève description de la prestation ou du
+                produit peut être utile. Exemple : <code>Facture 2025-042 – Développement web</code>
+              </li>
+            </ul>
+          </section>
+
+          {/* ── Section 4 ── */}
+          <section aria-labelledby="bonnes-pratiques-fr" className="mt-10">
+            <h2 id="bonnes-pratiques-fr">Bonnes pratiques pour les références de paiement</h2>
+
+            <h3>Règle d&apos;or : toujours inclure le numéro de facture</h3>
+            <p>
+              La règle la plus importante est simple : incluez <strong>toujours</strong> le numéro
+              de facture dans la référence de paiement. C&apos;est lui qui permettra à votre
+              logiciel de comptabilité ou à vous-même de faire le lien entre un virement reçu et la
+              facture correspondante.
+            </p>
+            <p>
+              Sans numéro de facture dans le libellé, vous devrez vous fier au montant et à la date
+              pour identifier le paiement – ce qui peut être ambiguë si vous avez plusieurs factures
+              du même montant ou si un client paie en retard.
+            </p>
+
+            <h3>Structure recommandée</h3>
+            <p>
+              Une bonne référence de paiement suit une structure claire et cohérente. Voici quelques
+              modèles recommandés :
+            </p>
+            <ul>
+              <li>
+                Format simple : <code>Facture [NUMÉRO]</code>
+                <br />
+                Exemple : <code>Facture 2025-042</code>
+              </li>
+              <li>
+                Format avec date : <code>Facture [NUMÉRO] du [DATE]</code>
+                <br />
+                Exemple : <code>Facture 2025-042 du 15.03.2025</code>
+              </li>
+              <li>
+                Format avec description : <code>Facture [NUMÉRO] – [DESCRIPTION]</code>
+                <br />
+                Exemple : <code>Facture 2025-042 – Conseil en stratégie digitale</code>
+              </li>
+              <li>
+                Format pour associations : <code>Cotisation [ANNÉE] – Membre [NUMÉRO]</code>
+                <br />
+                Exemple : <code>Cotisation 2025 – Membre 1042</code>
+              </li>
+            </ul>
+
+            <h3>Cohérence dans la numérotation des factures</h3>
+            <p>
+              Adopter un système de numérotation cohérent et chronologique pour vos factures est
+              une bonne pratique comptable indépendante du GiroCode. Les formats les plus courants
+              sont :
+            </p>
+            <ul>
+              <li><code>2025-001</code>, <code>2025-002</code>, etc. (séquentiel annuel)</li>
+              <li><code>2025-03-001</code>, <code>2025-03-002</code> (séquentiel mensuel)</li>
+              <li><code>INV-2025-001</code> (avec préfixe)</li>
+            </ul>
+            <p>
+              En France, la numérotation chronologique des factures est une <strong>obligation
+              légale</strong> pour les professionnels assujettis à la TVA.
+            </p>
+          </section>
+
+          {/* ── Section 5 ── */}
+          <section aria-labelledby="erreurs-ref-fr" className="mt-10">
+            <h2 id="erreurs-ref-fr">Erreurs courantes avec les références de paiement</h2>
+
+            <h3>1. Référence trop longue</h3>
+            <p>
+              La limite de 140 caractères est suffisante pour la plupart des usages, mais certains
+              utilisateurs tentent d&apos;inclure des descriptions très longues. Si la référence
+              dépasse 140 caractères, le GiroCode sera invalide. Notre générateur tronque
+              automatiquement la référence à 140 caractères avec un avertissement.
+            </p>
+
+            <h3>2. Référence vide</h3>
+            <p>
+              Envoyer un virement SEPA sans libellé est techniquement possible mais fortement
+              déconseillé. Sans référence, il est très difficile de réconcilier les paiements reçus
+              avec les factures correspondantes, surtout si vous recevez de nombreux paiements.
+            </p>
+
+            <h3>3. Référence non structurée et ambiguë</h3>
+            <p>
+              Utiliser des libellés vagues comme « Paiement », « Facture », « Règlement »
+              (sans numéro) est une erreur fréquente. Ces libellés ne permettent pas
+              d&apos;identifier le paiement de manière unique.
+            </p>
+
+            <h3>4. Numéros de facture incohérents</h3>
+            <p>
+              Si votre numérotation de facture n&apos;est pas cohérente ou ne suit pas une
+              séquence logique, la réconciliation devient difficile même avec un GiroCode. Adoptez
+              une convention de numérotation dès le début de votre activité.
+            </p>
+
+            <h3>5. Caractères spéciaux problématiques</h3>
+            <p>
+              Bien que l&apos;UTF-8 soit supporté, certains caractères très spéciaux (emoji,
+              caractères cyrilliques, etc.) peuvent ne pas être correctement transmis par certains
+              systèmes bancaires. Tenez-vous aux caractères latins standard et aux accents courants
+              pour une compatibilité maximale.
+            </p>
+          </section>
+
+          {/* ── Section 6 ── */}
+          <section aria-labelledby="secteurs-fr" className="mt-10">
+            <h2 id="secteurs-fr">Références de paiement pour différents secteurs</h2>
+
+            <h3>Freelances et agences</h3>
+            <p>
+              Les freelances et les agences émettent généralement des factures pour des prestations
+              de services spécifiques. Voici les recommandations :
+            </p>
+            <ul>
+              <li>
+                Inclure le numéro de facture et une courte description de la prestation
+              </li>
+              <li>
+                Exemple : <code>Facture 2025-042 – Développement site web – Phase 2</code>
+              </li>
+              <li>
+                Si vous travaillez pour plusieurs clients, vous pouvez ajouter le nom du client :
+                <code>Facture 2025-042 – Dupont SA – Design graphique</code>
+              </li>
+            </ul>
+
+            <h3>Artisans et prestataires de services</h3>
+            <p>
+              Les artisans (plombiers, électriciens, menuisiers, etc.) font souvent des chantiers
+              identifiables par une adresse ou un type de travaux :
+            </p>
+            <ul>
+              <li>
+                <code>Facture 2025-015 – Rénovation salle de bain – 12 rue de la Paix</code>
+              </li>
+              <li>
+                <code>Devis 2025-007 acompte 30%</code>
+              </li>
+            </ul>
+
+            <h3>Associations</h3>
+            <p>
+              Les associations utilisent souvent les GiroCodes pour les cotisations et les dons.
+              Des références spécifiques facilitent la gestion administrative :
+            </p>
+            <ul>
+              <li>
+                Cotisation annuelle : <code>Cotisation 2025 – Membre 1042 – Jean Dupont</code>
+              </li>
+              <li>
+                Don : <code>Don 2025 – Projet Éducation – Reçu fiscal disponible</code>
+              </li>
+              <li>
+                Inscription événement : <code>Inscription Gala 2025 – 2 places – Dupont</code>
+              </li>
+            </ul>
+
+            <h3>Boutiques en ligne (e-commerce)</h3>
+            <p>
+              Les boutiques en ligne qui acceptent les virements SEPA peuvent utiliser des GiroCodes
+              avec des références de commande :
+            </p>
+            <ul>
+              <li>
+                <code>Commande #CMD-2025-8734</code>
+              </li>
+              <li>
+                <code>Règlement commande CMD-2025-8734 – Jean Dupont</code>
+              </li>
+            </ul>
+            <p>
+              Note : Pour l&apos;e-commerce, les virements SEPA avec GiroCode sont moins courants
+              car ils ne permettent pas de vérifier automatiquement le paiement avant l&apos;envoi
+              de la commande. Ils sont mieux adaptés aux transactions B2B ou aux contextes où la
+              confiance est déjà établie.
+            </p>
+
+            <h3>Professions libérales (médecins, avocats, architectes)</h3>
+            <p>
+              Les professions libérales peuvent avoir des contraintes de confidentialité particulières
+              (secret médical, etc.). Dans ce cas, des références neutres sont préférables :
+            </p>
+            <ul>
+              <li>
+                <code>Honoraires dossier 2025-042</code> (sans nom du patient/client)
+              </li>
+              <li>
+                <code>Consultation du 15.03.2025 – Ref 2025-042</code>
+              </li>
+            </ul>
+          </section>
+
+          {/* ── Section 7 – Exemples pratiques ── */}
+          <section aria-labelledby="exemples-fr" className="mt-10">
+            <h2 id="exemples-fr">Exemples de GiroCodes complets</h2>
+
+            <h3>Exemple 1 : Facture d&apos;un freelance développeur web</h3>
+            <pre className="overflow-x-auto rounded-xl bg-slate-900/80 p-4 text-xs text-emerald-300">
+              {`BCD
+002
+1
+SCT
+SOGEFRPPXXX
+Marie Martin Développement
+FR7612345678901234567890185
+EUR2850.00
+
+Facture 2025-042 – Développement application mobile`}
+            </pre>
+
+            <h3>Exemple 2 : Cotisation d&apos;association (sans montant fixe)</h3>
+            <pre className="overflow-x-auto rounded-xl bg-slate-900/80 p-4 text-xs text-emerald-300">
+              {`BCD
+002
+1
+SCT
+
+Association Sportive Les Aigles
+FR7698765432100987654321012
+
+
+Cotisation 2025 – Membre 247 – Pierre Durand`}
+            </pre>
+
+            <h3>Exemple 3 : Acompte avec description détaillée</h3>
+            <pre className="overflow-x-auto rounded-xl bg-slate-900/80 p-4 text-xs text-emerald-300">
+              {`BCD
+002
+1
+SCT
+BNPAFRPPXXX
+Cabinet Architecture Renard
+FR7630004000031234567890143
+EUR5000.00
+
+Acompte 50% – Devis 2025-018 – Rénovation bureau Paris 11e`}
+            </pre>
+          </section>
+
+          {/* ── Section 8 – Outils affiliés ── */}
+          <section aria-labelledby="outils-ref-fr" className="mt-10">
+            <h2 id="outils-ref-fr">Facturation professionnelle avec références correctes</h2>
+            <p>
+              Les logiciels de facturation modernes gèrent automatiquement la numérotation des
+              factures et l&apos;intégration des GiroCodes avec les bonnes références :
+            </p>
+
+            <div className="not-prose mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-xl border border-slate-700 bg-slate-900/60 p-5">
+                <h3 className="mb-2 text-base font-semibold text-slate-50">FastBill</h3>
+                <p className="mb-4 text-sm text-slate-400">
+                  FastBill numérote automatiquement les factures de manière séquentielle et conforme
+                  aux exigences légales. Le numéro de facture est automatiquement inclus dans la
+                  référence du GiroCode généré, garantissant une réconciliation parfaite.
+                </p>
+                <a
+                  href="https://www.awin1.com/cread.php?awinmid=20766&awinaffid=2793610"
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="inline-flex items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-sky-500"
+                >
+                  Essayer FastBill *<span aria-hidden>→</span>
+                </a>
+                <p className="mt-2 text-xs text-slate-600">* Lien affilié</p>
+              </div>
+              <div className="rounded-xl border border-slate-700 bg-slate-900/60 p-5">
+                <h3 className="mb-2 text-base font-semibold text-slate-50">sevDesk</h3>
+                <p className="mb-4 text-sm text-slate-400">
+                  sevDesk offre un système complet de gestion des factures avec numérotation
+                  automatique, modèles personnalisables et génération automatique de GiroCodes. La
+                  référence de paiement inclut automatiquement le numéro de facture.
+                </p>
+                <a
+                  href="https://www.awin1.com/cread.php?awinmid=15944&awinaffid=2793610"
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="inline-flex items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-sky-500"
+                >
+                  Essayer sevDesk *<span aria-hidden>→</span>
+                </a>
+                <p className="mt-2 text-xs text-slate-600">* Lien affilié</p>
+              </div>
+            </div>
+
+            <p className="mt-6">
+              Si vous préférez créer vos factures manuellement (Word, LibreOffice, etc.), notre{' '}
+              <Link href="/fr" className="text-sky-400 hover:text-sky-300">
+                générateur de GiroCode gratuit
+              </Link>{' '}
+              vous permet de créer des codes QR que vous pouvez intégrer directement dans vos
+              modèles de facture.
+            </p>
+          </section>
+
+          {/* ── Liens internes ── */}
+          <section aria-labelledby="voir-aussi-ref-fr" className="mt-10">
+            <h2 id="voir-aussi-ref-fr">Voir aussi</h2>
+            <ul>
+              <li>
+                <Link href="/fr/wissen/girocode" className="text-sky-400 hover:text-sky-300">
+                  Qu&apos;est-ce qu&apos;un GiroCode ?
+                </Link>
+              </li>
+              <li>
+                <Link href="/fr/wissen/epc-standard" className="text-sky-400 hover:text-sky-300">
+                  Norme EPC – Structure technique du payload
+                </Link>
+              </li>
+              <li>
+                <Link href="/fr/wissen/iban-bic" className="text-sky-400 hover:text-sky-300">
+                  IBAN &amp; BIC pour GiroCode
+                </Link>
+              </li>
+              <li>
+                <Link href="/fr/wissen/rechnung" className="text-sky-400 hover:text-sky-300">
+                  GiroCode sur les factures – Guide complet
+                </Link>
+              </li>
+              <li>
+                <Link href="/fr/wissen/scannen" className="text-sky-400 hover:text-sky-300">
+                  Comment scanner un GiroCode
+                </Link>
+              </li>
+            </ul>
+          </section>
+
+          {/* ── CTA + Disclosure ── */}
+          <div className="mt-10 border-t border-slate-800 pt-8">
+            <Link
+              href="/fr"
+              className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-500"
+            >
+              Créer un GiroCode maintenant <span aria-hidden>→</span>
+            </Link>
           </div>
+
+          <p className="mt-8 text-xs text-slate-600">
+            * Divulgation : Les liens marqués d&apos;un * sont des liens affiliés. Si vous achetez
+            via ces liens, nous recevons une petite commission sans frais supplémentaires pour vous.
+          </p>
         </article>
       </div>
     </main>
   );
 }
-
