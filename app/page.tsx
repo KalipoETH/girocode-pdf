@@ -47,7 +47,7 @@ export default function HomePage() {
         className="animate-card-in relative overflow-hidden px-4 pb-20 pt-20 text-center"
         style={{ animationDelay: '0s' }}
       >
-        {/* Dezente Hintergrund-Punkte */}
+        {/* Dezenter Glow-Hintergrund */}
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
           <div
             className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full"
@@ -56,17 +56,6 @@ export default function HomePage() {
                 'radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)',
             }}
           />
-          {[...Array(18)].map((_, i) => (
-            <span
-              key={i}
-              className="absolute h-1 w-1 rounded-full bg-emerald-500/20"
-              style={{
-                left: `${(i * 37 + 11) % 100}%`,
-                top: `${(i * 53 + 7) % 100}%`,
-                animationDelay: `${(i * 0.3) % 3}s`,
-              }}
-            />
-          ))}
         </div>
 
         <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-6">

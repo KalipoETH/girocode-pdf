@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
+import { FloatingDots } from '../components/FloatingDots';
 
 export const metadata: Metadata = {
   title: {
@@ -64,6 +65,7 @@ export default function RootLayout({
     <html lang="de" className="h-full">
       <body className="min-h-full bg-[#0b0c10] font-sans text-slate-100">
         <div className="flex min-h-screen flex-col">
+          <FloatingDots />
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />

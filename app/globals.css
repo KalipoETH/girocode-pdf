@@ -28,6 +28,42 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Floating dot animations */
+@keyframes float1 {
+  0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
+  33%       { transform: translateY(-20px) translateX(10px); opacity: 0.7; }
+  66%       { transform: translateY(10px) translateX(-15px); opacity: 0.5; }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.2; }
+  50%       { transform: translateY(-30px) translateX(20px); opacity: 0.6; }
+}
+
+@keyframes float3 {
+  0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.4; }
+  25%       { transform: translateY(15px) translateX(-10px); opacity: 0.7; }
+  75%       { transform: translateY(-25px) translateX(15px); opacity: 0.3; }
+}
+
+.bg-dot { will-change: transform; }
+.bg-dot-1  { animation: float1 20s ease-in-out infinite; }
+.bg-dot-2  { animation: float2 17s ease-in-out infinite; }
+.bg-dot-3  { animation: float3 23s ease-in-out infinite; }
+.bg-dot-4  { animation: float1 25s ease-in-out infinite; }
+.bg-dot-5  { animation: float2 19s ease-in-out infinite; }
+.bg-dot-6  { animation: float3 15s ease-in-out infinite; }
+.bg-dot-7  { animation: float1 22s ease-in-out infinite; }
+.bg-dot-8  { animation: float2 18s ease-in-out infinite; }
+.bg-dot-9  { animation: float3 24s ease-in-out infinite; }
+.bg-dot-10 { animation: float1 16s ease-in-out infinite; }
+.bg-dot-11 { animation: float2 21s ease-in-out infinite; }
+.bg-dot-12 { animation: float3 26s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-dot { animation: none; }
+}
+
 /* Animations (respect prefers-reduced-motion) */
 @keyframes card-in {
   from {
