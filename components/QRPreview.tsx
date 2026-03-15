@@ -207,7 +207,32 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
             </label>
           </>
         ) : (
-          <p className="text-xs text-slate-400">{t.emptyText}</p>
+          <div className="flex flex-col items-center gap-3 py-4 text-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-16 w-16 text-emerald-500/40"
+              aria-hidden
+            >
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="5" y="5" width="3" height="3" fill="currentColor" stroke="none" />
+              <rect x="16" y="5" width="3" height="3" fill="currentColor" stroke="none" />
+              <rect x="5" y="16" width="3" height="3" fill="currentColor" stroke="none" />
+              <path d="M14 14h3v3h-3z" fill="currentColor" stroke="none" />
+              <path d="M17 17h4" />
+              <path d="M17 14v4" />
+            </svg>
+            <p className="max-w-[180px] text-xs leading-relaxed text-slate-400">
+              {t.emptyText}
+            </p>
+          </div>
         )}
       </div>
 

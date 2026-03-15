@@ -198,20 +198,14 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({
       aria-labelledby="girocode-generator-heading"
       className="flex flex-col gap-6 rounded-3xl border border-white/5 bg-[#121318]/80 p-6 shadow-2xl shadow-black/50 backdrop-blur"
     >
-      <div className="flex flex-col gap-2">
-        <div className="inline-flex w-fit items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-[11px] font-medium text-emerald-300 ring-1 ring-emerald-500/40">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          {t.badge}
-        </div>
-        <div>
-          <h2
-            id="girocode-generator-heading"
-            className="text-lg font-semibold tracking-tight text-slate-50"
-          >
-            {t.title}
-          </h2>
-          <p className="text-sm text-slate-400">{t.description}</p>
-        </div>
+      <div className="flex flex-col gap-1">
+        <h2
+          id="girocode-generator-heading"
+          className="text-lg font-semibold tracking-tight text-slate-50"
+        >
+          {t.title}
+        </h2>
+        <p className="text-sm text-slate-400">{t.description}</p>
       </div>
 
       <form
@@ -224,7 +218,7 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({
               {t.nameLabel}
               <input
                 type="text"
-                className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                className="mt-1 w-full rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                 value={form.name}
                 onChange={handleChange('name')}
                 required
@@ -237,7 +231,7 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({
                 type="text"
                 inputMode="text"
                 autoCapitalize="characters"
-                className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                className="mt-1 w-full rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                 value={form.iban}
                 onChange={handleChange('iban')}
                 placeholder={t.ibanPlaceholder}
@@ -252,7 +246,7 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({
                   type="text"
                   inputMode="text"
                   autoCapitalize="characters"
-                  className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                  className="mt-1 w-full rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                   value={form.bic}
                   onChange={handleChange('bic')}
                   placeholder={t.bicPlaceholder}
@@ -265,7 +259,7 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({
                   type="number"
                   min="0"
                   step="0.01"
-                  className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                  className="mt-1 w-full rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                   value={form.amount}
                   onChange={handleChange('amount')}
                   required
@@ -276,7 +270,7 @@ export const GiroCodeForm: React.FC<GiroCodeFormProps> = ({
             <label className="text-xs font-medium text-slate-200">
               {t.purposeLabel}
               <textarea
-                className="mt-1 min-h-[72px] w-full resize-y rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                className="mt-1 min-h-[72px] w-full resize-y rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                 value={form.purpose}
                 onChange={handleChange('purpose')}
                 maxLength={140}

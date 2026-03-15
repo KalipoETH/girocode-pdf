@@ -240,7 +240,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ locale, qrPngDataUrl }
                 {t.invoiceNo}
                 <input
                   type="text"
-                  className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                  className="mt-1 w-full rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                   value={form.invoiceNumber}
                   onChange={handleChange('invoiceNumber')}
                 />
@@ -250,7 +250,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ locale, qrPngDataUrl }
                 {t.invoiceDate}
                 <input
                   type="date"
-                  className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                  className="mt-1 w-full rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                   value={form.invoiceDate}
                   onChange={handleChange('invoiceDate')}
                 />
@@ -260,7 +260,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ locale, qrPngDataUrl }
             <label className="text-xs font-medium text-slate-200">
               {t.seller}
               <textarea
-                className="mt-1 min-h-[80px] w-full resize-y rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                className="mt-1 min-h-[80px] w-full resize-y rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                 value={form.sender}
                 onChange={handleChange('sender')}
               />
@@ -269,7 +269,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ locale, qrPngDataUrl }
             <label className="text-xs font-medium text-slate-200">
               {t.buyer}
               <textarea
-                className="mt-1 min-h-[80px] w-full resize-y rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                className="mt-1 min-h-[80px] w-full resize-y rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                 value={form.recipient}
                 onChange={handleChange('recipient')}
               />
@@ -293,7 +293,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ locale, qrPngDataUrl }
             <label className="text-xs font-medium text-slate-200">
               {t.serviceDescription}
               <textarea
-                className="mt-1 min-h-[96px] w-full resize-y rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                className="mt-1 min-h-[96px] w-full resize-y rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                 value={form.description}
                 onChange={handleChange('description')}
               />
@@ -306,7 +306,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ locale, qrPngDataUrl }
                   type="number"
                   min="0"
                   step="0.01"
-                  className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                  className="mt-1 w-full rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                   value={form.netAmount}
                   onChange={handleChange('netAmount')}
                 />
@@ -318,7 +318,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ locale, qrPngDataUrl }
                   type="number"
                   min="0"
                   step="0.1"
-                  className="mt-1 w-full rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/60"
+                  className="mt-1 w-full rounded-lg border border-[#3a4055] bg-[#141720] px-3 py-2 text-sm text-slate-100 shadow-sm shadow-black/40 outline-none ring-0 transition placeholder:text-[#8b90a0] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"
                   value={form.vatRate}
                   onChange={handleChange('vatRate')}
                 />

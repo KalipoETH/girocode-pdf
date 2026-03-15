@@ -12,30 +12,23 @@ export function Footer() {
           <ProductHuntBadge />
         </div>
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-        <p>
-          © {new Date().getFullYear()} GiroCode Generator. Erstellt lokal im Browser – keine
-          Datenübertragung.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/impressum"
-            className="hover:text-slate-200 hover:underline"
-          >
-            Impressum
-          </Link>
-          <Link
-            href="/datenschutz"
-            className="hover:text-slate-200 hover:underline"
-          >
-            Datenschutz
-          </Link>
-          <Link
-            href="/ueber-uns"
-            className="hover:text-slate-200 hover:underline"
-          >
-            Über uns
-          </Link>
-        </div>
+          <p>
+            © 2025 GiroCode Generator · lokal · keine Gewähr
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/impressum" className="hover:text-slate-200 hover:underline">
+              Impressum
+            </Link>
+            <Link href="/datenschutz" className="hover:text-slate-200 hover:underline">
+              Datenschutz
+            </Link>
+            <Link href="/ueber-uns" className="hover:text-slate-200 hover:underline">
+              Über uns
+            </Link>
+            <Link href="/fuer-entwickler" className="hover:text-slate-200 hover:underline">
+              Für Entwickler
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

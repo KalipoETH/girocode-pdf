@@ -21,8 +21,6 @@ const navConfig = [
   { key: 'knowledge', path: '/wissen' },
   { key: 'about', path: '/ueber-uns' },
   { key: 'developers', path: '/fuer-entwickler' },
-  { key: 'imprint', path: '/impressum' },
-  { key: 'privacy', path: '/datenschutz' },
 ];
 
 const navLabels: Record<Locale, Record<string, string>> = {
@@ -31,32 +29,24 @@ const navLabels: Record<Locale, Record<string, string>> = {
     knowledge: 'Wissen',
     about: 'Über uns',
     developers: 'Für Entwickler',
-    imprint: 'Impressum',
-    privacy: 'Datenschutz',
   },
   en: {
     home: 'Generator',
     knowledge: 'Knowledge',
     about: 'About us',
     developers: 'For developers',
-    imprint: 'Imprint',
-    privacy: 'Privacy',
   },
   fr: {
     home: 'Générateur',
     knowledge: 'Informations',
     about: 'À propos',
     developers: 'Pour les développeurs',
-    imprint: 'Mentions légales',
-    privacy: 'Confidentialité',
   },
   es: {
     home: 'Generador',
     knowledge: 'Información',
     about: 'Sobre nosotros',
     developers: 'Para desarrolladores',
-    imprint: 'Aviso legal',
-    privacy: 'Privacidad',
   },
 };
 
