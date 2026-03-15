@@ -43,30 +43,109 @@ export default function HomePageEs() {
           }),
         }}
       />
-      <div className="mx-auto flex max-w-5xl flex-col gap-10 px-4 py-8 md:py-12">
-        <header className="animate-card-in space-y-3" style={{ animationDelay: '0s' }}>
+      {/* Hero */}
+      <header
+        className="animate-card-in relative overflow-hidden px-4 pb-20 pt-20 text-center"
+        style={{ animationDelay: '0s' }}
+      >
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div
+            className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)' }}
+          />
+          {[...Array(18)].map((_, i) => (
+            <span
+              key={i}
+              className="absolute h-1 w-1 rounded-full bg-emerald-500/20"
+              style={{ left: `${(i * 37 + 11) % 100}%`, top: `${(i * 53 + 7) % 100}%` }}
+            />
+          ))}
+        </div>
+
+        <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-6">
           <p className="inline-flex w-fit items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-[11px] font-medium text-emerald-300 ring-1 ring-emerald-500/40">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
             {es.hero.badge}
           </p>
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-50 md:text-3xl">
-              {es.hero.title}
+
+          <div className="space-y-2">
+            <h1
+              className="font-bold tracking-tight text-slate-50"
+              style={{ fontSize: 'clamp(36px, 5vw, 56px)', lineHeight: 1.1 }}
+            >
+              GiroCode Generator
             </h1>
-            <p className="max-w-2xl text-sm text-slate-400 md:text-base">
-              {es.hero.subtitle}
+            <p className="text-xl font-semibold md:text-2xl" style={{ color: '#22c55e' }}>
+              SEPA-QR &amp; Factura PDF
             </p>
           </div>
-        </header>
 
-        <div className="flex flex-col gap-6">
+          <p className="max-w-xl text-base leading-relaxed text-slate-400 md:text-lg">
+            {es.hero.subtitle}
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {[
+              { icon: '✅', label: 'Compatible EPC' },
+              { icon: '🔒', label: 'Compatible RGPD' },
+              { icon: '💸', label: '100% gratuito' },
+            ].map((badge) => (
+              <span
+                key={badge.label}
+                className="inline-flex items-center gap-1.5 rounded-full border border-slate-700/80 bg-slate-900/60 px-3 py-1.5 text-xs font-medium text-slate-200"
+              >
+                <span>{badge.icon}</span>
+                {badge.label}
+              </span>
+            ))}
+          </div>
+
+          <a
+            href="#generator"
+            className="mt-2 inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-sm font-bold text-slate-950 shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl motion-reduce:hover:translate-y-0"
+            style={{
+              background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+              boxShadow: '0 0 24px rgba(34,197,94,0.35)',
+            }}
+          >
+            Crear GiroCode ahora →
+          </a>
+        </div>
+      </header>
+
+      <div className="mx-auto flex max-w-5xl flex-col gap-10 px-4 pb-12">
+
+        {/* Generator */}
+        <section id="generator" className="flex flex-col gap-6">
           <div className="animate-card-in" style={{ animationDelay: '0.1s' }}>
             <GiroCodeForm locale="es" onQrDataUrlChange={setQrPngDataUrl} />
           </div>
           <div className="animate-card-in" style={{ animationDelay: '0.2s' }}>
             <InvoiceForm locale="es" qrPngDataUrl={qrPngDataUrl} />
           </div>
-        </div>
+        </section>
+
+        {/* Trust section */}
+        <section
+          aria-label="Confianza y seguridad"
+          className="animate-card-in grid gap-4 sm:grid-cols-3"
+          style={{ animationDelay: '0.25s' }}
+        >
+          {[
+            { icon: '🔒', title: 'Sin compartir datos', sub: 'Tu IBAN nunca sale de tu navegador' },
+            { icon: '⚡', title: 'Listo para usar', sub: 'Sin cuenta, sin instalación' },
+            { icon: '🌍', title: '4 idiomas', sub: 'DE, EN, FR, ES' },
+          ].map((card) => (
+            <div
+              key={card.title}
+              className="flex flex-col gap-2 rounded-2xl border border-slate-800/80 bg-slate-900/50 p-5"
+            >
+              <span className="text-2xl">{card.icon}</span>
+              <p className="text-sm font-semibold text-slate-100">{card.title}</p>
+              <p className="text-xs text-slate-400">{card.sub}</p>
+            </div>
+          ))}
+        </section>
 
         <section
           aria-labelledby="seo-how-it-works-es"
@@ -99,10 +178,7 @@ export default function HomePageEs() {
             </dl>
             <p className="mt-3 text-xs text-slate-400">
               Más información en la sección{' '}
-              <Link
-                href="/es/wissen"
-                className="text-sky-400 underline hover:text-sky-300"
-              >
+              <Link href="/es/wissen" className="text-sky-400 underline hover:text-sky-300">
                 de información sobre GiroCode y SEPA-QR
               </Link>
               .
