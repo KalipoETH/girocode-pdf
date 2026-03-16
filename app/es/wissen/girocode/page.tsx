@@ -307,7 +307,7 @@ export default function WissenGirocodePageEs() {
                 <td className="px-4 py-3 font-medium text-slate-200">Coste para el vendedor</td>
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">Gratuito</td>
                 <td className="px-4 py-3 text-[#ef4444]">~2,5–3,5 %</td>
-                <td className="px-4 py-3 text-[#f97316]">~1,4–2,9 %</td>
+                <td className="px-4 py-3 text-[#ef4444]">~1,4–2,9 %</td>
                 <td className="px-4 py-3 text-[#9aa1b6]">Variable</td>
               </tr>
               <tr className="bg-slate-800/30">
@@ -315,19 +315,19 @@ export default function WissenGirocodePageEs() {
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">Alta</td>
                 <td className="px-4 py-3 text-[#ef4444]">Baja</td>
                 <td className="px-4 py-3 text-[#f97316]">Media</td>
-                <td className="px-4 py-3 text-[#9aa1b6]">Alta</td>
+                <td className="px-4 py-3 text-[#22c55e]">Alta</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-medium text-slate-200">Disponibilidad en SEPA</td>
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">Universal</td>
-                <td className="px-4 py-3 text-[#f97316]">Alta</td>
-                <td className="px-4 py-3 text-[#f97316]">Alta</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Alta</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Alta</td>
                 <td className="px-4 py-3 text-[#9aa1b6]">Universal</td>
               </tr>
               <tr className="bg-slate-800/30">
                 <td className="px-4 py-3 font-medium text-slate-200">Simplicidad para el pagador</td>
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">Muy alta</td>
-                <td className="px-4 py-3 text-[#f97316]">Media</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Media</td>
                 <td className="px-4 py-3 text-[#f97316]">Media</td>
                 <td className="px-4 py-3 text-[#9aa1b6]">Media</td>
               </tr>
@@ -336,7 +336,7 @@ export default function WissenGirocodePageEs() {
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">No</td>
                 <td className="px-4 py-3 text-[#ef4444]">Sí</td>
                 <td className="px-4 py-3 text-[#f97316]">Sí (para integrar)</td>
-                <td className="px-4 py-3 text-[#9aa1b6]">Mandato requerido</td>
+                <td className="px-4 py-3 text-[#f97316]">Mandato requerido</td>
               </tr>
               <tr className="bg-slate-800/30">
                 <td className="px-4 py-3 font-medium text-slate-200">Intermediarios</td>

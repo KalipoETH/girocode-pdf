@@ -212,7 +212,8 @@ export function KnowledgeLayout({
                   href="https://www.awin1.com/cread.php?awinmid=15944&awinaffid=2793610"
                   target="_blank"
                   rel="noopener noreferrer sponsored"
-                  className="btn-affiliate inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm"
+                  className="btn-affiliate inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold text-white"
+                  style={{ color: '#ffffff' }}
                 >
                   {t.sevdeskCta}
                 </a>
@@ -225,7 +226,8 @@ export function KnowledgeLayout({
                   href="https://www.awin1.com/cread.php?awinmid=20766&awinaffid=2793610"
                   target="_blank"
                   rel="noopener noreferrer sponsored"
-                  className="btn-affiliate inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm"
+                  className="btn-affiliate inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold text-white"
+                  style={{ color: '#ffffff' }}
                 >
                   {t.fastbillCta}
                 </a>
@@ -250,7 +252,7 @@ export function KnowledgeLayout({
               <Link
                 href={t.ctaHref}
                 className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(34,197,94,0.4)]"
-                style={{ background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)', color: '#ffffff' }}
               >
                 {t.ctaLabel}
                 <span aria-hidden>→</span>

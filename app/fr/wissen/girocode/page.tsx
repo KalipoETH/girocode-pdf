@@ -325,7 +325,7 @@ export default function WissenGirocodePageFr() {
                 <td className="px-4 py-3 font-medium text-slate-200">Coûts par transaction</td>
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">Gratuit</td>
                 <td className="px-4 py-3 text-[#ef4444]">1,9–3,4 % + 0,35 €</td>
-                <td className="px-4 py-3 text-[#f97316]">1,5 % + 0,25 €</td>
+                <td className="px-4 py-3 text-[#ef4444]">1,5 % + 0,25 €</td>
                 <td className="px-4 py-3 text-[#9aa1b6]">Gratuit / faible</td>
               </tr>
               <tr className="bg-slate-800/30">
@@ -333,27 +333,27 @@ export default function WissenGirocodePageFr() {
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">Très élevée</td>
                 <td className="px-4 py-3 text-[#ef4444]">Faible (données tiers)</td>
                 <td className="px-4 py-3 text-[#f97316]">Moyenne</td>
-                <td className="px-4 py-3 text-[#9aa1b6]">Élevée</td>
+                <td className="px-4 py-3 text-[#22c55e]">Élevée</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-medium text-slate-200">Inscription requise</td>
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">Non</td>
                 <td className="px-4 py-3 text-[#ef4444]">Oui (les deux)</td>
                 <td className="px-4 py-3 text-[#f97316]">Oui (émetteur)</td>
-                <td className="px-4 py-3 text-[#9aa1b6]">Mandat nécessaire</td>
+                <td className="px-4 py-3 text-[#f97316]">Mandat nécessaire</td>
               </tr>
               <tr className="bg-slate-800/30">
                 <td className="px-4 py-3 font-medium text-slate-200">Facilité d&apos;utilisation</td>
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">Très simple (scan)</td>
-                <td className="px-4 py-3 text-[#f97316]">Simple (app)</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Simple (app)</td>
                 <td className="px-4 py-3 text-[#f97316]">Moyen (lien)</td>
                 <td className="px-4 py-3 text-[#9aa1b6]">Automatique</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-medium text-slate-200">Disponibilité</td>
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">Zone SEPA</td>
-                <td className="px-4 py-3 text-[#f97316]">Mondial</td>
-                <td className="px-4 py-3 text-[#f97316]">Mondial</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Mondial</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Mondial</td>
                 <td className="px-4 py-3 text-[#9aa1b6]">Zone SEPA</td>
               </tr>
               <tr className="bg-slate-800/30">

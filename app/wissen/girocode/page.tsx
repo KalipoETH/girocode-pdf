@@ -281,29 +281,29 @@ export default function WissenGirocodePage() {
                 <td className="px-4 py-3 font-medium text-slate-200">Kosten Empfänger</td>
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">Kostenlos</td>
                 <td className="px-4 py-3 text-[#ef4444]">1,2–3,4 % + Fix</td>
-                <td className="px-4 py-3 text-[#f97316]">Händlergebühr</td>
+                <td className="px-4 py-3 text-[#ef4444]">Händlergebühr</td>
                 <td className="px-4 py-3 text-[#9aa1b6]">Meist kostenlos</td>
               </tr>
               <tr className="bg-slate-800/30">
                 <td className="px-4 py-3 font-medium text-slate-200">Datenschutz</td>
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">DSGVO-konform</td>
                 <td className="px-4 py-3 text-[#ef4444]">US-Unternehmen</td>
-                <td className="px-4 py-3 text-[#f97316]">Datenanalyse</td>
-                <td className="px-4 py-3 text-[#9aa1b6]">DSGVO-konform</td>
+                <td className="px-4 py-3 text-[#ef4444]">Datenanalyse</td>
+                <td className="px-4 py-3 text-[#22c55e]">DSGVO-konform</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-medium text-slate-200">Verbreitung DE</td>
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">Alle SEPA-Banken</td>
-                <td className="px-4 py-3 text-[#f97316]">Sehr weit</td>
-                <td className="px-4 py-3 text-[#f97316]">E-Commerce</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Sehr weit</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">E-Commerce</td>
                 <td className="px-4 py-3 text-[#9aa1b6]">Universal</td>
               </tr>
               <tr className="bg-slate-800/30">
                 <td className="px-4 py-3 font-medium text-slate-200">Einfachheit</td>
                 <td className="px-4 py-3 font-semibold text-[#22c55e]">QR-Scan</td>
-                <td className="px-4 py-3 text-[#f97316]">App/Web</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">App/Web</td>
                 <td className="px-4 py-3 text-[#f97316]">Checkout-Prozess</td>
-                <td className="px-4 py-3 text-[#9aa1b6]">Mandat nötig</td>
+                <td className="px-4 py-3 text-[#f97316]">Mandat nötig</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-medium text-slate-200">Voraussetzung</td>
