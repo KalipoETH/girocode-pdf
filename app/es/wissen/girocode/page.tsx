@@ -291,59 +291,59 @@ export default function WissenGirocodePageEs() {
         <p>
           La siguiente tabla compara el GiroCode con otras alternativas de pago comunes:
         </p>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+        <div className="not-prose my-6 overflow-x-auto rounded-lg border border-slate-700">
+          <table className="compare-table w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-700">
-                <th className="py-2 pr-4 font-semibold text-slate-200">Característica</th>
-                <th className="py-2 pr-4 font-semibold text-sky-300">GiroCode</th>
-                <th className="py-2 pr-4 font-semibold text-slate-300">PayPal</th>
-                <th className="py-2 pr-4 font-semibold text-slate-300">Stripe</th>
-                <th className="py-2 font-semibold text-slate-300">Domiciliación</th>
+              <tr>
+                <th className="px-4 py-3">Característica</th>
+                <th className="px-4 py-3">GiroCode</th>
+                <th className="px-4 py-3">PayPal</th>
+                <th className="px-4 py-3">Stripe</th>
+                <th className="px-4 py-3">Domiciliación</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-slate-700/50">
               <tr>
-                <td className="py-2 pr-4 text-slate-400">Coste para el vendedor</td>
-                <td className="py-2 pr-4 text-emerald-400">Gratuito</td>
-                <td className="py-2 pr-4 text-red-400">~2,5–3,5 %</td>
-                <td className="py-2 pr-4 text-red-400">~1,4–2,9 %</td>
-                <td className="py-2 text-yellow-400">Variable</td>
+                <td className="px-4 py-3 font-medium text-slate-200">Coste para el vendedor</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">Gratuito</td>
+                <td className="px-4 py-3 text-[#ef4444]">~2,5–3,5 %</td>
+                <td className="px-4 py-3 text-[#f97316]">~1,4–2,9 %</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Variable</td>
+              </tr>
+              <tr className="bg-slate-800/30">
+                <td className="px-4 py-3 font-medium text-slate-200">Privacidad del pagador</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">Alta</td>
+                <td className="px-4 py-3 text-[#ef4444]">Baja</td>
+                <td className="px-4 py-3 text-[#f97316]">Media</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Alta</td>
               </tr>
               <tr>
-                <td className="py-2 pr-4 text-slate-400">Privacidad del pagador</td>
-                <td className="py-2 pr-4 text-emerald-400">Alta</td>
-                <td className="py-2 pr-4 text-red-400">Baja</td>
-                <td className="py-2 pr-4 text-yellow-400">Media</td>
-                <td className="py-2 text-emerald-400">Alta</td>
+                <td className="px-4 py-3 font-medium text-slate-200">Disponibilidad en SEPA</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">Universal</td>
+                <td className="px-4 py-3 text-[#f97316]">Alta</td>
+                <td className="px-4 py-3 text-[#f97316]">Alta</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Universal</td>
+              </tr>
+              <tr className="bg-slate-800/30">
+                <td className="px-4 py-3 font-medium text-slate-200">Simplicidad para el pagador</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">Muy alta</td>
+                <td className="px-4 py-3 text-[#f97316]">Media</td>
+                <td className="px-4 py-3 text-[#f97316]">Media</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Media</td>
               </tr>
               <tr>
-                <td className="py-2 pr-4 text-slate-400">Disponibilidad en SEPA</td>
-                <td className="py-2 pr-4 text-emerald-400">Universal</td>
-                <td className="py-2 pr-4 text-emerald-400">Alta</td>
-                <td className="py-2 pr-4 text-emerald-400">Alta</td>
-                <td className="py-2 text-emerald-400">Universal</td>
+                <td className="px-4 py-3 font-medium text-slate-200">Cuenta adicional requerida</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">No</td>
+                <td className="px-4 py-3 text-[#ef4444]">Sí</td>
+                <td className="px-4 py-3 text-[#f97316]">Sí (para integrar)</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Mandato requerido</td>
               </tr>
-              <tr>
-                <td className="py-2 pr-4 text-slate-400">Simplicidad para el pagador</td>
-                <td className="py-2 pr-4 text-emerald-400">Muy alta</td>
-                <td className="py-2 pr-4 text-yellow-400">Media</td>
-                <td className="py-2 pr-4 text-yellow-400">Media</td>
-                <td className="py-2 text-yellow-400">Media</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 text-slate-400">Cuenta adicional requerida</td>
-                <td className="py-2 pr-4 text-emerald-400">No</td>
-                <td className="py-2 pr-4 text-red-400">Sí</td>
-                <td className="py-2 pr-4 text-red-400">Sí (para integrar)</td>
-                <td className="py-2 text-yellow-400">Mandato requerido</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 text-slate-400">Intermediarios</td>
-                <td className="py-2 pr-4 text-emerald-400">Ninguno</td>
-                <td className="py-2 pr-4 text-red-400">PayPal Inc.</td>
-                <td className="py-2 pr-4 text-red-400">Stripe Inc.</td>
-                <td className="py-2 text-yellow-400">Banco emisor</td>
+              <tr className="bg-slate-800/30">
+                <td className="px-4 py-3 font-medium text-slate-200">Intermediarios</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">Ninguno</td>
+                <td className="px-4 py-3 text-[#ef4444]">PayPal Inc.</td>
+                <td className="px-4 py-3 text-[#f97316]">Stripe Inc.</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Banco emisor</td>
               </tr>
             </tbody>
           </table>

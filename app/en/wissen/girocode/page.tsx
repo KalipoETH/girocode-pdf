@@ -244,59 +244,59 @@ export default function WissenGirocodePageEn() {
 
       <section aria-labelledby="girocode-vs-payment-methods" className="mt-10">
         <h2 id="girocode-vs-payment-methods">GiroCode vs. Other Payment Methods</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-sm">
+        <div className="not-prose my-6 overflow-x-auto rounded-lg border border-slate-700">
+          <table className="compare-table w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-700">
-                <th className="py-2 pr-4 text-left text-slate-300">Feature</th>
-                <th className="py-2 pr-4 text-left text-slate-300">GiroCode</th>
-                <th className="py-2 pr-4 text-left text-slate-300">PayPal</th>
-                <th className="py-2 pr-4 text-left text-slate-300">Stripe</th>
-                <th className="py-2 text-left text-slate-300">Direct Debit</th>
+              <tr>
+                <th className="px-4 py-3">Feature</th>
+                <th className="px-4 py-3">GiroCode</th>
+                <th className="px-4 py-3">PayPal</th>
+                <th className="px-4 py-3">Stripe</th>
+                <th className="px-4 py-3">Direct Debit</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800 text-slate-400">
+            <tbody className="divide-y divide-slate-700/50">
               <tr>
-                <td className="py-2 pr-4 font-medium text-slate-300">Transaction cost</td>
-                <td className="py-2 pr-4">Free (bank SEPA fee)</td>
-                <td className="py-2 pr-4">1.5–3.5% + fixed fee</td>
-                <td className="py-2 pr-4">1.5% + 0.25 € (SEPA)</td>
-                <td className="py-2">Free or low bank fee</td>
+                <td className="px-4 py-3 font-medium text-slate-200">Transaction cost</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">Free (bank SEPA fee)</td>
+                <td className="px-4 py-3 text-[#ef4444]">1.5–3.5% + fixed fee</td>
+                <td className="px-4 py-3 text-[#f97316]">1.5% + 0.25 € (SEPA)</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Free or low bank fee</td>
+              </tr>
+              <tr className="bg-slate-800/30">
+                <td className="px-4 py-3 font-medium text-slate-200">Account required</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">Bank account only</td>
+                <td className="px-4 py-3 text-[#f97316]">PayPal account</td>
+                <td className="px-4 py-3 text-[#f97316]">Card or bank account</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Bank account only</td>
               </tr>
               <tr>
-                <td className="py-2 pr-4 font-medium text-slate-300">Account required</td>
-                <td className="py-2 pr-4">Bank account only</td>
-                <td className="py-2 pr-4">PayPal account</td>
-                <td className="py-2 pr-4">Card or bank account</td>
-                <td className="py-2">Bank account only</td>
+                <td className="px-4 py-3 font-medium text-slate-200">Privacy</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">High – bank only</td>
+                <td className="px-4 py-3 text-[#ef4444]">Low – PayPal sees all</td>
+                <td className="px-4 py-3 text-[#f97316]">Medium – Stripe sees all</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">High – bank only</td>
+              </tr>
+              <tr className="bg-slate-800/30">
+                <td className="px-4 py-3 font-medium text-slate-200">Chargeback risk</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">Very low</td>
+                <td className="px-4 py-3 text-[#ef4444]">High (buyer protection)</td>
+                <td className="px-4 py-3 text-[#f97316]">Medium</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Medium (8-week reversal)</td>
               </tr>
               <tr>
-                <td className="py-2 pr-4 font-medium text-slate-300">Privacy</td>
-                <td className="py-2 pr-4">High – bank only</td>
-                <td className="py-2 pr-4">Low – PayPal sees all</td>
-                <td className="py-2 pr-4">Medium – Stripe sees all</td>
-                <td className="py-2">High – bank only</td>
+                <td className="px-4 py-3 font-medium text-slate-200">Setup complexity</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">None</td>
+                <td className="px-4 py-3 text-[#f97316]">Low</td>
+                <td className="px-4 py-3 text-[#f97316]">Medium</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Requires SEPA mandate</td>
               </tr>
-              <tr>
-                <td className="py-2 pr-4 font-medium text-slate-300">Chargeback risk</td>
-                <td className="py-2 pr-4">Very low</td>
-                <td className="py-2 pr-4">High (buyer protection)</td>
-                <td className="py-2 pr-4">Medium</td>
-                <td className="py-2">Medium (8-week reversal)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-medium text-slate-300">Setup complexity</td>
-                <td className="py-2 pr-4">None</td>
-                <td className="py-2 pr-4">Low</td>
-                <td className="py-2 pr-4">Medium</td>
-                <td className="py-2">Requires SEPA mandate</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-medium text-slate-300">SEPA availability</td>
-                <td className="py-2 pr-4">All 36 SEPA countries</td>
-                <td className="py-2 pr-4">200+ countries</td>
-                <td className="py-2 pr-4">40+ countries</td>
-                <td className="py-2">All 36 SEPA countries</td>
+              <tr className="bg-slate-800/30">
+                <td className="px-4 py-3 font-medium text-slate-200">SEPA availability</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">All 36 SEPA countries</td>
+                <td className="px-4 py-3 text-[#f97316]">200+ countries</td>
+                <td className="px-4 py-3 text-[#f97316]">40+ countries</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">All 36 SEPA countries</td>
               </tr>
             </tbody>
           </table>

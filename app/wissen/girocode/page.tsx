@@ -266,51 +266,51 @@ export default function WissenGirocodePage() {
         </p>
 
         <div className="not-prose my-6 overflow-x-auto rounded-lg border border-slate-700">
-          <table className="w-full text-sm">
+          <table className="compare-table w-full text-sm">
             <thead>
-              <tr className="bg-slate-800 text-slate-300">
-                <th className="px-4 py-3 text-left font-medium">Merkmal</th>
-                <th className="px-4 py-3 text-left font-medium">GiroCode</th>
-                <th className="px-4 py-3 text-left font-medium">PayPal</th>
-                <th className="px-4 py-3 text-left font-medium">Klarna</th>
-                <th className="px-4 py-3 text-left font-medium">Lastschrift</th>
+              <tr>
+                <th className="px-4 py-3">Merkmal</th>
+                <th className="px-4 py-3">GiroCode</th>
+                <th className="px-4 py-3">PayPal</th>
+                <th className="px-4 py-3">Klarna</th>
+                <th className="px-4 py-3">Lastschrift</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-700/50">
-              <tr className="text-slate-300">
+              <tr>
                 <td className="px-4 py-3 font-medium text-slate-200">Kosten Empfänger</td>
-                <td className="px-4 py-3 text-emerald-400">Kostenlos</td>
-                <td className="px-4 py-3 text-amber-400">1,2–3,4 % + Fix</td>
-                <td className="px-4 py-3 text-amber-400">Händlergebühr</td>
-                <td className="px-4 py-3 text-emerald-400">Meist kostenlos</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">Kostenlos</td>
+                <td className="px-4 py-3 text-[#ef4444]">1,2–3,4 % + Fix</td>
+                <td className="px-4 py-3 text-[#f97316]">Händlergebühr</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Meist kostenlos</td>
               </tr>
-              <tr className="bg-slate-800/30 text-slate-300">
+              <tr className="bg-slate-800/30">
                 <td className="px-4 py-3 font-medium text-slate-200">Datenschutz</td>
-                <td className="px-4 py-3 text-emerald-400">DSGVO-konform</td>
-                <td className="px-4 py-3 text-amber-400">US-Unternehmen</td>
-                <td className="px-4 py-3 text-amber-400">Datenanalyse</td>
-                <td className="px-4 py-3 text-emerald-400">DSGVO-konform</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">DSGVO-konform</td>
+                <td className="px-4 py-3 text-[#ef4444]">US-Unternehmen</td>
+                <td className="px-4 py-3 text-[#f97316]">Datenanalyse</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">DSGVO-konform</td>
               </tr>
-              <tr className="text-slate-300">
+              <tr>
                 <td className="px-4 py-3 font-medium text-slate-200">Verbreitung DE</td>
-                <td className="px-4 py-3 text-emerald-400">Alle SEPA-Banken</td>
-                <td className="px-4 py-3 text-emerald-400">Sehr weit</td>
-                <td className="px-4 py-3 text-amber-400">E-Commerce</td>
-                <td className="px-4 py-3 text-emerald-400">Universal</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">Alle SEPA-Banken</td>
+                <td className="px-4 py-3 text-[#f97316]">Sehr weit</td>
+                <td className="px-4 py-3 text-[#f97316]">E-Commerce</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Universal</td>
               </tr>
-              <tr className="bg-slate-800/30 text-slate-300">
+              <tr className="bg-slate-800/30">
                 <td className="px-4 py-3 font-medium text-slate-200">Einfachheit</td>
-                <td className="px-4 py-3 text-emerald-400">QR-Scan</td>
-                <td className="px-4 py-3 text-emerald-400">App/Web</td>
-                <td className="px-4 py-3 text-amber-400">Checkout-Prozess</td>
-                <td className="px-4 py-3 text-amber-400">Mandat nötig</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">QR-Scan</td>
+                <td className="px-4 py-3 text-[#f97316]">App/Web</td>
+                <td className="px-4 py-3 text-[#f97316]">Checkout-Prozess</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">Mandat nötig</td>
               </tr>
-              <tr className="text-slate-300">
+              <tr>
                 <td className="px-4 py-3 font-medium text-slate-200">Voraussetzung</td>
-                <td className="px-4 py-3 text-emerald-400">SEPA-Konto</td>
-                <td className="px-4 py-3 text-amber-400">PayPal-Konto</td>
-                <td className="px-4 py-3 text-amber-400">Klarna-Integration</td>
-                <td className="px-4 py-3 text-amber-400">SEPA-Mandat</td>
+                <td className="px-4 py-3 font-semibold text-[#22c55e]">SEPA-Konto</td>
+                <td className="px-4 py-3 text-[#f97316]">PayPal-Konto</td>
+                <td className="px-4 py-3 text-[#f97316]">Klarna-Integration</td>
+                <td className="px-4 py-3 text-[#9aa1b6]">SEPA-Mandat</td>
               </tr>
             </tbody>
           </table>

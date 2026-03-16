@@ -175,6 +175,28 @@ body {
   background: #0f1117;
 }
 
+/* ── Compare Table (not-prose) ── */
+.compare-table thead th {
+  background: #133018 !important;
+  color: #86efac !important;
+  font-weight: 700;
+  text-align: left;
+}
+
+/* ── Affiliate Button (green gradient) ── */
+.btn-affiliate {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  color: #ffffff;
+  font-weight: 700;
+  border: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-affiliate:hover {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  box-shadow: 0 0 18px rgba(34, 197, 94, 0.4);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-card-in,
   .animate-qr-appear,
