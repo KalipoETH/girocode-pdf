@@ -31,6 +31,8 @@ function getTexts(locale: Locale) {
         'No GiroCode generated yet. Please fill in the payment data and click “Generate GiroCode”.',
       reset: 'Reset',
       externalAlt: 'GiroCode via external QR service',
+      download: 'Download QR Code ↓',
+      downloadHint: 'PNG format · optimized for print & digital',
     };
   }
 
@@ -45,6 +47,8 @@ function getTexts(locale: Locale) {
         'Aucun GiroCode généré pour le moment. Veuillez saisir les données de paiement et cliquer sur « Générer GiroCode ».',
       reset: 'Réinitialiser',
       externalAlt: 'GiroCode via service QR externe',
+      download: 'Télécharger le QR Code ↓',
+      downloadHint: 'Format PNG · optimisé pour impression & numérique',
     };
   }
 
@@ -59,6 +63,8 @@ function getTexts(locale: Locale) {
         'Todavía no se ha generado ningún GiroCode. Rellena los datos de pago y haz clic en «Generar GiroCode».',
       reset: 'Restablecer',
       externalAlt: 'GiroCode mediante servicio QR externo',
+      download: 'Descargar QR Code ↓',
+      downloadHint: 'Formato PNG · optimizado para impresión & digital',
     };
   }
 
@@ -73,6 +79,8 @@ function getTexts(locale: Locale) {
       'Noch kein GiroCode erzeugt. Bitte Zahlungsdaten ausfüllen und auf „GiroCode generieren“ klicken.',
     reset: 'Zurücksetzen',
     externalAlt: 'GiroCode über externen QR-Dienst',
+    download: 'QR-Code herunterladen ↓',
+    downloadHint: 'PNG-Format · optimiert für Druck & Digital',
   };
 }
 
@@ -135,6 +143,15 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
         }
       });
   }, [epcPayload, useExternal, onQrRendered]);
+
+  const downloadQR = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const link = document.createElement('a');
+    link.download = 'girocode.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
 
   const handleReset = () => {
     setUseExternal(false);
@@ -245,6 +262,22 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
           {t.reset}
         </button>
       </div>
+
+      {epcPayload && !useExternal && (
+        <div className="flex flex-col gap-1.5">
+          <button
+            type="button"
+            onClick={downloadQR}
+            style={{ marginTop: '12px', width: '100%', fontWeight: 700 }}
+            className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-2.5 text-sm text-white shadow-md shadow-emerald-900/30 transition hover:from-emerald-400 hover:to-teal-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+          >
+            {t.download}
+          </button>
+          <p style={{ fontSize: '12px', color: '#8b90a0', textAlign: 'center' }}>
+            {t.downloadHint}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
