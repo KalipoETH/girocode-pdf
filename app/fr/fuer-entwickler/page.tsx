@@ -105,10 +105,10 @@ QRCode.toCanvas(canvas, payload, {
               Vous êtes une agence ou un éditeur de logiciel et souhaitez coopérer ? N’hésitez pas
               à m’écrire&nbsp;:{' '}
               <a
-                href="mailto:kontakt@girocodegenerator.com"
+                href="mailto:jahnke.kaleb@gmail.com"
                 className="text-sky-400 underline decoration-sky-500/70 underline-offset-2 hover:text-sky-300"
               >
-                kontakt@girocodegenerator.com
+                jahnke.kaleb@gmail.com
               </a>
             </p>
           </section>

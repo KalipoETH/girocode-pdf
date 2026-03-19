@@ -91,10 +91,10 @@ export default function UeberUnsPage() {
           <p className="text-sm text-slate-300 md:text-base">
             Fragen, Feedback oder Fehler gefunden? Schreib mir gerne eine E-Mail an{' '}
             <a
-              href="mailto:kontakt@girocodegenerator.com"
+              href="mailto:jahnke.kaleb@gmail.com"
               className="text-sky-400 underline decoration-sky-500/70 underline-offset-2 hover:text-sky-300"
             >
-              kontakt@girocodegenerator.com
+              jahnke.kaleb@gmail.com
             </a>
             .
           </p>

@@ -104,10 +104,10 @@ QRCode.toCanvas(canvas, payload, {
               Du bist Agentur oder Softwareanbieter und möchtest kooperieren? Meld dich gerne per
               E-Mail:{' '}
               <a
-                href="mailto:kontakt@girocodegenerator.com"
+                href="mailto:jahnke.kaleb@gmail.com"
                 className="text-sky-400 underline decoration-sky-500/70 underline-offset-2 hover:text-sky-300"
               >
-                kontakt@girocodegenerator.com
+                jahnke.kaleb@gmail.com
               </a>
             </p>
           </section>

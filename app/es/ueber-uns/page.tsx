@@ -90,10 +90,10 @@ export default function SobreNosotrosPageEs() {
           <p className="text-sm text-slate-300 md:text-base">
             ¿Tienes preguntas, comentarios o has encontrado un error? Escríbeme a{' '}
             <a
-              href="mailto:kontakt@girocodegenerator.com"
+              href="mailto:jahnke.kaleb@gmail.com"
               className="text-sky-400 underline decoration-sky-500/70 underline-offset-2 hover:text-sky-300"
             >
-              kontakt@girocodegenerator.com
+              jahnke.kaleb@gmail.com
             </a>
             .
           </p>

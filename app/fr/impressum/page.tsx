@@ -24,10 +24,10 @@ export default function ImpressumPageFr() {
             <p>
               E-mail :{' '}
               <a
-                href="mailto:kontakt@girocodegenerator.com"
+                href="mailto:jahnke.kaleb@gmail.com"
                 className="text-sky-400 underline decoration-sky-500/60 hover:text-sky-300"
               >
-                kontakt@girocodegenerator.com
+                jahnke.kaleb@gmail.com
               </a>
             </p>
           </div>
