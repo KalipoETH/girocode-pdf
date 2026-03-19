@@ -32,6 +32,18 @@ export default function ImpressumPage() {
                 jahnke.kaleb@gmail.com
               </a>
             </p>
+            <p className="mt-1">
+              Kontaktformular:{" "}
+              <a
+                href="https://www.girocodegenerator.com/kontakt"
+                className="text-sky-400 hover:text-sky-300 underline decoration-sky-500/60"
+              >
+                https://www.girocodegenerator.com/kontakt
+              </a>
+            </p>
+            <p className="mt-1">
+              Wir bemühen uns, Anfragen innerhalb von 48 Stunden zu beantworten.
+            </p>
           </div>
 
           <div>

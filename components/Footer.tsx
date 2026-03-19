@@ -25,6 +25,9 @@ export function Footer() {
             <Link href="/ueber-uns" className="hover:text-slate-200 hover:underline">
               Über uns
             </Link>
+            <Link href="/kontakt" className="hover:text-slate-200 hover:underline">
+              Kontakt
+            </Link>
             <Link href="/fuer-entwickler" className="hover:text-slate-200 hover:underline">
               Für Entwickler
             </Link>

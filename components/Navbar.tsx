@@ -20,6 +20,7 @@ const navConfig = [
   { key: 'home', path: '' },
   { key: 'knowledge', path: '/wissen' },
   { key: 'about', path: '/ueber-uns' },
+  { key: 'contact', path: '/kontakt' },
   { key: 'developers', path: '/fuer-entwickler' },
 ];
 
@@ -28,24 +29,28 @@ const navLabels: Record<Locale, Record<string, string>> = {
     home: 'Generator',
     knowledge: 'Wissen',
     about: 'Über uns',
+    contact: 'Kontakt',
     developers: 'Für Entwickler',
   },
   en: {
     home: 'Generator',
     knowledge: 'Knowledge',
     about: 'About us',
+    contact: 'Contact',
     developers: 'For developers',
   },
   fr: {
     home: 'Générateur',
     knowledge: 'Informations',
     about: 'À propos',
+    contact: 'Contact',
     developers: 'Pour les développeurs',
   },
   es: {
     home: 'Generador',
     knowledge: 'Información',
     about: 'Sobre nosotros',
+    contact: 'Contacto',
     developers: 'Para desarrolladores',
   },
 };

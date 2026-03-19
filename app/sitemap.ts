@@ -245,6 +245,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
     {
+      url: 'https://www.girocodegenerator.com/kontakt',
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.5,
+    },
+    {
       url: 'https://www.girocodegenerator.com/impressum',
       lastModified: now,
       changeFrequency: 'yearly',
